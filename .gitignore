@@ -31,3 +31,6 @@ obj/
 **/.idea/**/
 
 # End of https://www.toptal.com/developers/gitignore/api/git,rider,dotnetcore
+
+# Ignore user settings of rider/resharper
+**/*.sln.DotSettings.user
