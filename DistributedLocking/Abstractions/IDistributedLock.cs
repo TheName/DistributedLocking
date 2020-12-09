@@ -1,17 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
 using TheName.DistributedLocking.Abstractions.Records;
 
 namespace TheName.DistributedLocking.Abstractions
 {
-    public interface IDistributedLock
+    public interface IDistributedLock : IAsyncDisposable
     {
-        Task<bool> TryAcquireAsync(
-            LockIdentifier lockIdentifier,
-            LockTimeout lockTimeout,
-            out LockId lockId,
-            CancellationToken cancellationToken);
-
-        Task<bool> TryReleaseAsync(LockId lockId, CancellationToken cancellationToken);
+        LockId LockId { get; }
     }
 }

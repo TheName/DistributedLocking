@@ -1,0 +1,81 @@
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoFixture.Xunit2;
+using DistributedLocking.UnitTests.Attributes;
+using Moq;
+using TheName.DistributedLocking;
+using TheName.DistributedLocking.Abstractions.Exceptions;
+using TheName.DistributedLocking.Abstractions.Records;
+using TheName.DistributedLocking.Abstractions.Repositories;
+using Xunit;
+
+namespace DistributedLocking.UnitTests
+{
+    public class DistributedLockAcquirer_Should
+    {
+        [Fact]
+        public void Throw_When_TryingToCreateWithNullRepository()
+        {
+            Assert.Throws<ArgumentNullException>(() => new DistributedLockAcquirer(null));
+        }
+        
+        [Theory]
+        [AutoMoqData]
+        public void NotThrow_When_TryingToCreateWithNotNullRepository(IDistributedLockRepository repository)
+        {
+            _ = new DistributedLockAcquirer(repository);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task Throw_When_TryingToAcquireLock_And_RepositoryFails(
+            LockIdentifier lockIdentifier,
+            LockTimeout lockTimeout,
+            [Frozen] Mock<IDistributedLockRepository> repositoryMock,
+            DistributedLockAcquirer distributedLockAcquirer,
+            CancellationToken cancellationToken)
+        {
+            LockId lockId = null;
+            repositoryMock
+                .Setup(repository => repository.TryAcquireAsync(
+                    lockIdentifier,
+                    lockTimeout,
+                    out lockId,
+                    cancellationToken))
+                .ReturnsAsync(false);
+
+            await Assert.ThrowsAsync<CouldNotAcquireLockException>(() =>
+                distributedLockAcquirer.AcquireAsync(
+                    lockIdentifier,
+                    lockTimeout,
+                    cancellationToken));
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task ReturnDistributedLock_When_TryingToAcquireLock_And_RepositorySucceeds(
+            LockIdentifier lockIdentifier,
+            LockTimeout lockTimeout,
+            LockId lockId,
+            [Frozen] Mock<IDistributedLockRepository> repositoryMock,
+            DistributedLockAcquirer distributedLockAcquirer,
+            CancellationToken cancellationToken)
+        {
+            repositoryMock
+                .Setup(repository => repository.TryAcquireAsync(
+                    lockIdentifier,
+                    lockTimeout,
+                    out lockId,
+                    cancellationToken))
+                .ReturnsAsync(true);
+
+            var result = await distributedLockAcquirer.AcquireAsync(
+                lockIdentifier,
+                lockTimeout,
+                cancellationToken);
+
+            Assert.Equal(lockId, result.LockId);
+        }
+    }
+}
