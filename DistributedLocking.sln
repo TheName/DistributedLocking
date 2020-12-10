@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking", "Distr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.UnitTests", "DistributedLocking.UnitTests\DistributedLocking.UnitTests.csproj", "{AD99ECA2-FC27-4205-A0A6-B6BD17EDFDBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.SqlServer", "DistributedLocking.SqlServer\DistributedLocking.SqlServer.csproj", "{9394FB25-8E6E-48F7-B9B1-C7025DCD32FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{AD99ECA2-FC27-4205-A0A6-B6BD17EDFDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD99ECA2-FC27-4205-A0A6-B6BD17EDFDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD99ECA2-FC27-4205-A0A6-B6BD17EDFDBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9394FB25-8E6E-48F7-B9B1-C7025DCD32FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9394FB25-8E6E-48F7-B9B1-C7025DCD32FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9394FB25-8E6E-48F7-B9B1-C7025DCD32FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9394FB25-8E6E-48F7-B9B1-C7025DCD32FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -36,14 +36,12 @@ namespace DistributedLocking.UnitTests
             DistributedLockAcquirer distributedLockAcquirer,
             CancellationToken cancellationToken)
         {
-            LockId lockId = null;
             repositoryMock
                 .Setup(repository => repository.TryAcquireAsync(
                     lockIdentifier,
                     lockTimeout,
-                    out lockId,
                     cancellationToken))
-                .ReturnsAsync(false);
+                .ReturnsAsync((false, null));
 
             await Assert.ThrowsAsync<CouldNotAcquireLockException>(() =>
                 distributedLockAcquirer.AcquireAsync(
@@ -66,9 +64,8 @@ namespace DistributedLocking.UnitTests
                 .Setup(repository => repository.TryAcquireAsync(
                     lockIdentifier,
                     lockTimeout,
-                    out lockId,
                     cancellationToken))
-                .ReturnsAsync(true);
+                .ReturnsAsync((true, lockId));
 
             var result = await distributedLockAcquirer.AcquireAsync(
                 lockIdentifier,

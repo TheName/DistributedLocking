@@ -22,12 +22,13 @@ namespace TheName.DistributedLocking
             LockTimeout lockTimeout,
             CancellationToken cancellationToken)
         {
-            if (!await _repository.TryAcquireAsync(lockIdentifier, lockTimeout, out var lockId, cancellationToken).ConfigureAwait(false))
+            var (success, acquiredLockId) = await _repository.TryAcquireAsync(lockIdentifier, lockTimeout, cancellationToken).ConfigureAwait(false); 
+            if (!success)
             {
                 throw new CouldNotAcquireLockException(lockIdentifier, lockTimeout);
             }
 
-            return new DistributedLock(lockId, _repository);
+            return new DistributedLock(acquiredLockId, _repository);
         }
     }
 }
