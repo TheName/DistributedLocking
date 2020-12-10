@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
-using DistributedLocking.UnitTests.Attributes;
 using Moq;
+using TestHelpers.Attributes;
 using TheName.DistributedLocking;
 using TheName.DistributedLocking.Abstractions.Exceptions;
 using TheName.DistributedLocking.Abstractions.Records;

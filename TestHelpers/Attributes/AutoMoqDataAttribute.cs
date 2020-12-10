@@ -1,7 +1,7 @@
 ﻿using AutoFixture.Xunit2;
-using DistributedLocking.UnitTests.AutoFixture;
+using TestHelpers.AutoFixture;
 
-namespace DistributedLocking.UnitTests.Attributes
+namespace TestHelpers.Attributes
 {
     public class AutoMoqDataAttribute : AutoDataAttribute
     {

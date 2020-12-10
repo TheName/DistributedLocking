@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 
-namespace DistributedLocking.UnitTests.AutoFixture
+namespace TestHelpers.AutoFixture
 {
     public static class AutoFixtureFactory
     {
