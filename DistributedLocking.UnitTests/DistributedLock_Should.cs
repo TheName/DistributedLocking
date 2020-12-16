@@ -39,7 +39,7 @@ namespace DistributedLocking.UnitTests
 
         [Theory]
         [AutoMoqData]
-        public async Task TryToReleaseLock_When_Disposing(
+        internal async Task TryToReleaseLock_When_Disposing(
             [Frozen] Mock<IDistributedLockRepository> distributedLockRepositoryMock,
             DistributedLock distributedLock)
         {
@@ -53,7 +53,7 @@ namespace DistributedLocking.UnitTests
 
         [Theory]
         [AutoMoqData]
-        public async Task Throw_When_TryingToReleaseLock_When_Disposing_And_ReleasingFails(
+        internal async Task Throw_When_TryingToReleaseLock_When_Disposing_And_ReleasingFails(
             [Frozen] Mock<IDistributedLockRepository> distributedLockRepositoryMock,
             DistributedLock distributedLock)
         {

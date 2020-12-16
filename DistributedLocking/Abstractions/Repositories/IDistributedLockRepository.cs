@@ -12,5 +12,9 @@ namespace TheName.DistributedLocking.Abstractions.Repositories
             CancellationToken cancellationToken);
 
         Task<bool> TryReleaseAsync(LockId lockId, CancellationToken cancellationToken);
+
+        Task<bool> ExistsAsync(CancellationToken cancellationToken);
+
+        Task CreateIfNotExistsAsync(CancellationToken cancellationToken);
     }
 }

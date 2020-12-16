@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.SqlServe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpers", "TestHelpers\TestHelpers.csproj", "{0B8FFBA6-0703-4BF2-9297-BEFA57758FF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInjection", "Extensions.DependencyInjection\Extensions.DependencyInjection.csproj", "{8E469476-1DB2-4A4B-BD74-079A678ADBCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInjection.SqlServer", "Extensions.DependencyInjection.SqlServer\Extensions.DependencyInjection.SqlServer.csproj", "{36232988-824B-4824-A732-AAABB474C8AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{0B8FFBA6-0703-4BF2-9297-BEFA57758FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B8FFBA6-0703-4BF2-9297-BEFA57758FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B8FFBA6-0703-4BF2-9297-BEFA57758FF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E469476-1DB2-4A4B-BD74-079A678ADBCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E469476-1DB2-4A4B-BD74-079A678ADBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E469476-1DB2-4A4B-BD74-079A678ADBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E469476-1DB2-4A4B-BD74-079A678ADBCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36232988-824B-4824-A732-AAABB474C8AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36232988-824B-4824-A732-AAABB474C8AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36232988-824B-4824-A732-AAABB474C8AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36232988-824B-4824-A732-AAABB474C8AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

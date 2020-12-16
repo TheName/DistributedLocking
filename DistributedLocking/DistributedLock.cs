@@ -8,7 +8,7 @@ using TheName.DistributedLocking.Abstractions.Repositories;
 
 namespace TheName.DistributedLocking
 {
-    public class DistributedLock : IDistributedLock
+    internal class DistributedLock : IDistributedLock
     {
         public LockId LockId { get; }
         

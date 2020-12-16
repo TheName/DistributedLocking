@@ -3,11 +3,8 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using TheName.DistributedLocking.Abstractions.Repositories;
+using TheName.DistributedLocking.Extensions.DependencyInjection.SqlServer;
 using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Configuration;
-using TheName.DistributedLocking.SqlServer.Repositories;
 
 namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
 {
@@ -36,19 +33,8 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
             var serviceCollection = new ServiceCollection();
             serviceCollection
                 .AddSingleton<IConfiguration>(configuration)
-                .AddOptions<SqlServerDistributedLockConfiguration>()
-                .Bind(configuration.GetSection(nameof(SqlServerDistributedLockConfiguration)))
-                .PostConfigure(lockConfiguration =>
-                {
-                    var sqlConnectionBuilder = new SqlConnectionStringBuilder(lockConfiguration.ConnectionString);
-                    sqlConnectionBuilder.InitialCatalog = $"{sqlConnectionBuilder.InitialCatalog}_{Guid.NewGuid()}";
-                    lockConfiguration.ConnectionString = sqlConnectionBuilder.ConnectionString;
-                });
-
-            serviceCollection
-                .AddSingleton<ISqlServerDistributedLockConfiguration>(provider =>
-                    provider.GetRequiredService<IOptions<SqlServerDistributedLockConfiguration>>().Value)
-                .AddSingleton<IDistributedLockRepository, SqlServerDistributedLockRepository>();
+                .AddSqlServerDistributedLocking()
+                .Decorate<ISqlServerDistributedLockConfiguration, SqlServerDistributedLockConfiguration>();
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
             
@@ -84,6 +70,31 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
             if (ServiceProvider is IDisposable disposable)
             {
                 disposable.Dispose();
+            }
+        }
+        
+        private class SqlServerDistributedLockConfiguration : ISqlServerDistributedLockConfiguration
+        {
+            private readonly ISqlServerDistributedLockConfiguration _configuration;
+            private readonly Guid _databaseId = Guid.NewGuid();
+            
+            public string ConnectionString
+            {
+                get
+                {
+                    var sqlConnectionBuilder = new SqlConnectionStringBuilder(_configuration.ConnectionString);
+                    sqlConnectionBuilder.InitialCatalog = $"{sqlConnectionBuilder.InitialCatalog}_{_databaseId}";
+                    return sqlConnectionBuilder.ConnectionString;
+                }
+            }
+
+            public string SchemaName => _configuration.SchemaName;
+            public string TableName => _configuration.TableName;
+            public TimeSpan SqlApplicationLockTimeout => _configuration.SqlApplicationLockTimeout;
+
+            public SqlServerDistributedLockConfiguration(ISqlServerDistributedLockConfiguration configuration)
+            {
+                _configuration = configuration;
             }
         }
     }
