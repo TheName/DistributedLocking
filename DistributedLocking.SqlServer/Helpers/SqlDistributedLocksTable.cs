@@ -37,7 +37,7 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
         private static readonly string DeleteDistributedLockIfExistsSqlCommandFormat =
             "DELETE FROM [{0}].[{1}] " +
             $"WHERE LockId = {LockIdParameterName} " +
-            "AND    ExpiryDateTimestamp < SYSUTCDATETIME();";
+            "AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
         
         private readonly ISqlClient _sqlClient;
 

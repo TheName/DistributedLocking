@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DistributedLocking.SqlServer.IntegrationTests.CollectionDefinitions;
@@ -34,6 +35,104 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             
             Assert.True(success);
             Assert.NotEqual(Guid.Empty, acquiredLockId.Value);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task FailToAcquireLock_When_TryingToAcquire_And_LockIdentifierIsAlreadyAcquired(
+            LockIdentifier lockIdentifier,
+            LockTimeout lockTimeout)
+        {
+            // make sure the timeout will last at least until we try to acquire again
+            lockTimeout = new LockTimeout(lockTimeout.Value + TimeSpan.FromSeconds(5));
+            var (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            Assert.True(success);
+            
+            (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            Assert.False(success);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task AcquireLockOnlyOnOneThread_When_TryingToAcquireLockInParallel(
+            LockIdentifier lockIdentifier,
+            LockTimeout lockTimeout)
+        {
+            // make sure the timeout will last at least until all tasks are done
+            lockTimeout = new LockTimeout(lockTimeout.Value + TimeSpan.FromSeconds(5));
+            var tryAcquireTasks = Enumerable.Range(0, 1000)
+                .Select(i =>
+                    DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None))
+                .ToList();
+
+            await Task.WhenAll(tryAcquireTasks);
+
+            var tryAcquireResults = tryAcquireTasks
+                .Select(task => task.Result)
+                .ToList();
+
+            Assert.Single(tryAcquireResults, tuple => tuple.Success);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task ReleaseAcquiredLock(
+            LockIdentifier lockIdentifier,
+            LockTimeout lockTimeout)
+        {
+            // make sure the timeout will last at least until the release is called
+            lockTimeout = new LockTimeout(lockTimeout.Value + TimeSpan.FromSeconds(5));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            Assert.True(success);
+
+            var result = await DistributedLockRepository.TryReleaseAsync(acquiredLockId, CancellationToken.None);
+            
+            Assert.True(result);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_TimeoutHasExpired(
+            LockIdentifier lockIdentifier,
+            LockTimeout lockTimeout)
+        {
+            // make sure the timeout will last no longer than until we try to release it
+            const int maxMillisecondsTimeout = 100;
+            lockTimeout = new LockTimeout(TimeSpan.FromMilliseconds(lockTimeout.Value.TotalMilliseconds % maxMillisecondsTimeout));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            Assert.True(success);
+
+            await Task.Delay(maxMillisecondsTimeout);
+            var result = await DistributedLockRepository.TryReleaseAsync(acquiredLockId, CancellationToken.None);
+            
+            Assert.False(result);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_LockWasNotAcquired(
+            LockId lockId)
+        {
+            var result = await DistributedLockRepository.TryReleaseAsync(lockId, CancellationToken.None);
+            
+            Assert.False(result);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task AcquireLock_When_TryingToAcquireLock_And_LockWasAcquiredAndAlreadyReleased(
+            LockIdentifier lockIdentifier,
+            LockTimeout lockTimeout)
+        {
+            // make sure the timeout will last at least until the release is called
+            lockTimeout = new LockTimeout(lockTimeout.Value + TimeSpan.FromSeconds(5));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            Assert.True(success);
+            var result = await DistributedLockRepository.TryReleaseAsync(acquiredLockId, CancellationToken.None);
+            Assert.True(result);
+
+            (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            Assert.True(success);
         }
     }
 }
