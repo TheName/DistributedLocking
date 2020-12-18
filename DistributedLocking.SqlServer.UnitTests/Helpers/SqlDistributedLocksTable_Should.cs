@@ -294,6 +294,6 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         private static string GetExpectedDeleteCommandText(string schemaName, string tableName) =>
             $"DELETE FROM [{schemaName}].[{tableName}] " +
             "WHERE LockId = @LockId " +
-            "AND    ExpiryDateTimestamp < SYSUTCDATETIME();";
+            "AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
     }
 }

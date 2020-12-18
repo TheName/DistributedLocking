@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInject
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{862407D1-65AF-431B-A2CE-DEC7D1A4F29E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.Abstractions", "DistributedLocking.Abstractions\DistributedLocking.Abstractions.csproj", "{E18FC300-0869-400A-B878-676CC93AE919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.Abstractions.UnitTests", "DistributedLocking.Abstractions.UnitTests\DistributedLocking.Abstractions.UnitTests.csproj", "{1002DEFB-603F-4BFD-8B88-BCAC4E2ACE03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +72,14 @@ Global
 		{2BD3F588-6778-48C2-B640-3AD95C42F272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BD3F588-6778-48C2-B640-3AD95C42F272}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BD3F588-6778-48C2-B640-3AD95C42F272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E18FC300-0869-400A-B878-676CC93AE919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E18FC300-0869-400A-B878-676CC93AE919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E18FC300-0869-400A-B878-676CC93AE919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E18FC300-0869-400A-B878-676CC93AE919}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1002DEFB-603F-4BFD-8B88-BCAC4E2ACE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1002DEFB-603F-4BFD-8B88-BCAC4E2ACE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1002DEFB-603F-4BFD-8B88-BCAC4E2ACE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1002DEFB-603F-4BFD-8B88-BCAC4E2ACE03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9394FB25-8E6E-48F7-B9B1-C7025DCD32FC} = {862407D1-65AF-431B-A2CE-DEC7D1A4F29E}
