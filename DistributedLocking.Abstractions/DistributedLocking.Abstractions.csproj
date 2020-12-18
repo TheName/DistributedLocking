@@ -5,6 +5,25 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>TheName.DistributedLocking.Abstractions</RootNamespace>
+        <AssemblyName>TheName.DistributedLocking.Abstractions</AssemblyName>
+    </PropertyGroup>
+
+    <!-- NuGet metadata -->
+    <PropertyGroup>
+        <Title>DistributedLocking.Abstractions</Title>
+        <Description>This package contains abstractions over TheName.DistributedLocking packages.</Description>
+        <Authors>Dawid Szmidka</Authors>
+        <PackageId>TheName.DistributedLocking.Abstractions</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <PackageReleaseNotes>
+            - Initial version of DistributedLocking.Abstractions project
+        </PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
+        <RepositoryUrl>https://github.com/TheName/DistributedLocking</RepositoryUrl>
     </PropertyGroup>
 
 </Project>
