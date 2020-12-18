@@ -4,20 +4,17 @@ using System.Threading.Tasks;
 
 namespace TheName.DistributedLocking.SqlServer.Abstractions.Helpers
 {
-    internal interface ISqlDistributedLocksTable
+    internal interface ISqlDistributedLocksTableManager
     {
-        Task<bool> TryInsertAsync(
+        Task<bool> TableExistsAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan expirationTimeSpan,
             CancellationToken cancellationToken);
-
-        Task<bool> TryDeleteAsync(
+        
+        Task CreateTableIfNotExistsAsync(
             string schemaName,
             string tableName,
-            Guid lockId,
+            TimeSpan sqlApplicationLockTimeout,
             CancellationToken cancellationToken);
     }
 }

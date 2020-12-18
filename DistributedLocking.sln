@@ -14,6 +14,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInject
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInjection.SqlServer", "Extensions.DependencyInjection.SqlServer\Extensions.DependencyInjection.SqlServer.csproj", "{36232988-824B-4824-A732-AAABB474C8AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.SqlServer.UnitTests", "DistributedLocking.SqlServer.UnitTests\DistributedLocking.SqlServer.UnitTests.csproj", "{86762DA1-6528-4C3D-B63F-D3AA1FAD3EF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInjection.UnitTests", "Extensions.DependencyInjection.UnitTests\Extensions.DependencyInjection.UnitTests.csproj", "{5CB12C73-337E-4198-A889-EC2611D8B310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInjection.SqlServer.UnitTests", "Extensions.DependencyInjection.SqlServer.UnitTests\Extensions.DependencyInjection.SqlServer.UnitTests.csproj", "{2BD3F588-6778-48C2-B640-3AD95C42F272}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{862407D1-65AF-431B-A2CE-DEC7D1A4F29E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +56,24 @@ Global
 		{36232988-824B-4824-A732-AAABB474C8AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36232988-824B-4824-A732-AAABB474C8AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36232988-824B-4824-A732-AAABB474C8AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86762DA1-6528-4C3D-B63F-D3AA1FAD3EF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86762DA1-6528-4C3D-B63F-D3AA1FAD3EF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86762DA1-6528-4C3D-B63F-D3AA1FAD3EF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86762DA1-6528-4C3D-B63F-D3AA1FAD3EF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CB12C73-337E-4198-A889-EC2611D8B310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CB12C73-337E-4198-A889-EC2611D8B310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CB12C73-337E-4198-A889-EC2611D8B310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CB12C73-337E-4198-A889-EC2611D8B310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD3F588-6778-48C2-B640-3AD95C42F272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD3F588-6778-48C2-B640-3AD95C42F272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD3F588-6778-48C2-B640-3AD95C42F272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD3F588-6778-48C2-B640-3AD95C42F272}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9394FB25-8E6E-48F7-B9B1-C7025DCD32FC} = {862407D1-65AF-431B-A2CE-DEC7D1A4F29E}
+		{C5EF780B-3C1A-4650-A9F2-334BDB7EBE45} = {862407D1-65AF-431B-A2CE-DEC7D1A4F29E}
+		{86762DA1-6528-4C3D-B63F-D3AA1FAD3EF4} = {862407D1-65AF-431B-A2CE-DEC7D1A4F29E}
+		{36232988-824B-4824-A732-AAABB474C8AE} = {862407D1-65AF-431B-A2CE-DEC7D1A4F29E}
+		{2BD3F588-6778-48C2-B640-3AD95C42F272} = {862407D1-65AF-431B-A2CE-DEC7D1A4F29E}
 	EndGlobalSection
 EndGlobal

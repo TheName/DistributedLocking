@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using TheName.DistributedLocking.Abstractions.Repositories;
+using TheName.DistributedLocking.Abstractions.Factories;
 using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
 using TheName.DistributedLocking.SqlServer.Configuration;
-using TheName.DistributedLocking.SqlServer.Helpers;
-using TheName.DistributedLocking.SqlServer.Repositories;
+using TheName.DistributedLocking.SqlServer.Factories;
 
 namespace TheName.DistributedLocking.Extensions.DependencyInjection.SqlServer
 {
@@ -14,22 +12,11 @@ namespace TheName.DistributedLocking.Extensions.DependencyInjection.SqlServer
     {
         public static IServiceCollection AddSqlServerDistributedLocking(this IServiceCollection services)
         {
-            services.AddDistributedLocking();
-            services.TryAddTransient<ISqlClient>(provider =>
-                new SqlClient(provider.GetRequiredService<ISqlServerDistributedLockConfiguration>()));
+            services
+                .AddDistributedLocking()
+                .TryAddTransient<IDistributedLockRepositoryFactory, SqlServerDistributedLockFactory>();
 
-            services.TryAddTransient<ISqlDataDefinitionLanguageExecutor>(provider =>
-                new SqlDataDefinitionLanguageExecutor(provider.GetRequiredService<ISqlClient>()));
-
-            services.TryAddTransient<ISqlDistributedLocksTable>(provider =>
-                new SqlDistributedLocksTable(
-                    provider.GetRequiredService<ISqlClient>(),
-                    provider.GetRequiredService<ISqlDataDefinitionLanguageExecutor>()));
-
-            services.TryAddTransient<IDistributedLockRepository>(provider =>
-                new SqlServerDistributedLockRepository(
-                    provider.GetRequiredService<ISqlDistributedLocksTable>(),
-                    provider.GetRequiredService<ISqlServerDistributedLockConfiguration>()));
+            services.TryAddTransient<IDistributedLockRepositoryManagerFactory, SqlServerDistributedLockFactory>();
 
             services.AddOptions<SqlServerDistributedLockConfiguration>()
                 .BindConfiguration(nameof(SqlServerDistributedLockConfiguration))

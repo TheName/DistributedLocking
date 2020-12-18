@@ -11,9 +11,9 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
     public class SqlDatabaseFixture : IDisposable
     {
         private const string ConfigurationFileName = "appsettings.json";
-        
-        public IServiceProvider ServiceProvider { get; }
-        
+
+        private IServiceProvider ServiceProvider { get; }
+
         private string DatabaseName 
         {
             get
@@ -41,6 +41,17 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
             CreateDatabaseAsync().GetAwaiter().GetResult();
         }
 
+        public T GetService<T>() => ServiceProvider.GetRequiredService<T>();
+
+        public void Dispose()
+        {
+            DropDatabaseAsync().GetAwaiter().GetResult();
+            if (ServiceProvider is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+
         private async Task CreateDatabaseAsync() =>
             await ExecuteNonQueryAsyncWithoutInitialCatalog($"CREATE DATABASE \"{DatabaseName}\"");
 
@@ -62,15 +73,6 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
             var command = new SqlCommand(sqlCommand, connection);
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
-        }
-        
-        public void Dispose()
-        {
-            DropDatabaseAsync().GetAwaiter().GetResult();
-            if (ServiceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
         }
         
         private class SqlServerDistributedLockConfiguration : ISqlServerDistributedLockConfiguration

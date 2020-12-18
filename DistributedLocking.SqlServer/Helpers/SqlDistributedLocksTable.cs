@@ -12,22 +12,13 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
         private const string LockIdentifierParameterName = "@LockIdentifier";
         private const string LockIdParameterName = "@LockId";
         private const string ExpiryDateTimeSpanInMillisecondsParameterName = "@ExpiryDateTimeSpanInMilliseconds";
-        
-        private const string CreateDistributedLockTableSqlCommandFormat =
-            "CREATE TABLE [{0}].{1} ( " +
-            "   LockIdentifier          CHAR(36)    NOT NULL UNIQUE, " +
-            "   LockId                  CHAR(36)    NOT NULL UNIQUE, " +
-            "   ExpiryDateTimestamp     DATETIME2   NOT NULL, " +
-            "   CONSTRAINT PK_{1}       PRIMARY KEY (LockIdentifier)); " +
-            "CREATE INDEX IDX_LockIdentifier_ExpiryDateTimestamp ON [{0}].{1} (LockIdentifier, ExpiryDateTimestamp); " +
-            "CREATE INDEX IDX_LockId_ExpiryDateTimestamp ON [{0}].{1} (LockId, ExpiryDateTimestamp); ";
 
         private static readonly string InsertIfNotExistsSqlCommandFormat =
             "BEGIN TRANSACTION; " +
-            "SET NOCOUNT ON " +
+            "SET NOCOUNT ON; " +
             "DELETE FROM [{0}].[{1}] " +
             $"  WHERE LockIdentifier = {LockIdentifierParameterName} AND ExpiryDateTimestamp < SYSUTCDATETIME(); " +
-            "SET NOCOUNT OFF " +
+            "SET NOCOUNT OFF; " +
             "COMMIT TRANSACTION; " +
             "BEGIN TRANSACTION; " +
             "INSERT INTO [{0}].[{1}] " +
@@ -49,32 +40,11 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
             "AND    ExpiryDateTimestamp < SYSUTCDATETIME();";
         
         private readonly ISqlClient _sqlClient;
-        private readonly ISqlDataDefinitionLanguageExecutor _dataDefinitionLanguageExecutor;
 
-        public SqlDistributedLocksTable(
-            ISqlClient sqlClient,
-            ISqlDataDefinitionLanguageExecutor dataDefinitionLanguageExecutor)
+        public SqlDistributedLocksTable(ISqlClient sqlClient)
         {
             _sqlClient = sqlClient ?? throw new ArgumentNullException(nameof(sqlClient));
-            _dataDefinitionLanguageExecutor = dataDefinitionLanguageExecutor ?? throw new ArgumentNullException(nameof(dataDefinitionLanguageExecutor));
         }
-
-        public async Task<bool> TableExistsAsync(string schemaName, string tableName, CancellationToken cancellationToken) =>
-            await _dataDefinitionLanguageExecutor.TableExistsAsync(schemaName, tableName, cancellationToken)
-                .ConfigureAwait(false);
-
-        public async Task CreateTableIfNotExistsAsync(
-            string schemaName,
-            string tableName,
-            TimeSpan sqlApplicationLockTimeout,
-            CancellationToken cancellationToken) =>
-            await _dataDefinitionLanguageExecutor.CreateTableIfNotExistsAsync(
-                    schemaName,
-                    tableName,
-                    sqlApplicationLockTimeout,
-                    GetCreateTableSqlCommand(schemaName, tableName),
-                    cancellationToken)
-                .ConfigureAwait(false);
 
         public async Task<bool> TryInsertAsync(
             string schemaName,
@@ -120,12 +90,6 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
                     $"Delete distributed lock statement should have affected 1 or 0 rows, but it affected {numberOfAffectedRows}")
             };
         }
-        
-        private static string GetCreateTableSqlCommand(string schemaName, string tableName) =>
-            string.Format(
-                CreateDistributedLockTableSqlCommandFormat,
-                schemaName,
-                tableName);
 
         private static string GetInsertDistributedLockIfNotExistsSqlCommandText(string schemaName, string tableName) =>
             string.Format(InsertIfNotExistsSqlCommandFormat, schemaName, tableName);

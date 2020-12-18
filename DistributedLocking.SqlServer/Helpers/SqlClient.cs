@@ -2,18 +2,17 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
 using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
 
 namespace TheName.DistributedLocking.SqlServer.Helpers
 {
     internal class SqlClient : ISqlClient
     {
-        private readonly ISqlServerDistributedLockConfiguration _configuration;
+        private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-        public SqlClient(ISqlServerDistributedLockConfiguration configuration)
+        public SqlClient(ISqlConnectionFactory sqlConnectionFactory)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _sqlConnectionFactory = sqlConnectionFactory ?? throw new ArgumentNullException(nameof(sqlConnectionFactory));
         }
         
         public async Task<T> ExecuteScalarAsync<T>(string sqlCommandText, CancellationToken cancellationToken)
@@ -29,10 +28,11 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
 
         public async Task<int> ExecuteNonQueryAsync(string sqlCommandText, SqlParameter[] sqlParameters, CancellationToken cancellationToken)
         {
-            var connection = new SqlConnection(_configuration.ConnectionString);
+            var connection = _sqlConnectionFactory.Create();
             await using (connection.ConfigureAwait(false))
             {
-                var command = new SqlCommand(sqlCommandText, connection);
+                var command = connection.CreateCommand();
+                command.CommandText = sqlCommandText;
                 command.Parameters.AddRange(sqlParameters);
                 await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
                 return await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
@@ -41,10 +41,11 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
 
         private async Task<object> ExecuteScalarAsync(string sqlCommandText, CancellationToken cancellationToken)
         {
-            var connection = new SqlConnection(_configuration.ConnectionString);
+            var connection = _sqlConnectionFactory.Create();
             await using (connection.ConfigureAwait(false))
             {
-                var command = new SqlCommand(sqlCommandText, connection);
+                var command = connection.CreateCommand();
+                command.CommandText = sqlCommandText;
                 await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
                 return await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
             }

@@ -16,8 +16,6 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
         private string SchemaName => _configuration.SchemaName;
         private string TableName => _configuration.TableName;
 
-        private TimeSpan CreateTableIfNotExistsSqlApplicationLockTimeout => _configuration.SqlApplicationLockTimeout;
-
         internal SqlServerDistributedLockRepository(
             ISqlDistributedLocksTable sqlDistributedLocksTable,
             ISqlServerDistributedLockConfiguration configuration)
@@ -47,18 +45,6 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
         public async Task<bool> TryReleaseAsync(LockId lockId, CancellationToken cancellationToken) =>
             await _sqlDistributedLocksTable
                 .TryDeleteAsync(SchemaName, TableName, lockId.Value, cancellationToken)
-                .ConfigureAwait(false);
-
-        public async Task<bool> ExistsAsync(CancellationToken cancellationToken) =>
-            await _sqlDistributedLocksTable.TableExistsAsync(SchemaName, TableName, cancellationToken)
-                .ConfigureAwait(false);
-
-        public async Task CreateIfNotExistsAsync(CancellationToken cancellationToken) =>
-            await _sqlDistributedLocksTable.CreateTableIfNotExistsAsync(
-                    SchemaName,
-                    TableName,
-                    CreateTableIfNotExistsSqlApplicationLockTimeout,
-                    cancellationToken)
                 .ConfigureAwait(false);
     }
 }

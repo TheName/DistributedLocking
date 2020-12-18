@@ -80,14 +80,9 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
                 (int) applicationLockTimeout.TotalMilliseconds,
                 createTableCommandText);
 
-        private static void ValidateGetAppLockResult(object result, TimeSpan applicationLockTimeout)
+        private static void ValidateGetAppLockResult(int result, TimeSpan applicationLockTimeout)
         {
-            if (result is not int resultInt)
-            {
-                throw new InvalidOperationException("SQL script creating schema and table should have returned a result status code.");
-            }
-
-            switch ((GetAppLockResult)resultInt)
+            switch ((GetAppLockResult)result)
             {
                 case GetAppLockResult.Successful:
                 case GetAppLockResult.SuccessfulAfterWaiting:
