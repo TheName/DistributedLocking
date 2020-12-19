@@ -49,7 +49,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqData]
         public async Task ReturnFalseAndNullAcquiredLockId_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout,
+            DistributedLockTimeToLive lockTimeToLive,
             string schemaName,
             string tableName)
         {
@@ -63,13 +63,13 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                     tableName,
                     lockIdentifier.Value,
                     It.Is<Guid>(guid => guid != Guid.Empty),
-                    lockTimeout.Value,
+                    lockTimeToLive.Value,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var (success, acquiredLockId) = await SqlServerDistributedLockRepository.TryAcquireAsync(   
                 lockIdentifier,
-                lockTimeout,
+                lockTimeToLive,
                 CancellationToken.None);
             
             Assert.False(success);
@@ -80,7 +80,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqData]
         public async Task ReturnTrueAndAcquiredLockId_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout,
+            DistributedLockTimeToLive lockTimeToLive,
             string schemaName,
             string tableName)
         {
@@ -96,7 +96,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                     tableName,
                     lockIdentifier.Value,
                     It.Is<Guid>(guid => guid != Guid.Empty),
-                    lockTimeout.Value,
+                    lockTimeToLive.Value,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true)
                 .Callback<string, string, Guid, Guid, TimeSpan, CancellationToken>((_, _, _, lockIdValue, _, _) =>
@@ -104,7 +104,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
 
             var (success, acquiredLockId) = await SqlServerDistributedLockRepository.TryAcquireAsync(   
                 lockIdentifier,
-                lockTimeout,
+                lockTimeToLive,
                 CancellationToken.None);
             
             Assert.True(success);

@@ -19,13 +19,13 @@ namespace TheName.DistributedLocking
         
         public async Task<IDistributedLock> AcquireAsync(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout,
+            DistributedLockTimeToLive lockTimeToLive,
             CancellationToken cancellationToken)
         {
-            var (success, acquiredLockId) = await _repository.TryAcquireAsync(lockIdentifier, lockTimeout, cancellationToken).ConfigureAwait(false); 
+            var (success, acquiredLockId) = await _repository.TryAcquireAsync(lockIdentifier, lockTimeToLive, cancellationToken).ConfigureAwait(false); 
             if (!success)
             {
-                throw new CouldNotAcquireLockException(lockIdentifier, lockTimeout);
+                throw new CouldNotAcquireLockException(lockIdentifier, lockTimeToLive);
             }
 
             return new DistributedLock(acquiredLockId, lockIdentifier, _repository);

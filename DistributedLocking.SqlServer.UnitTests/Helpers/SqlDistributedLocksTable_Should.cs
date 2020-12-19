@@ -37,7 +37,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             string tableName,
             Guid lockIdentifier,
             Guid lockId,
-            TimeSpan expirationTimeSpan)
+            TimeSpan timeToLiveTimeSpan)
         {
             var expectedCommandText = GetExpectedInsertIfNotExistsCommandText(schemaName, tableName);
             
@@ -46,7 +46,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
                 tableName,
                 lockIdentifier,
                 lockId,
-                expirationTimeSpan,
+                timeToLiveTimeSpan,
                 CancellationToken.None);
 
             SqlClientMock
@@ -65,14 +65,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             string tableName,
             Guid lockIdentifier,
             Guid lockId,
-            TimeSpan expirationTimeSpan)
+            TimeSpan timeToLiveTimeSpan)
         {
             await SqlDistributedLocksTable.TryInsertAsync(
                 schemaName,
                 tableName,
                 lockIdentifier,
                 lockId,
-                expirationTimeSpan,
+                timeToLiveTimeSpan,
                 CancellationToken.None);
 
             var assertSqlParameters = new Func<SqlParameter[], bool>(parameters =>
@@ -91,7 +91,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
                 
                 var expiryDateTimeSpanInMillisecondsParameter = parameters.Single(parameter => parameter.ParameterName == "@ExpiryDateTimeSpanInMilliseconds");
                 Assert.Equal(SqlDbType.BigInt, expiryDateTimeSpanInMillisecondsParameter.SqlDbType);
-                Assert.Equal(expirationTimeSpan.TotalMilliseconds, expiryDateTimeSpanInMillisecondsParameter.Value);
+                Assert.Equal(timeToLiveTimeSpan.TotalMilliseconds, expiryDateTimeSpanInMillisecondsParameter.Value);
 
                 return true;
             });
@@ -115,7 +115,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             string tableName,
             Guid lockIdentifier,
             Guid lockId,
-            TimeSpan expirationTimeSpan)
+            TimeSpan timeToLiveTimeSpan)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -129,7 +129,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
                 tableName,
                 lockIdentifier,
                 lockId,
-                expirationTimeSpan,
+                timeToLiveTimeSpan,
                 CancellationToken.None);
             
             Assert.Equal(expectedResult, result);
@@ -144,7 +144,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             string tableName,
             Guid lockIdentifier,
             Guid lockId,
-            TimeSpan expirationTimeSpan)
+            TimeSpan timeToLiveTimeSpan)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -158,7 +158,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
                 tableName,
                 lockIdentifier,
                 lockId,
-                expirationTimeSpan,
+                timeToLiveTimeSpan,
                 CancellationToken.None));
         }
 

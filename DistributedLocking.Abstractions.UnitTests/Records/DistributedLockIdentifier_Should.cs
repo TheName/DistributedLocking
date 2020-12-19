@@ -5,12 +5,12 @@ using Xunit;
 
 namespace DistributedLocking.Abstractions.UnitTests.Records
 {
-    public class LockId_Should
+    public class DistributedLockIdentifier_Should
     {
         [Fact]
         public void Throw_When_TryingToCreateWithEmptyGuid()
         {
-            Assert.Throws<ArgumentException>(() => new DistributedLockId(Guid.Empty));
+            Assert.Throws<ArgumentException>(() => new DistributedLockIdentifier(Guid.Empty));
         }
 
         [Theory]
@@ -18,7 +18,7 @@ namespace DistributedLocking.Abstractions.UnitTests.Records
         public void NotThrow_When_TryingToCreateWithNonEmptyGuid(
             Guid lockId)
         {
-            _ = new DistributedLockId(lockId);
+            _ = new DistributedLockIdentifier(lockId);
         }
     }
 }

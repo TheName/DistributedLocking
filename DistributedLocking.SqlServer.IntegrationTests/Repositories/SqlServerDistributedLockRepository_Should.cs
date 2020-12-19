@@ -29,9 +29,9 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task AcquireLock(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout)
+            DistributedLockTimeToLive lockTimeToLive)
         {
-            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             
             Assert.True(success);
             Assert.NotEqual(Guid.Empty, acquiredLockId.Value);
@@ -41,14 +41,14 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task FailToAcquireLock_When_TryingToAcquire_And_LockIdentifierIsAlreadyAcquired(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout)
+            DistributedLockTimeToLive lockTimeToLive)
         {
             // make sure the timeout will last at least until we try to acquire again
-            lockTimeout = new DistributedLockTimeToLive(lockTimeout.Value + TimeSpan.FromSeconds(5));
-            var (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            lockTimeToLive = new DistributedLockTimeToLive(lockTimeToLive.Value + TimeSpan.FromSeconds(5));
+            var (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             Assert.True(success);
             
-            (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             Assert.False(success);
         }
 
@@ -56,13 +56,13 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task AcquireLockOnlyOnOneThread_When_TryingToAcquireLockInParallel(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout)
+            DistributedLockTimeToLive lockTimeToLive)
         {
             // make sure the timeout will last at least until all tasks are done
-            lockTimeout = new DistributedLockTimeToLive(lockTimeout.Value + TimeSpan.FromSeconds(5));
+            lockTimeToLive = new DistributedLockTimeToLive(lockTimeToLive.Value + TimeSpan.FromSeconds(5));
             var tryAcquireTasks = Enumerable.Range(0, 1000)
                 .Select(i =>
-                    DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None))
+                    DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None))
                 .ToList();
 
             await Task.WhenAll(tryAcquireTasks);
@@ -78,11 +78,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task ReleaseAcquiredLock(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout)
+            DistributedLockTimeToLive lockTimeToLive)
         {
             // make sure the timeout will last at least until the release is called
-            lockTimeout = new DistributedLockTimeToLive(lockTimeout.Value + TimeSpan.FromSeconds(5));
-            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            lockTimeToLive = new DistributedLockTimeToLive(lockTimeToLive.Value + TimeSpan.FromSeconds(5));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             Assert.True(success);
 
             var result = await DistributedLockRepository.TryReleaseAsync(acquiredLockId, CancellationToken.None);
@@ -94,12 +94,12 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_TimeoutHasExpired(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout)
+            DistributedLockTimeToLive lockTimeToLive)
         {
             // make sure the timeout will last no longer than until we try to release it
             const int maxMillisecondsTimeout = 100;
-            lockTimeout = new DistributedLockTimeToLive(TimeSpan.FromMilliseconds(lockTimeout.Value.TotalMilliseconds % maxMillisecondsTimeout));
-            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            lockTimeToLive = new DistributedLockTimeToLive(TimeSpan.FromMilliseconds(lockTimeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             Assert.True(success);
 
             await Task.Delay(maxMillisecondsTimeout);
@@ -122,16 +122,16 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task AcquireLock_When_TryingToAcquireLock_And_LockWasAcquiredAndAlreadyReleased(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout)
+            DistributedLockTimeToLive lockTimeToLive)
         {
             // make sure the timeout will last at least until the release is called
-            lockTimeout = new DistributedLockTimeToLive(lockTimeout.Value + TimeSpan.FromSeconds(5));
-            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            lockTimeToLive = new DistributedLockTimeToLive(lockTimeToLive.Value + TimeSpan.FromSeconds(5));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             Assert.True(success);
             var result = await DistributedLockRepository.TryReleaseAsync(acquiredLockId, CancellationToken.None);
             Assert.True(result);
 
-            (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             Assert.True(success);
         }
     }

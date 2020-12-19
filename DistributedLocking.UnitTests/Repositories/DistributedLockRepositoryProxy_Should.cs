@@ -34,20 +34,20 @@ namespace DistributedLocking.UnitTests.Repositories
             bool success,
             DistributedLockId lockId,
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout,
+            DistributedLockTimeToLive lockTimeToLive,
             [Frozen] IDistributedLockRepositoryFactory repositoryFactory,
             DistributedLockRepositoryProxy repositoryProxy)
         {
             var repositoryMock = new Mock<IDistributedLockRepository>();
             repositoryMock
-                .Setup(repository => repository.TryAcquireAsync(lockIdentifier, lockTimeout, It.IsAny<CancellationToken>()))
+                .Setup(repository => repository.TryAcquireAsync(lockIdentifier, lockTimeToLive, It.IsAny<CancellationToken>()))
                 .ReturnsAsync((success, lockId));
 
             Mock.Get(repositoryFactory)
                 .Setup(factory => factory.Create())
                 .Returns(repositoryMock.Object);
 
-            var result = await repositoryProxy.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
+            var result = await repositoryProxy.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             
             Assert.Equal(success, result.Success);
             Assert.Equal(lockId, result.AcquiredLockId);

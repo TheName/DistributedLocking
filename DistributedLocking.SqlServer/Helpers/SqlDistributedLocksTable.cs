@@ -51,7 +51,7 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
             string tableName,
             Guid lockIdentifier,
             Guid lockId,
-            TimeSpan expirationTimeSpan,
+            TimeSpan timeToLiveTimeSpan,
             CancellationToken cancellationToken)
         {
             var numberOfAffectedRows = await _sqlClient.ExecuteNonQueryAsync(
@@ -60,7 +60,7 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
                     {
                         GetLockIdentifierParameter(lockIdentifier),
                         GetLockIdParameter(lockId),
-                        GetExpiryDateTimeSpanInMillisecondsParameter(expirationTimeSpan)
+                        GetExpiryDateTimeSpanInMillisecondsParameter(timeToLiveTimeSpan)
                     },
                     cancellationToken)
                 .ConfigureAwait(false);

@@ -31,7 +31,7 @@ namespace DistributedLocking.UnitTests
         [AutoMoqData]
         public async Task Throw_When_TryingToAcquireLock_And_RepositoryFails(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout,
+            DistributedLockTimeToLive lockTimeToLive,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             DistributedLockAcquirer distributedLockAcquirer,
             CancellationToken cancellationToken)
@@ -39,14 +39,14 @@ namespace DistributedLocking.UnitTests
             repositoryMock
                 .Setup(repository => repository.TryAcquireAsync(
                     lockIdentifier,
-                    lockTimeout,
+                    lockTimeToLive,
                     cancellationToken))
                 .ReturnsAsync((false, null));
 
             await Assert.ThrowsAsync<CouldNotAcquireLockException>(() =>
                 distributedLockAcquirer.AcquireAsync(
                     lockIdentifier,
-                    lockTimeout,
+                    lockTimeToLive,
                     cancellationToken));
         }
 
@@ -54,7 +54,7 @@ namespace DistributedLocking.UnitTests
         [AutoMoqData]
         public async Task ReturnDistributedLock_When_TryingToAcquireLock_And_RepositorySucceeds(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout,
+            DistributedLockTimeToLive lockTimeToLive,
             DistributedLockId lockId,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             DistributedLockAcquirer distributedLockAcquirer,
@@ -63,13 +63,13 @@ namespace DistributedLocking.UnitTests
             repositoryMock
                 .Setup(repository => repository.TryAcquireAsync(
                     lockIdentifier,
-                    lockTimeout,
+                    lockTimeToLive,
                     cancellationToken))
                 .ReturnsAsync((true, lockId));
 
             var result = await distributedLockAcquirer.AcquireAsync(
                 lockIdentifier,
-                lockTimeout,
+                lockTimeToLive,
                 cancellationToken);
 
             Assert.Equal(lockId, result.LockId);

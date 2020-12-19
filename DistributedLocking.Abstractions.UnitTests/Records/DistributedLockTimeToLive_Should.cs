@@ -3,9 +3,9 @@ using TestHelpers.Attributes;
 using TheName.DistributedLocking.Abstractions.Records;
 using Xunit;
 
-namespace DistributedLocking.UnitTests.Abstractions.Records
+namespace DistributedLocking.Abstractions.UnitTests.Records
 {
-    public class LockTimeout_Should
+    public class DistributedLockTimeToLive_Should
     {
         [Fact]
         public void Throw_When_TryingToCreateWithZeroTimespan()

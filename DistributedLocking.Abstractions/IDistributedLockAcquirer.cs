@@ -8,7 +8,7 @@ namespace TheName.DistributedLocking.Abstractions
     {
         Task<IDistributedLock> AcquireAsync(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeout,
+            DistributedLockTimeToLive lockTimeToLive,
             CancellationToken cancellationToken);
     }
 }
