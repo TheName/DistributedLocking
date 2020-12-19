@@ -7,7 +7,7 @@ namespace TheName.DistributedLocking.Abstractions
     public interface IDistributedLockAcquirer
     {
         Task<IDistributedLock> AcquireAsync(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             CancellationToken cancellationToken);
     }

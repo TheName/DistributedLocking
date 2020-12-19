@@ -28,7 +28,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task AcquireLock(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout)
         {
             var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeout, CancellationToken.None);
@@ -40,7 +40,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task FailToAcquireLock_When_TryingToAcquire_And_LockIdentifierIsAlreadyAcquired(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout)
         {
             // make sure the timeout will last at least until we try to acquire again
@@ -55,7 +55,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task AcquireLockOnlyOnOneThread_When_TryingToAcquireLockInParallel(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout)
         {
             // make sure the timeout will last at least until all tasks are done
@@ -77,7 +77,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task ReleaseAcquiredLock(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout)
         {
             // make sure the timeout will last at least until the release is called
@@ -93,7 +93,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_TimeoutHasExpired(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout)
         {
             // make sure the timeout will last no longer than until we try to release it
@@ -121,7 +121,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task AcquireLock_When_TryingToAcquireLock_And_LockWasAcquiredAndAlreadyReleased(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout)
         {
             // make sure the timeout will last at least until the release is called

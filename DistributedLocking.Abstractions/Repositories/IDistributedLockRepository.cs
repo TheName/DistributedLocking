@@ -7,7 +7,7 @@ namespace TheName.DistributedLocking.Abstractions.Repositories
     public interface IDistributedLockRepository
     {
         Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             CancellationToken cancellationToken);
 

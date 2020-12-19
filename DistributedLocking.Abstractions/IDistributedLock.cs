@@ -7,6 +7,6 @@ namespace TheName.DistributedLocking.Abstractions
     {
         DistributedLockId LockId { get; }
         
-        LockIdentifier LockIdentifier { get; }
+        DistributedLockIdentifier LockIdentifier { get; }
     }
 }

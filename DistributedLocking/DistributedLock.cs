@@ -12,13 +12,13 @@ namespace TheName.DistributedLocking
     {
         public DistributedLockId LockId { get; }
         
-        public LockIdentifier LockIdentifier { get; }
+        public DistributedLockIdentifier LockIdentifier { get; }
 
         private readonly IDistributedLockRepository _distributedLockRepository;
 
         public DistributedLock(
             DistributedLockId lockId,
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             IDistributedLockRepository distributedLockRepository)
         {
             LockId = lockId ?? throw new ArgumentNullException(nameof(lockId));

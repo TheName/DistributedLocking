@@ -18,7 +18,7 @@ namespace TheName.DistributedLocking
         }
         
         public async Task<IDistributedLock> AcquireAsync(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             CancellationToken cancellationToken)
         {

@@ -33,7 +33,7 @@ namespace DistributedLocking.UnitTests.Repositories
         public async Task ReturnResultFromCreatedRepository_When_CallingTryAcquireAsync(
             bool success,
             DistributedLockId lockId,
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             [Frozen] IDistributedLockRepositoryFactory repositoryFactory,
             DistributedLockRepositoryProxy repositoryProxy)

@@ -25,7 +25,7 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
         }
         
         public async Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
-            LockIdentifier lockIdentifier,
+            DistributedLockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             CancellationToken cancellationToken)
         {
