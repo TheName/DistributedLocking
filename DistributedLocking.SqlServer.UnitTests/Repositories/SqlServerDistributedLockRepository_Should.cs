@@ -117,7 +117,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqWithInlineData(false)]
         public async Task ReturnResultFromTable_When_TryingToReleaseLock(
             bool success,
-            LockId lockId,
+            DistributedLockId lockId,
             string schemaName,
             string tableName)
         {

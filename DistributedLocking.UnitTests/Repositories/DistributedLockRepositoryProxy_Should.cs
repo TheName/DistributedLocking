@@ -32,7 +32,7 @@ namespace DistributedLocking.UnitTests.Repositories
         [AutoMoqWithInlineData(false)]
         public async Task ReturnResultFromCreatedRepository_When_CallingTryAcquireAsync(
             bool success,
-            LockId lockId,
+            DistributedLockId lockId,
             LockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             [Frozen] IDistributedLockRepositoryFactory repositoryFactory,
@@ -58,7 +58,7 @@ namespace DistributedLocking.UnitTests.Repositories
         [AutoMoqWithInlineData(false)]
         public async Task ReturnResultFromCreatedRepository_When_CallingTryReleaseAsync(
             bool success,
-            LockId lockId,
+            DistributedLockId lockId,
             [Frozen] IDistributedLockRepositoryFactory repositoryFactory,
             DistributedLockRepositoryProxy repositoryProxy)
         {

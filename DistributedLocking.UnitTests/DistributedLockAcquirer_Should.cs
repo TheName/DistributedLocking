@@ -55,7 +55,7 @@ namespace DistributedLocking.UnitTests
         public async Task ReturnDistributedLock_When_TryingToAcquireLock_And_RepositorySucceeds(
             LockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
-            LockId lockId,
+            DistributedLockId lockId,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             DistributedLockAcquirer distributedLockAcquirer,
             CancellationToken cancellationToken)

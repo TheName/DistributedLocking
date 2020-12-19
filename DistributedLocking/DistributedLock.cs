@@ -10,14 +10,14 @@ namespace TheName.DistributedLocking
 {
     internal class DistributedLock : IDistributedLock
     {
-        public LockId LockId { get; }
+        public DistributedLockId LockId { get; }
         
         public LockIdentifier LockIdentifier { get; }
 
         private readonly IDistributedLockRepository _distributedLockRepository;
 
         public DistributedLock(
-            LockId lockId,
+            DistributedLockId lockId,
             LockIdentifier lockIdentifier,
             IDistributedLockRepository distributedLockRepository)
         {

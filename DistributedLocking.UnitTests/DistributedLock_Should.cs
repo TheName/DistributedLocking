@@ -26,7 +26,7 @@ namespace DistributedLocking.UnitTests
         [Theory]
         [AutoMoqData]
         public void Throw_When_TryingToCreateWithNullLockIdentifier(
-            LockId lockId,
+            DistributedLockId lockId,
             IDistributedLockRepository distributedLockRepository)
         {
             Assert.Throws<ArgumentNullException>(() => new DistributedLock(lockId, null, distributedLockRepository));
@@ -35,7 +35,7 @@ namespace DistributedLocking.UnitTests
         [Theory]
         [AutoMoqData]
         public void Throw_When_TryingToCreateWithNullRepository(
-            LockId lockId,
+            DistributedLockId lockId,
             LockIdentifier lockIdentifier)
         {
             Assert.Throws<ArgumentNullException>(() => new DistributedLock(lockId, lockIdentifier, null));
@@ -44,7 +44,7 @@ namespace DistributedLocking.UnitTests
         [Theory]
         [AutoMoqData]
         public void NotThrow_When_TryingToCreateWithoutNullValues(
-            LockId lockId,
+            DistributedLockId lockId,
             LockIdentifier lockIdentifier,
             IDistributedLockRepository repository)
         {

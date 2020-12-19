@@ -2,15 +2,15 @@
 
 namespace TheName.DistributedLocking.Abstractions.Records
 {
-    public record LockId
+    public record DistributedLockId
     {
         public Guid Value { get; }
 
-        public LockId(Guid value)
+        public DistributedLockId(Guid value)
         {
             if (value == Guid.Empty)
             {
-                throw new ArgumentException("Lock ID cannot be empty guid!", nameof(value));
+                throw new ArgumentException("DistributedLockId ID cannot be empty guid!", nameof(value));
             }
 
             Value = value;

@@ -6,11 +6,11 @@ namespace TheName.DistributedLocking.Abstractions.Repositories
 {
     public interface IDistributedLockRepository
     {
-        Task<(bool Success, LockId AcquiredLockId)> TryAcquireAsync(
+        Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
             LockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             CancellationToken cancellationToken);
 
-        Task<bool> TryReleaseAsync(LockId lockId, CancellationToken cancellationToken);
+        Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken);
     }
 }

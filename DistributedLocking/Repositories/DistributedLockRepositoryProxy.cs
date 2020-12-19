@@ -18,7 +18,7 @@ namespace TheName.DistributedLocking.Repositories
             _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory));
         }
 
-        public async Task<(bool Success, LockId AcquiredLockId)> TryAcquireAsync(
+        public async Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
             LockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             CancellationToken cancellationToken) =>
@@ -28,7 +28,7 @@ namespace TheName.DistributedLocking.Repositories
                     cancellationToken)
                 .ConfigureAwait(false);
 
-        public async Task<bool> TryReleaseAsync(LockId lockId, CancellationToken cancellationToken) =>
+        public async Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken) =>
             await Repository.TryReleaseAsync(lockId, cancellationToken).ConfigureAwait(false);
     }
 }

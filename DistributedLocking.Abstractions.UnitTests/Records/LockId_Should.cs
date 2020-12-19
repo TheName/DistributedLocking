@@ -10,7 +10,7 @@ namespace DistributedLocking.Abstractions.UnitTests.Records
         [Fact]
         public void Throw_When_TryingToCreateWithEmptyGuid()
         {
-            Assert.Throws<ArgumentException>(() => new LockId(Guid.Empty));
+            Assert.Throws<ArgumentException>(() => new DistributedLockId(Guid.Empty));
         }
 
         [Theory]
@@ -18,7 +18,7 @@ namespace DistributedLocking.Abstractions.UnitTests.Records
         public void NotThrow_When_TryingToCreateWithNonEmptyGuid(
             Guid lockId)
         {
-            _ = new LockId(lockId);
+            _ = new DistributedLockId(lockId);
         }
     }
 }

@@ -111,7 +111,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_LockWasNotAcquired(
-            LockId lockId)
+            DistributedLockId lockId)
         {
             var result = await DistributedLockRepository.TryReleaseAsync(lockId, CancellationToken.None);
             

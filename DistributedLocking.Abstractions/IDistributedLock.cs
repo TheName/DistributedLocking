@@ -5,7 +5,7 @@ namespace TheName.DistributedLocking.Abstractions
 {
     public interface IDistributedLock : IAsyncDisposable
     {
-        LockId LockId { get; }
+        DistributedLockId LockId { get; }
         
         LockIdentifier LockIdentifier { get; }
     }

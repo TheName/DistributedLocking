@@ -24,7 +24,7 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
         
-        public async Task<(bool Success, LockId AcquiredLockId)> TryAcquireAsync(
+        public async Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
             LockIdentifier lockIdentifier,
             LockTimeout lockTimeout,
             CancellationToken cancellationToken)
@@ -39,10 +39,10 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
                     cancellationToken)
                 .ConfigureAwait(false);
 
-            return (result, result ? new LockId(lockId) : null);
+            return (result, result ? new DistributedLockId(lockId) : null);
         }
 
-        public async Task<bool> TryReleaseAsync(LockId lockId, CancellationToken cancellationToken) =>
+        public async Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken) =>
             await _sqlDistributedLocksTable
                 .TryDeleteAsync(SchemaName, TableName, lockId.Value, cancellationToken)
                 .ConfigureAwait(false);
