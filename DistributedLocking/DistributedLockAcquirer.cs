@@ -19,7 +19,7 @@ namespace TheName.DistributedLocking
         
         public async Task<IDistributedLock> AcquireAsync(
             DistributedLockIdentifier lockIdentifier,
-            LockTimeout lockTimeout,
+            DistributedLockTimeout lockTimeout,
             CancellationToken cancellationToken)
         {
             var (success, acquiredLockId) = await _repository.TryAcquireAsync(lockIdentifier, lockTimeout, cancellationToken).ConfigureAwait(false); 

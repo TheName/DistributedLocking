@@ -49,7 +49,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqData]
         public async Task ReturnFalseAndNullAcquiredLockId_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
             DistributedLockIdentifier lockIdentifier,
-            LockTimeout lockTimeout,
+            DistributedLockTimeout lockTimeout,
             string schemaName,
             string tableName)
         {
@@ -80,7 +80,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqData]
         public async Task ReturnTrueAndAcquiredLockId_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
             DistributedLockIdentifier lockIdentifier,
-            LockTimeout lockTimeout,
+            DistributedLockTimeout lockTimeout,
             string schemaName,
             string tableName)
         {

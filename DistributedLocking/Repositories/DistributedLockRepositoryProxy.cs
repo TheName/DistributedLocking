@@ -20,7 +20,7 @@ namespace TheName.DistributedLocking.Repositories
 
         public async Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
             DistributedLockIdentifier lockIdentifier,
-            LockTimeout lockTimeout,
+            DistributedLockTimeout lockTimeout,
             CancellationToken cancellationToken) =>
             await Repository.TryAcquireAsync(
                     lockIdentifier,
