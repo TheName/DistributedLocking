@@ -20,5 +20,23 @@ namespace DistributedLocking.Abstractions.UnitTests.Records
         {
             _ = new DistributedLockId(lockId);
         }
+
+        [Theory]
+        [AutoMoqData]
+        public void ImplicitlyConvertFromGuidToDistributedLockId(Guid value)
+        {
+            DistributedLockId lockId = value;
+            
+            Assert.Equal(value, lockId.Value);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public void ImplicitlyConvertFromDistributedLockIdToGuid(DistributedLockId lockId)
+        {
+            Guid value = lockId;
+            
+            Assert.Equal(lockId.Value, value);
+        }
     }
 }

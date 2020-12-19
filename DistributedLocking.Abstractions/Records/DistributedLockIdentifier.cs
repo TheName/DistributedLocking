@@ -15,5 +15,8 @@ namespace TheName.DistributedLocking.Abstractions.Records
             
             Value = value;
         }
+        
+        public static implicit operator Guid(DistributedLockIdentifier lockIdentifier) => lockIdentifier.Value;
+        public static implicit operator DistributedLockIdentifier(Guid lockIdentifier) => new(lockIdentifier);
     }
 }

@@ -27,5 +27,23 @@ namespace DistributedLocking.Abstractions.UnitTests.Records
         {
             _ = new DistributedLockTimeToLive(TimeSpan.Zero + TimeSpan.FromMilliseconds(milliseconds));
         }
+
+        [Theory]
+        [AutoMoqData]
+        public void ImplicitlyConvertFromTimeSpanToDistributedLockTimeToLive(TimeSpan value)
+        {
+            DistributedLockTimeToLive timeToLive = value;
+            
+            Assert.Equal(value, timeToLive.Value);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public void ImplicitlyConvertFromDistributedLockTimeToLiveToTimeSpan(DistributedLockTimeToLive timeToLive)
+        {
+            TimeSpan value = timeToLive;
+            
+            Assert.Equal(timeToLive.Value, value);
+        }
     }
 }

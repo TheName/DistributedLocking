@@ -15,5 +15,8 @@ namespace TheName.DistributedLocking.Abstractions.Records
             
             Value = value;
         }
+        
+        public static implicit operator TimeSpan(DistributedLockTimeToLive timeToLive) => timeToLive.Value;
+        public static implicit operator DistributedLockTimeToLive(TimeSpan timeToLive) => new(timeToLive);
     }
 }
