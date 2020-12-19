@@ -28,7 +28,7 @@ namespace TheName.DistributedLocking
                 throw new CouldNotAcquireLockException(lockIdentifier, lockTimeout);
             }
 
-            return new DistributedLock(acquiredLockId, _repository);
+            return new DistributedLock(acquiredLockId, lockIdentifier, _repository);
         }
     }
 }
