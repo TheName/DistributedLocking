@@ -8,7 +8,7 @@ namespace TheName.DistributedLocking.Abstractions.Repositories
     {
         Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeout lockTimeout,
+            DistributedLockTimeToLive lockTimeout,
             CancellationToken cancellationToken);
 
         Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken);

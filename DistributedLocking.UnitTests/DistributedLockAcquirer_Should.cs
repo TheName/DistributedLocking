@@ -31,7 +31,7 @@ namespace DistributedLocking.UnitTests
         [AutoMoqData]
         public async Task Throw_When_TryingToAcquireLock_And_RepositoryFails(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeout lockTimeout,
+            DistributedLockTimeToLive lockTimeout,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             DistributedLockAcquirer distributedLockAcquirer,
             CancellationToken cancellationToken)
@@ -54,7 +54,7 @@ namespace DistributedLocking.UnitTests
         [AutoMoqData]
         public async Task ReturnDistributedLock_When_TryingToAcquireLock_And_RepositorySucceeds(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeout lockTimeout,
+            DistributedLockTimeToLive lockTimeout,
             DistributedLockId lockId,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             DistributedLockAcquirer distributedLockAcquirer,

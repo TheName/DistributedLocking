@@ -2,15 +2,15 @@
 
 namespace TheName.DistributedLocking.Abstractions.Records
 {
-    public record DistributedLockTimeout
+    public record DistributedLockTimeToLive
     {
         public TimeSpan Value { get; }
 
-        public DistributedLockTimeout(TimeSpan value)
+        public DistributedLockTimeToLive(TimeSpan value)
         {
             if (value <= TimeSpan.Zero)
             {
-                throw new ArgumentException("DistributedLockTimeout timeout cannot be lower or equal to zero!", nameof(value));
+                throw new ArgumentException("DistributedLockTimeToLive cannot be lower than or equal to zero!", nameof(value));
             }
             
             Value = value;

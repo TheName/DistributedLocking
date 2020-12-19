@@ -26,7 +26,7 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
         
         public async Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeout lockTimeout,
+            DistributedLockTimeToLive lockTimeout,
             CancellationToken cancellationToken)
         {
             var lockId = Guid.NewGuid();

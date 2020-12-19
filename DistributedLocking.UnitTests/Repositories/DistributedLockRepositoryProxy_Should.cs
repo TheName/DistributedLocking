@@ -34,7 +34,7 @@ namespace DistributedLocking.UnitTests.Repositories
             bool success,
             DistributedLockId lockId,
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeout lockTimeout,
+            DistributedLockTimeToLive lockTimeout,
             [Frozen] IDistributedLockRepositoryFactory repositoryFactory,
             DistributedLockRepositoryProxy repositoryProxy)
         {
