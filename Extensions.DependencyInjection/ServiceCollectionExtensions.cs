@@ -14,10 +14,10 @@ namespace TheName.DistributedLocking.Extensions.DependencyInjection
     {
         public static IServiceCollection AddDistributedLocking(this IServiceCollection services)
         {
-            services.TryAddTransient<IDistributedLockAcquirer, DistributedLockAcquirer>();
             services.TryAddTransient<IDistributedLockRepositoryManager, DistributedLockRepositoryManagerProxy>();
             services.TryAddTransient<IDistributedLockRepository, DistributedLockRepositoryProxy>();
             services.TryAddSingleton<IDistributedLockRepositoryInitializer, DistributedLockRepositoryInitializer>();
+            services.TryAddTransient<IDistributedLockManager, DistributedLockManager>();
 
             return services;
         }
