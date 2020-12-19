@@ -11,6 +11,11 @@ namespace TheName.DistributedLocking.Abstractions.Repositories
             DistributedLockTimeToLive lockTimeToLive,
             CancellationToken cancellationToken);
 
+        Task<bool> TryExtendAsync(
+            DistributedLockId lockId,
+            DistributedLockTimeToLive additionalTimeToLive,
+            CancellationToken cancellationToken);
+
         Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken);
     }
 }

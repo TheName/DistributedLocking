@@ -137,5 +137,36 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
             
             Assert.Equal(success, result);
         }
+
+        [Theory]
+        [AutoMoqWithInlineData(true)]
+        [AutoMoqWithInlineData(false)]
+        public async Task ReturnResultFromTable_When_TryingToExtendLock(
+            bool success,
+            DistributedLockId lockId,
+            DistributedLockTimeToLive additionalTimeToLive,
+            string schemaName,
+            string tableName)
+        {
+            SqlServerDistributedLockConfigurationMock
+                .SetupSchemaName(schemaName)
+                .SetupTableName(tableName);
+
+            SqlDistributedLocksTableMock
+                .Setup(table => table.TryUpdateAsync(
+                    schemaName,
+                    tableName,
+                    lockId.Value,
+                    additionalTimeToLive.Value,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(success);
+
+            var result = await SqlServerDistributedLockRepository.TryExtendAsync(
+                lockId,
+                additionalTimeToLive,
+                CancellationToken.None);
+            
+            Assert.Equal(success, result);
+        }
     }
 }

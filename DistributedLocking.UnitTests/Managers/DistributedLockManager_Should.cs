@@ -93,9 +93,9 @@ namespace DistributedLocking.UnitTests.Managers
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync((false, null));
 
-            var totalTimeout = new DistributedLockAcquiringTimeout(TimeSpan.FromSeconds(1));
-            var delay = new DistributedLockAcquiringDelayBetweenRetries(TimeSpan.FromMilliseconds(90));
-            var expectedNumberOfRepositoryCalls = (int) (totalTimeout.Value / delay.Value);
+            const int expectedNumberOfRepositoryCalls = 10;
+            var delay = new DistributedLockAcquiringDelayBetweenRetries(TimeSpan.FromMilliseconds(100));
+            var totalTimeout = new DistributedLockAcquiringTimeout(delay.Value * 10 + delay.Value / 2);
 
             await Assert.ThrowsAsync<CouldNotAcquireLockException>(() => manager.AcquireAsync(
                 identifier,
@@ -140,6 +140,45 @@ namespace DistributedLocking.UnitTests.Managers
             Mock.Get(repository)
                 .Setup(lockRepository => lockRepository.TryReleaseAsync(
                     distributedLock.LockId,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            await manager.ReleaseAsync(distributedLock, CancellationToken.None);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task Throw_When_TryingToExtend_And_RepositoryFails(
+            IDistributedLock distributedLock,
+            DistributedLockTimeToLive additionalTimeToLive,
+            [Frozen] IDistributedLockRepository repository,
+            DistributedLockManager manager)
+        {
+            Mock.Get(repository)
+                .Setup(lockRepository => lockRepository.TryExtendAsync(
+                    It.IsAny<DistributedLockId>(),
+                    It.IsAny<DistributedLockTimeToLive>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+
+            await Assert.ThrowsAsync<CouldNotExtendLockException>(() => manager.ExtendAsync(
+                distributedLock,
+                additionalTimeToLive,
+                CancellationToken.None));
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task NotThrow_When_TryingToExtend_And_RepositorySucceeds(
+            IDistributedLock distributedLock,
+            DistributedLockTimeToLive additionalTimeToLive,
+            [Frozen] IDistributedLockRepository repository,
+            DistributedLockManager manager)
+        {
+            Mock.Get(repository)
+                .Setup(lockRepository => lockRepository.TryExtendAsync(
+                    distributedLock.LockId,
+                    additionalTimeToLive,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 

@@ -13,6 +13,11 @@ namespace TheName.DistributedLocking.Abstractions.Managers
             DistributedLockAcquiringDelayBetweenRetries delayBetweenRetries,
             CancellationToken cancellationToken);
 
-        Task ReleaseAsync(IDistributedLock @lock, CancellationToken cancellationToken);
+        Task ExtendAsync(
+            IDistributedLock distributedLock,
+            DistributedLockTimeToLive additionalTimeToLive,
+            CancellationToken cancellationToken);
+
+        Task ReleaseAsync(IDistributedLock distributedLock, CancellationToken cancellationToken);
     }
 }

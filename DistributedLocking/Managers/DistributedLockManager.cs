@@ -49,6 +49,23 @@ namespace TheName.DistributedLocking.Managers
             throw new CouldNotAcquireLockException(lockIdentifier, lockTimeToLive, acquiringTimeout);
         }
 
+        public async Task ExtendAsync(
+            IDistributedLock distributedLock, 
+            DistributedLockTimeToLive additionalTimeToLive,
+            CancellationToken cancellationToken)
+        {
+            var result = await _repository.TryExtendAsync(
+                    distributedLock.LockId,
+                    additionalTimeToLive,
+                    cancellationToken)
+                .ConfigureAwait(false);
+            
+            if (!result)
+            {
+                throw new CouldNotExtendLockException(distributedLock.LockId);
+            }
+        }
+
         public async Task ReleaseAsync(IDistributedLock @lock, CancellationToken cancellationToken)
         {
             var result = await _repository.TryReleaseAsync(@lock.LockId, cancellationToken).ConfigureAwait(false);

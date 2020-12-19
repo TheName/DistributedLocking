@@ -42,6 +42,14 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
             return (result, result ? new DistributedLockId(lockId) : null);
         }
 
+        public async Task<bool> TryExtendAsync(
+            DistributedLockId lockId,
+            DistributedLockTimeToLive additionalTimeToLive,
+            CancellationToken cancellationToken) =>
+            await _sqlDistributedLocksTable
+                .TryUpdateAsync(SchemaName, TableName, lockId.Value, additionalTimeToLive.Value, cancellationToken)
+                .ConfigureAwait(false);
+
         public async Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken) =>
             await _sqlDistributedLocksTable
                 .TryDeleteAsync(SchemaName, TableName, lockId.Value, cancellationToken)

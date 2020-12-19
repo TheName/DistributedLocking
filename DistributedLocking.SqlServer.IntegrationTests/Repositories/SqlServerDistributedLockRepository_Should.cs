@@ -134,5 +134,50 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             (success, _) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
             Assert.True(success);
         }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task ExtendAcquiredLock(
+            DistributedLockIdentifier lockIdentifier,
+            DistributedLockTimeToLive lockTimeToLive)
+        {
+            // make sure the timeout will last at least until the release is called
+            lockTimeToLive = new DistributedLockTimeToLive(lockTimeToLive.Value + TimeSpan.FromSeconds(5));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
+            Assert.True(success);
+
+            var result = await DistributedLockRepository.TryExtendAsync(acquiredLockId, lockTimeToLive, CancellationToken.None);
+            
+            Assert.True(result);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task FailToExtendAcquiredLock_When_TryingToExtendLock_And_TimeoutHasExpired(
+            DistributedLockIdentifier lockIdentifier,
+            DistributedLockTimeToLive lockTimeToLive)
+        {
+            // make sure the timeout will last no longer than until we try to release it
+            const int maxMillisecondsTimeout = 100;
+            lockTimeToLive = new DistributedLockTimeToLive(TimeSpan.FromMilliseconds(lockTimeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout));
+            var (success, acquiredLockId) = await DistributedLockRepository.TryAcquireAsync(lockIdentifier, lockTimeToLive, CancellationToken.None);
+            Assert.True(success);
+
+            await Task.Delay(maxMillisecondsTimeout);
+            var result = await DistributedLockRepository.TryExtendAsync(acquiredLockId, lockTimeToLive, CancellationToken.None);
+            
+            Assert.False(result);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task FailToExtendAcquiredLock_When_TryingToExtendLock_And_LockWasNotAcquired(
+            DistributedLockId lockId,
+            DistributedLockTimeToLive lockTimeToLive)
+        {
+            var result = await DistributedLockRepository.TryExtendAsync(lockId, lockTimeToLive, CancellationToken.None);
+            
+            Assert.False(result);
+        }
     }
 }

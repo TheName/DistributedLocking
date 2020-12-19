@@ -38,6 +38,21 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
             "DELETE FROM [{0}].[{1}] " +
             $"WHERE LockId = {LockIdParameterName} " +
             "AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
+
+        private static readonly string UpdateDistributedLockIfExistsSqlCommandFormat =
+            "BEGIN TRANSACTION; " +
+            "UPDATE [{0}].[{1}] " +
+            "SET" +
+            $"   ExpiryDateTimestamp = DATEADD(millisecond,{ExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
+            "WHERE" +
+            $"  LockId = {LockIdParameterName} " +
+            "   AND " +
+            "   EXISTS " +
+            "   (SELECT *" +
+            "   FROM [{0}].[{1}] WITH (UPDLOCK, HOLDLOCK)" +
+            $"  WHERE LockId = {LockIdParameterName} " +
+            "   AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
+            "COMMIT TRANSACTION; ";
         
         private readonly ISqlClient _sqlClient;
 
@@ -74,6 +89,32 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
             };
         }
 
+        public async Task<bool> TryUpdateAsync(
+            string schemaName,
+            string tableName,
+            Guid lockId,
+            TimeSpan additionalTimeToLiveTimeSpan,
+            CancellationToken cancellationToken)
+        {
+            var numberOfAffectedRows = await _sqlClient.ExecuteNonQueryAsync(
+                    GetUpdateDistributedLockIfExistsSqlCommandText(schemaName, tableName),
+                    new[] 
+                    {
+                        GetLockIdParameter(lockId),
+                        GetExpiryDateTimeSpanInMillisecondsParameter(additionalTimeToLiveTimeSpan)
+                    },
+                    cancellationToken)
+                .ConfigureAwait(false);
+
+            return numberOfAffectedRows switch
+            {
+                0 => false,
+                1 => true,
+                _ => throw new InvalidOperationException(
+                    $"Update distributed lock statement should have affected 1 or 0 rows, but it affected {numberOfAffectedRows}")
+            };
+        }
+
         public async Task<bool> TryDeleteAsync(string schemaName, string tableName, Guid lockId, CancellationToken cancellationToken)
         {
             var numberOfAffectedRows = await _sqlClient.ExecuteNonQueryAsync(
@@ -96,6 +137,9 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
 
         private static string GetDeleteDistributedLockIfExistsSqlCommandText(string schemaName, string tableName) =>
             string.Format(DeleteDistributedLockIfExistsSqlCommandFormat, schemaName, tableName);
+
+        private static string GetUpdateDistributedLockIfExistsSqlCommandText(string schemaName, string tableName) =>
+            string.Format(UpdateDistributedLockIfExistsSqlCommandFormat, schemaName, tableName);
 
         private static SqlParameter GetLockIdentifierParameter(Guid lockIdentifier) =>
             new(LockIdentifierParameterName, SqlDbType.Char, 36)
