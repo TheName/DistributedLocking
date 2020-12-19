@@ -2,7 +2,7 @@
 
 namespace TheName.DistributedLocking.Abstractions.Records
 {
-    public class DistributedLockAcquiringDelayBetweenRetries
+    public record DistributedLockAcquiringDelayBetweenRetries
     {
         public TimeSpan Value { get; }
 
