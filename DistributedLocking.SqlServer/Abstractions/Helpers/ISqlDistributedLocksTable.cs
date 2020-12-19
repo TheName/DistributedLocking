@@ -17,8 +17,9 @@ namespace TheName.DistributedLocking.SqlServer.Abstractions.Helpers
         Task<bool> TryUpdateAsync(
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId,
-            TimeSpan additionalTimeToLiveTimeSpan,
+            TimeSpan timeToLiveTimeSpan,
             CancellationToken cancellationToken);
 
         Task<bool> TryDeleteAsync(

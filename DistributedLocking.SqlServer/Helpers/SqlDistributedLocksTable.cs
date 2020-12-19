@@ -45,7 +45,8 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
             "SET" +
             $"   ExpiryDateTimestamp = DATEADD(millisecond,{ExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
             "WHERE" +
-            $"  LockId = {LockIdParameterName} " +
+            $"  LockIdentifier = {LockIdentifierParameterName}" +
+            $"  AND LockId = {LockIdParameterName} " +
             "   AND " +
             "   EXISTS " +
             "   (SELECT *" +
@@ -92,6 +93,7 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
         public async Task<bool> TryUpdateAsync(
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId,
             TimeSpan additionalTimeToLiveTimeSpan,
             CancellationToken cancellationToken)
@@ -100,6 +102,7 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
                     GetUpdateDistributedLockIfExistsSqlCommandText(schemaName, tableName),
                     new[] 
                     {
+                        GetLockIdentifierParameter(lockIdentifier),
                         GetLockIdParameter(lockId),
                         GetExpiryDateTimeSpanInMillisecondsParameter(additionalTimeToLiveTimeSpan)
                     },

@@ -156,6 +156,7 @@ namespace DistributedLocking.UnitTests.Managers
         {
             Mock.Get(repository)
                 .Setup(lockRepository => lockRepository.TryExtendAsync(
+                    It.IsAny<DistributedLockIdentifier>(),
                     It.IsAny<DistributedLockId>(),
                     It.IsAny<DistributedLockTimeToLive>(),
                     It.IsAny<CancellationToken>()))
@@ -177,6 +178,7 @@ namespace DistributedLocking.UnitTests.Managers
         {
             Mock.Get(repository)
                 .Setup(lockRepository => lockRepository.TryExtendAsync(
+                    distributedLock.LockIdentifier,
                     distributedLock.LockId,
                     additionalTimeToLive,
                     It.IsAny<CancellationToken>()))

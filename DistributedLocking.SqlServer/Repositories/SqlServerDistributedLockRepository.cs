@@ -43,11 +43,12 @@ namespace TheName.DistributedLocking.SqlServer.Repositories
         }
 
         public async Task<bool> TryExtendAsync(
+            DistributedLockIdentifier lockIdentifier,
             DistributedLockId lockId,
-            DistributedLockTimeToLive additionalTimeToLive,
+            DistributedLockTimeToLive lockTimeToLive,
             CancellationToken cancellationToken) =>
             await _sqlDistributedLocksTable
-                .TryUpdateAsync(SchemaName, TableName, lockId.Value, additionalTimeToLive.Value, cancellationToken)
+                .TryUpdateAsync(SchemaName, TableName, lockIdentifier.Value, lockId.Value, lockTimeToLive.Value, cancellationToken)
                 .ConfigureAwait(false);
 
         public async Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken) =>

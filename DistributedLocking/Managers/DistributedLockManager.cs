@@ -51,12 +51,13 @@ namespace TheName.DistributedLocking.Managers
 
         public async Task ExtendAsync(
             IDistributedLock distributedLock, 
-            DistributedLockTimeToLive additionalTimeToLive,
+            DistributedLockTimeToLive lockTimeToLive,
             CancellationToken cancellationToken)
         {
             var result = await _repository.TryExtendAsync(
+                    distributedLock.LockIdentifier,
                     distributedLock.LockId,
-                    additionalTimeToLive,
+                    lockTimeToLive,
                     cancellationToken)
                 .ConfigureAwait(false);
             

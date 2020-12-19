@@ -143,6 +143,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqWithInlineData(false)]
         public async Task ReturnResultFromTable_When_TryingToExtendLock(
             bool success,
+            DistributedLockIdentifier lockIdentifier,
             DistributedLockId lockId,
             DistributedLockTimeToLive additionalTimeToLive,
             string schemaName,
@@ -156,12 +157,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                 .Setup(table => table.TryUpdateAsync(
                     schemaName,
                     tableName,
+                    lockIdentifier.Value,
                     lockId.Value,
                     additionalTimeToLive.Value,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(success);
 
             var result = await SqlServerDistributedLockRepository.TryExtendAsync(
+                lockIdentifier,
                 lockId,
                 additionalTimeToLive,
                 CancellationToken.None);

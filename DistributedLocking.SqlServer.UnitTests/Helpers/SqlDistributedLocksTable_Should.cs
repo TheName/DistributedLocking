@@ -275,6 +275,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedCommandText_When_TryingToUpdateAsync(
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId,
             TimeSpan additionalTimeToLive)
         {
@@ -283,6 +284,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             await SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 additionalTimeToLive,
                 CancellationToken.None);
@@ -301,19 +303,26 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedSqlParameters_When_TryingToUpdateAsync(
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId,
             TimeSpan additionalTimeToLive)
         {
             await SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 additionalTimeToLive,
                 CancellationToken.None);
 
             var assertSqlParameters = new Func<SqlParameter[], bool>(parameters =>
             {
-                Assert.Equal(2, parameters.Length);
+                Assert.Equal(3, parameters.Length);
+                
+                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == "@LockIdentifier");
+                Assert.Equal(SqlDbType.Char, lockIdentifierParameter.SqlDbType);
+                Assert.Equal(lockIdentifier.ToString().Length, lockIdentifierParameter.Size);
+                Assert.Equal(lockIdentifier.ToString(), lockIdentifierParameter.Value);
                 
                 var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == "@LockId");
                 Assert.Equal(SqlDbType.Char, lockIdParameter.SqlDbType);
@@ -344,6 +353,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId,
             TimeSpan additionalTimeToLive)
         {
@@ -357,6 +367,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             var result = await SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 additionalTimeToLive,
                 CancellationToken.None);
@@ -371,6 +382,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId,
             TimeSpan additionalTimeToLive)
         {
@@ -384,6 +396,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 additionalTimeToLive,
                 CancellationToken.None));
@@ -421,7 +434,8 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             "SET" +
             "   ExpiryDateTimestamp = DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,SYSUTCDATETIME()) " +
             "WHERE" +
-            "  LockId = @LockId " +
+            "  LockIdentifier = @LockIdentifier" +
+            "  AND LockId = @LockId " +
             "   AND " +
             "   EXISTS " +
             "   (SELECT *" +

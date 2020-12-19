@@ -29,12 +29,14 @@ namespace TheName.DistributedLocking.Repositories
                 .ConfigureAwait(false);
 
         public async Task<bool> TryExtendAsync(
+            DistributedLockIdentifier lockIdentifier,
             DistributedLockId lockId,
-            DistributedLockTimeToLive additionalTimeToLive,
+            DistributedLockTimeToLive lockTimeToLive,
             CancellationToken cancellationToken) =>
             await Repository.TryExtendAsync(
+                    lockIdentifier,
                     lockId,
-                    additionalTimeToLive,
+                    lockTimeToLive,
                     cancellationToken)
                 .ConfigureAwait(false);
 

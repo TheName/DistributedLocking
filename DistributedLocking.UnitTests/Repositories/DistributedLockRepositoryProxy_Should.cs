@@ -75,5 +75,30 @@ namespace DistributedLocking.UnitTests.Repositories
             
             Assert.Equal(success, result);
         }
+
+        [Theory]
+        [AutoMoqWithInlineData(true)]
+        [AutoMoqWithInlineData(false)]
+        public async Task ReturnResultFromCreatedRepository_When_CallingTryExtendAsync(
+            bool success,
+            DistributedLockIdentifier lockIdentifier,
+            DistributedLockId lockId,
+            DistributedLockTimeToLive timeToLive,
+            [Frozen] IDistributedLockRepositoryFactory repositoryFactory,
+            DistributedLockRepositoryProxy repositoryProxy)
+        {
+            var repositoryMock = new Mock<IDistributedLockRepository>();
+            repositoryMock
+                .Setup(repository => repository.TryExtendAsync(lockIdentifier, lockId, timeToLive, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(success);
+
+            Mock.Get(repositoryFactory)
+                .Setup(factory => factory.Create())
+                .Returns(repositoryMock.Object);
+
+            var result = await repositoryProxy.TryExtendAsync(lockIdentifier, lockId, timeToLive, CancellationToken.None);
+            
+            Assert.Equal(success, result);
+        }
     }
 }

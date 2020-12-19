@@ -15,7 +15,7 @@ namespace TheName.DistributedLocking.Abstractions.Managers
 
         Task ExtendAsync(
             IDistributedLock distributedLock,
-            DistributedLockTimeToLive additionalTimeToLive,
+            DistributedLockTimeToLive lockTimeToLive,
             CancellationToken cancellationToken);
 
         Task ReleaseAsync(IDistributedLock distributedLock, CancellationToken cancellationToken);
