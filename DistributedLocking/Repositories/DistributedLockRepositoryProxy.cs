@@ -40,7 +40,14 @@ namespace TheName.DistributedLocking.Repositories
                     cancellationToken)
                 .ConfigureAwait(false);
 
-        public async Task<bool> TryReleaseAsync(DistributedLockId lockId, CancellationToken cancellationToken) =>
-            await Repository.TryReleaseAsync(lockId, cancellationToken).ConfigureAwait(false);
+        public async Task<bool> TryReleaseAsync(
+            DistributedLockIdentifier lockIdentifier,
+            DistributedLockId lockId,
+            CancellationToken cancellationToken) =>
+            await Repository.TryReleaseAsync(
+                    lockIdentifier,
+                    lockId,
+                    cancellationToken)
+                .ConfigureAwait(false);
     }
 }

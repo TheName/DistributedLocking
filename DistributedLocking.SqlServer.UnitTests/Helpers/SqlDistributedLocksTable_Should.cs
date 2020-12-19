@@ -167,6 +167,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedCommandText_When_TryingToDeleteAsync(
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId)
         {
             var expectedCommandText = GetExpectedDeleteCommandText(schemaName, tableName);
@@ -174,6 +175,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             await SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 CancellationToken.None);
 
@@ -191,23 +193,29 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedSqlParameters_When_TryingToDeleteAsync(
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId)
         {
             await SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 CancellationToken.None);
 
             var assertSqlParameters = new Func<SqlParameter[], bool>(parameters =>
             {
-                var singleParameter = Assert.Single(parameters);
-                Assert.NotNull(singleParameter);
+                Assert.Equal(2, parameters.Length);
                 
-                Assert.Equal("@LockId", singleParameter.ParameterName);
-                Assert.Equal(SqlDbType.Char, singleParameter.SqlDbType);
-                Assert.Equal(lockId.ToString().Length, singleParameter.Size);
-                Assert.Equal(lockId.ToString(), singleParameter.Value);
+                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == "@LockIdentifier");
+                Assert.Equal(SqlDbType.Char, lockIdentifierParameter.SqlDbType);
+                Assert.Equal(lockIdentifier.ToString().Length, lockIdentifierParameter.Size);
+                Assert.Equal(lockIdentifier.ToString(), lockIdentifierParameter.Value);
+                
+                var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == "@LockId");
+                Assert.Equal(SqlDbType.Char, lockIdParameter.SqlDbType);
+                Assert.Equal(lockId.ToString().Length, lockIdParameter.Size);
+                Assert.Equal(lockId.ToString(), lockIdParameter.Value);
 
                 return true;
             });
@@ -229,6 +237,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId)
         {
             SqlClientMock
@@ -241,6 +250,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             var result = await SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 CancellationToken.None);
             
@@ -254,6 +264,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId)
         {
             SqlClientMock
@@ -266,6 +277,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
+                lockIdentifier,
                 lockId,
                 CancellationToken.None));
         }
@@ -425,8 +437,10 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
 
         private static string GetExpectedDeleteCommandText(string schemaName, string tableName) =>
             $"DELETE FROM [{schemaName}].[{tableName}] " +
-            "WHERE LockId = @LockId " +
-            "AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
+            "WHERE" +
+            "  LockIdentifier = @LockIdentifier" +
+            "  AND LockId = @LockId " +
+            "   AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
 
         private static string GetExpectedUpdateCommandText(string schemaName, string tableName) =>
             "BEGIN TRANSACTION; " +

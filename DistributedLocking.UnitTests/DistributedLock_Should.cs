@@ -61,21 +61,11 @@ namespace DistributedLocking.UnitTests
 
             distributedLockRepositoryMock
                 .Verify(
-                    repository => repository.TryReleaseAsync(distributedLock.LockId, CancellationToken.None),
+                    repository => repository.TryReleaseAsync(
+                        distributedLock.LockIdentifier,
+                        distributedLock.LockId,
+                        CancellationToken.None),
                     Times.Once);
-        }
-
-        [Theory]
-        [AutoMoqData]
-        internal async Task Throw_When_TryingToReleaseLock_When_Disposing_And_ReleasingFails(
-            [Frozen] Mock<IDistributedLockRepository> distributedLockRepositoryMock,
-            DistributedLock distributedLock)
-        {
-            distributedLockRepositoryMock
-                .Setup(repository => repository.TryReleaseAsync(distributedLock.LockId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(false);
-
-            await Assert.ThrowsAsync<CouldNotReleaseLockException>(async () => await distributedLock.DisposeAsync());
         }
     }
 }

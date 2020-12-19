@@ -63,16 +63,21 @@ namespace TheName.DistributedLocking.Managers
             
             if (!result)
             {
-                throw new CouldNotExtendLockException(distributedLock.LockId);
+                throw new CouldNotExtendLockException(distributedLock.LockIdentifier, distributedLock.LockId);
             }
         }
 
-        public async Task ReleaseAsync(IDistributedLock @lock, CancellationToken cancellationToken)
+        public async Task ReleaseAsync(IDistributedLock distributedLock, CancellationToken cancellationToken)
         {
-            var result = await _repository.TryReleaseAsync(@lock.LockId, cancellationToken).ConfigureAwait(false);
+            var result = await _repository.TryReleaseAsync(
+                    distributedLock.LockIdentifier,
+                    distributedLock.LockId,
+                    cancellationToken)
+                .ConfigureAwait(false);
+            
             if (!result)
             {
-                throw new CouldNotReleaseLockException(@lock.LockId);
+                throw new CouldNotReleaseLockException(distributedLock.LockIdentifier, distributedLock.LockId);
             }
         }
     }

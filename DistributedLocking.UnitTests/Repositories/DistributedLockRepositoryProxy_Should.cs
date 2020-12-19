@@ -58,20 +58,21 @@ namespace DistributedLocking.UnitTests.Repositories
         [AutoMoqWithInlineData(false)]
         public async Task ReturnResultFromCreatedRepository_When_CallingTryReleaseAsync(
             bool success,
+            DistributedLockIdentifier lockIdentifier,
             DistributedLockId lockId,
             [Frozen] IDistributedLockRepositoryFactory repositoryFactory,
             DistributedLockRepositoryProxy repositoryProxy)
         {
             var repositoryMock = new Mock<IDistributedLockRepository>();
             repositoryMock
-                .Setup(repository => repository.TryReleaseAsync(lockId, It.IsAny<CancellationToken>()))
+                .Setup(repository => repository.TryReleaseAsync(lockIdentifier, lockId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(success);
 
             Mock.Get(repositoryFactory)
                 .Setup(factory => factory.Create())
                 .Returns(repositoryMock.Object);
 
-            var result = await repositoryProxy.TryReleaseAsync(lockId, CancellationToken.None);
+            var result = await repositoryProxy.TryReleaseAsync(lockIdentifier, lockId, CancellationToken.None);
             
             Assert.Equal(success, result);
         }

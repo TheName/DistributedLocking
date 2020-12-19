@@ -117,6 +117,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqWithInlineData(false)]
         public async Task ReturnResultFromTable_When_TryingToReleaseLock(
             bool success,
+            DistributedLockIdentifier lockIdentifier,
             DistributedLockId lockId,
             string schemaName,
             string tableName)
@@ -129,11 +130,12 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                 .Setup(table => table.TryDeleteAsync(
                     schemaName,
                     tableName,
+                    lockIdentifier.Value,
                     lockId.Value,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(success);
 
-            var result = await SqlServerDistributedLockRepository.TryReleaseAsync(lockId, CancellationToken.None);
+            var result = await SqlServerDistributedLockRepository.TryReleaseAsync(lockIdentifier, lockId, CancellationToken.None);
             
             Assert.Equal(success, result);
         }

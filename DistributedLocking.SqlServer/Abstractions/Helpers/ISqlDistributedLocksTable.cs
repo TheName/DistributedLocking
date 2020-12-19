@@ -25,6 +25,7 @@ namespace TheName.DistributedLocking.SqlServer.Abstractions.Helpers
         Task<bool> TryDeleteAsync(
             string schemaName,
             string tableName,
+            Guid lockIdentifier,
             Guid lockId,
             CancellationToken cancellationToken);
     }

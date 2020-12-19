@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using TheName.DistributedLocking.Abstractions;
-using TheName.DistributedLocking.Abstractions.Exceptions;
 using TheName.DistributedLocking.Abstractions.Records;
 using TheName.DistributedLocking.Abstractions.Repositories;
 
@@ -28,10 +27,11 @@ namespace TheName.DistributedLocking
 
         public async ValueTask DisposeAsync()
         {
-            if (!await _distributedLockRepository.TryReleaseAsync(LockId, CancellationToken.None).ConfigureAwait(false))
-            {
-                throw new CouldNotReleaseLockException(LockId);
-            }
+            await _distributedLockRepository.TryReleaseAsync(
+                    LockIdentifier,
+                    LockId,
+                    CancellationToken.None)
+                .ConfigureAwait(false);
         }
     }
 }

@@ -36,8 +36,10 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
 
         private static readonly string DeleteDistributedLockIfExistsSqlCommandFormat =
             "DELETE FROM [{0}].[{1}] " +
-            $"WHERE LockId = {LockIdParameterName} " +
-            "AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
+            "WHERE" +
+            $"  LockIdentifier = {LockIdentifierParameterName}" +
+            $"  AND LockId = {LockIdParameterName} " +
+            "   AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
 
         private static readonly string UpdateDistributedLockIfExistsSqlCommandFormat =
             "BEGIN TRANSACTION; " +
@@ -118,11 +120,20 @@ namespace TheName.DistributedLocking.SqlServer.Helpers
             };
         }
 
-        public async Task<bool> TryDeleteAsync(string schemaName, string tableName, Guid lockId, CancellationToken cancellationToken)
+        public async Task<bool> TryDeleteAsync(
+            string schemaName,
+            string tableName,
+            Guid lockIdentifier,
+            Guid lockId,
+            CancellationToken cancellationToken)
         {
             var numberOfAffectedRows = await _sqlClient.ExecuteNonQueryAsync(
                     GetDeleteDistributedLockIfExistsSqlCommandText(schemaName, tableName),
-                    new[] {GetLockIdParameter(lockId)},
+                    new[]
+                    {
+                        GetLockIdentifierParameter(lockIdentifier),
+                        GetLockIdParameter(lockId)
+                    },
                     cancellationToken)
                 .ConfigureAwait(false);
 
