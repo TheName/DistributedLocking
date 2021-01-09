@@ -1,5 +1,6 @@
 ﻿using System;
-using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using TestHelpers.Attributes;
@@ -24,13 +25,13 @@ namespace Extensions.DependencyInjection.UnitTests
         [Theory]
         [AutoMoqData]
         public void NotThrow_When_RepositoryFactory_And_RepositoryManagerFactory_AreRegistered(
-            IDistributedLockRepositoryFactory repositoryFactory,
-            IDistributedLockRepositoryManagerFactory repositoryManagerFactory)
+            IDistributedLockRepository repository,
+            IDistributedLockRepositoryManager repositoryManager)
         {
             _ = new ServiceCollection()
                 .AddDistributedLocking()
-                .AddSingleton(repositoryFactory)
-                .AddSingleton(repositoryManagerFactory)
+                .AddSingleton(repository)
+                .AddSingleton(repositoryManager)
                 .BuildServiceProvider(new ServiceProviderOptions
                 {
                     ValidateOnBuild = true,

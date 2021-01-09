@@ -10,8 +10,9 @@ namespace DistributedLocking.Abstractions.Exceptions
 
         public CouldNotReleaseLockException(
             DistributedLockIdentifier lockIdentifier,
-            DistributedLockId lockId) 
-            : base(CreateExceptionMessage(lockIdentifier, lockId))
+            DistributedLockId lockId,
+            Exception innerException = null) 
+            : base(CreateExceptionMessage(lockIdentifier, lockId), innerException)
         {
             LockIdentifier = lockIdentifier ?? throw new ArgumentNullException(nameof(lockIdentifier));
             LockId = lockId ?? throw new ArgumentNullException(nameof(lockId));

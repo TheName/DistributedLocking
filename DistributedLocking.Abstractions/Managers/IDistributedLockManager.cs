@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Retries;
 
 namespace DistributedLocking.Abstractions.Managers
 {
@@ -9,15 +10,18 @@ namespace DistributedLocking.Abstractions.Managers
         Task<IDistributedLock> AcquireAsync(
             DistributedLockIdentifier lockIdentifier,
             DistributedLockTimeToLive lockTimeToLive,
-            DistributedLockAcquiringTimeout acquiringTimeout,
-            DistributedLockAcquiringDelayBetweenRetries delayBetweenRetries,
+            IRetryPolicyProvider retryPolicyProvider,
             CancellationToken cancellationToken);
 
         Task ExtendAsync(
             IDistributedLock distributedLock,
             DistributedLockTimeToLive lockTimeToLive,
+            IRetryPolicyProvider retryPolicyProvider,
             CancellationToken cancellationToken);
 
-        Task ReleaseAsync(IDistributedLock distributedLock, CancellationToken cancellationToken);
+        Task ReleaseAsync(
+            IDistributedLock distributedLock,
+            IRetryPolicyProvider retryPolicyProvider,
+            CancellationToken cancellationToken);
     }
 }

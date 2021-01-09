@@ -9,7 +9,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Configuration
         [Fact]
         public void PopulateSchemaNameWithDefault()
         {
-            const string expectedDefaultSchemaName = "TheName_DistributedLocking_SqlServer";
+            const string expectedDefaultSchemaName = "TheName_DistributedLocking";
             var defaultConfiguration = new SqlServerDistributedLockConfiguration();
             
             Assert.Equal(expectedDefaultSchemaName, defaultConfiguration.SchemaName);
