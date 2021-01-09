@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TheName.DistributedLocking.SqlServer.Abstractions.Helpers
+namespace DistributedLocking.SqlServer.Abstractions.Helpers
 {
     internal interface ISqlDataDefinitionLanguageExecutor
     {

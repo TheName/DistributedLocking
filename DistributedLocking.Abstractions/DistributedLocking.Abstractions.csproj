@@ -4,7 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <RootNamespace>TheName.DistributedLocking.Abstractions</RootNamespace>
+        <RootNamespace>DistributedLocking.Abstractions</RootNamespace>
         <AssemblyName>TheName.DistributedLocking.Abstractions</AssemblyName>
     </PropertyGroup>
 
@@ -19,7 +19,7 @@
             - Initial version of DistributedLocking.Abstractions project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions</PackageTags>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions;DistributedLocking</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

@@ -1,7 +1,7 @@
 ﻿using System;
-using TheName.DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Records;
 
-namespace TheName.DistributedLocking.Abstractions
+namespace DistributedLocking.Abstractions
 {
     public interface IDistributedLock : IAsyncDisposable
     {

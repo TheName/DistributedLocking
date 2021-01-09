@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions;
-using TheName.DistributedLocking.Abstractions.Exceptions;
-using TheName.DistributedLocking.Abstractions.Managers;
-using TheName.DistributedLocking.Abstractions.Records;
-using TheName.DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Abstractions;
+using DistributedLocking.Abstractions.Exceptions;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Repositories;
 
-namespace TheName.DistributedLocking.Managers
+namespace DistributedLocking.Managers
 {
     public class DistributedLockManager : IDistributedLockManager
     {

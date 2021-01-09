@@ -1,6 +1,6 @@
-﻿using TheName.DistributedLocking.Abstractions.Managers;
+﻿using DistributedLocking.Abstractions.Managers;
 
-namespace TheName.DistributedLocking.Abstractions.Factories
+namespace DistributedLocking.Abstractions.Factories
 {
     public interface IDistributedLockRepositoryManagerFactory
     {

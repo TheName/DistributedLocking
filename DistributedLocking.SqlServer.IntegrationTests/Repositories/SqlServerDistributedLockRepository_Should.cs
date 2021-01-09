@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.SqlServer.IntegrationTests.CollectionDefinitions;
 using DistributedLocking.SqlServer.IntegrationTests.Fixtures;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Records;
-using TheName.DistributedLocking.Abstractions.Repositories;
 using Xunit;
 using Xunit.Extensions.Ordering;
 

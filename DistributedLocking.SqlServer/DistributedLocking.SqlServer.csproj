@@ -4,7 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <RootNamespace>TheName.DistributedLocking.SqlServer</RootNamespace>
+        <RootNamespace>DistributedLocking.SqlServer</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

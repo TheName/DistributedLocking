@@ -1,6 +1,6 @@
 ﻿using System;
+using DistributedLocking.Abstractions.Records;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Records;
 using Xunit;
 
 namespace DistributedLocking.Abstractions.UnitTests.Records

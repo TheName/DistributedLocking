@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data.SqlClient;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Helpers;
 using DistributedLocking.SqlServer.UnitTests.Extensions;
 using Moq;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Helpers;
 using Xunit;
 
 namespace DistributedLocking.SqlServer.UnitTests.Helpers

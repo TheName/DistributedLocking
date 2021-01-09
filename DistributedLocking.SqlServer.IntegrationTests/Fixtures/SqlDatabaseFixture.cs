@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using DistributedLocking.Extensions.DependencyInjection.SqlServer;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TheName.DistributedLocking.Extensions.DependencyInjection.SqlServer;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
 
 namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
 {

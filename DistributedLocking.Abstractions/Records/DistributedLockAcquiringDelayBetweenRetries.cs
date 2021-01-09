@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TheName.DistributedLocking.Abstractions.Records
+namespace DistributedLocking.Abstractions.Records
 {
     public record DistributedLockAcquiringDelayBetweenRetries
     {

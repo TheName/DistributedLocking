@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Initializers;
 using Moq;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Managers;
-using TheName.DistributedLocking.Initializers;
 using Xunit;
 
 namespace DistributedLocking.UnitTests.Initializers

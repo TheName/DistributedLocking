@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace TheName.DistributedLocking.Abstractions.Initializers
+namespace DistributedLocking.Abstractions.Initializers
 {
     public interface IDistributedLockRepositoryInitializer
     {

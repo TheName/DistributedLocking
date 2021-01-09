@@ -4,10 +4,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.SqlServer.Helpers;
 using Moq;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
-using TheName.DistributedLocking.SqlServer.Helpers;
 using Xunit;
 
 namespace DistributedLocking.SqlServer.UnitTests.Helpers

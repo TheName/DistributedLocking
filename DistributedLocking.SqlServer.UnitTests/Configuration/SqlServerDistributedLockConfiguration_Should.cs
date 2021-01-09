@@ -1,5 +1,5 @@
 ﻿using System;
-using TheName.DistributedLocking.SqlServer.Configuration;
+using DistributedLocking.SqlServer.Configuration;
 using Xunit;
 
 namespace DistributedLocking.SqlServer.UnitTests.Configuration

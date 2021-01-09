@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions.Initializers;
-using TheName.DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Abstractions.Initializers;
+using DistributedLocking.Abstractions.Managers;
 
-namespace TheName.DistributedLocking.Initializers
+namespace DistributedLocking.Initializers
 {
     public class DistributedLockRepositoryInitializer : IDistributedLockRepositoryInitializer
     {

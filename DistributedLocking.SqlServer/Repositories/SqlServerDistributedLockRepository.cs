@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions.Records;
-using TheName.DistributedLocking.Abstractions.Repositories;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
 
-namespace TheName.DistributedLocking.SqlServer.Repositories
+namespace DistributedLocking.SqlServer.Repositories
 {
     public class SqlServerDistributedLockRepository : IDistributedLockRepository
     {

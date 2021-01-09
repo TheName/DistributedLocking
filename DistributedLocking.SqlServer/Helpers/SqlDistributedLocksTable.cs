@@ -3,9 +3,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
 
-namespace TheName.DistributedLocking.SqlServer.Helpers
+namespace DistributedLocking.SqlServer.Helpers
 {
     internal class SqlDistributedLocksTable : ISqlDistributedLocksTable
     {

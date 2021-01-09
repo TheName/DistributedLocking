@@ -1,6 +1,6 @@
 ﻿using System;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
 using Moq;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
 
 namespace DistributedLocking.SqlServer.UnitTests.Extensions
 {

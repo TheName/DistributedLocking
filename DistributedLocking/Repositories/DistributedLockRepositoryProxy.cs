@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.Abstractions.Records;
-using TheName.DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Repositories;
 
-namespace TheName.DistributedLocking.Repositories
+namespace DistributedLocking.Repositories
 {
     public class DistributedLockRepositoryProxy : IDistributedLockRepository
     {

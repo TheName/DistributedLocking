@@ -1,8 +1,8 @@
 ﻿using System;
+using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Extensions.DependencyInjection.UnitTests

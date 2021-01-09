@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Managers;
 using Moq;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.Abstractions.Managers;
-using TheName.DistributedLocking.Managers;
 using Xunit;
 
 namespace DistributedLocking.UnitTests.Managers

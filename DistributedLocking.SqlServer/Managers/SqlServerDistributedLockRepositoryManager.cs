@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions.Managers;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
 
-namespace TheName.DistributedLocking.SqlServer.Managers
+namespace DistributedLocking.SqlServer.Managers
 {
     public class SqlServerDistributedLockRepositoryManager : IDistributedLockRepositoryManager
     {

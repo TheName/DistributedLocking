@@ -4,7 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <RootNamespace>TheName.DistributedLocking.Extensions.DependencyInjection.SqlServer</RootNamespace>
+        <RootNamespace>DistributedLocking.Extensions.DependencyInjection.SqlServer</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

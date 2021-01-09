@@ -1,11 +1,11 @@
 ﻿using System;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
 
-namespace TheName.DistributedLocking.SqlServer.Configuration
+namespace DistributedLocking.SqlServer.Configuration
 {
     internal class SqlServerDistributedLockConfiguration : ISqlServerDistributedLockConfiguration
     {
-        private const string DefaultSchemaName = "TheName_DistributedLocking_SqlServer";
+        private const string DefaultSchemaName = "TheName_DistributedLocking";
         private const string DefaultTableName = "DistributedLocks";
         private static readonly TimeSpan DefaultSqlApplicationLockTimeout = TimeSpan.FromSeconds(3);  
         

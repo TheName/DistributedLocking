@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DistributedLocking.Abstractions.Records;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.SqlServer.Repositories;
 using DistributedLocking.SqlServer.UnitTests.Extensions;
 using Moq;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Records;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
-using TheName.DistributedLocking.SqlServer.Repositories;
 using Xunit;
 
 namespace DistributedLocking.SqlServer.UnitTests.Repositories

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data.Common;
 using System.Data.SqlClient;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
 
-namespace TheName.DistributedLocking.SqlServer.Helpers
+namespace DistributedLocking.SqlServer.Helpers
 {
     internal class SqlConnectionFactory : ISqlConnectionFactory
     {

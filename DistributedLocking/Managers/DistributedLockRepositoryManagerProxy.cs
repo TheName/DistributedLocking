@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.Abstractions.Managers;
 
-namespace TheName.DistributedLocking.Managers
+namespace DistributedLocking.Managers
 {
     public class DistributedLockRepositoryManagerProxy : IDistributedLockRepositoryManager
     {

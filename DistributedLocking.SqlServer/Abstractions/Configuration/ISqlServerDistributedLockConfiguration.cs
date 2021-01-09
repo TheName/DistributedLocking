@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TheName.DistributedLocking.SqlServer.Abstractions.Configuration
+namespace DistributedLocking.SqlServer.Abstractions.Configuration
 {
     public interface ISqlServerDistributedLockConfiguration
     {

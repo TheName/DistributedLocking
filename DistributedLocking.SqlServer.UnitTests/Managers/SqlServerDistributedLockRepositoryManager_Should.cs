@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.SqlServer.Managers;
 using DistributedLocking.SqlServer.UnitTests.Extensions;
 using Moq;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
-using TheName.DistributedLocking.SqlServer.Managers;
 using Xunit;
 
 namespace DistributedLocking.SqlServer.UnitTests.Managers

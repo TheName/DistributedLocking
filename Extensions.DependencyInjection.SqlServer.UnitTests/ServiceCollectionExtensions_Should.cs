@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using TheName.DistributedLocking.Extensions.DependencyInjection.SqlServer;
+﻿using DistributedLocking.Extensions.DependencyInjection.SqlServer;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Extensions.DependencyInjection.SqlServer.UnitTests

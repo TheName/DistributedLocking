@@ -2,10 +2,10 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
 using DistributedLocking.SqlServer.IntegrationTests.CollectionDefinitions;
 using DistributedLocking.SqlServer.IntegrationTests.Fixtures;
-using TheName.DistributedLocking.Abstractions.Managers;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
 using Xunit;
 using Xunit.Extensions.Ordering;
 

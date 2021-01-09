@@ -1,8 +1,8 @@
-﻿using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.SqlServer.Factories;
-using TheName.DistributedLocking.SqlServer.Managers;
-using TheName.DistributedLocking.SqlServer.Repositories;
+﻿using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.SqlServer.Factories;
+using DistributedLocking.SqlServer.Managers;
+using DistributedLocking.SqlServer.Repositories;
+using TestHelpers.Attributes;
 using Xunit;
 
 namespace DistributedLocking.SqlServer.UnitTests.Factories

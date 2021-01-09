@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Configuration;
+using DistributedLocking.SqlServer.Factories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Configuration;
-using TheName.DistributedLocking.SqlServer.Factories;
 
-namespace TheName.DistributedLocking.Extensions.DependencyInjection.SqlServer
+namespace DistributedLocking.Extensions.DependencyInjection.SqlServer
 {
     public static class ServiceCollectionExtensions
     {

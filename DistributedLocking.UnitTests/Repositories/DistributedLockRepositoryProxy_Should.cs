@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Repositories;
 using Moq;
 using TestHelpers.Attributes;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.Abstractions.Records;
-using TheName.DistributedLocking.Abstractions.Repositories;
-using TheName.DistributedLocking.Repositories;
 using Xunit;
 
 namespace DistributedLocking.UnitTests.Repositories

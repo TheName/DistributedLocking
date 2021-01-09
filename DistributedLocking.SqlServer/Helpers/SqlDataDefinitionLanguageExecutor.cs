@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.SqlServer.Abstractions.Helpers;
+using DistributedLocking.SqlServer.Abstractions.Helpers;
 using static System.String;
 
-namespace TheName.DistributedLocking.SqlServer.Helpers
+namespace DistributedLocking.SqlServer.Helpers
 {
     internal class SqlDataDefinitionLanguageExecutor : ISqlDataDefinitionLanguageExecutor
     {

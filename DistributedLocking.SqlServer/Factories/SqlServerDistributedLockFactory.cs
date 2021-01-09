@@ -1,13 +1,13 @@
 ﻿using System;
-using TheName.DistributedLocking.Abstractions.Factories;
-using TheName.DistributedLocking.Abstractions.Managers;
-using TheName.DistributedLocking.Abstractions.Repositories;
-using TheName.DistributedLocking.SqlServer.Abstractions.Configuration;
-using TheName.DistributedLocking.SqlServer.Helpers;
-using TheName.DistributedLocking.SqlServer.Managers;
-using TheName.DistributedLocking.SqlServer.Repositories;
+using DistributedLocking.Abstractions.Factories;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.SqlServer.Abstractions.Configuration;
+using DistributedLocking.SqlServer.Helpers;
+using DistributedLocking.SqlServer.Managers;
+using DistributedLocking.SqlServer.Repositories;
 
-namespace TheName.DistributedLocking.SqlServer.Factories
+namespace DistributedLocking.SqlServer.Factories
 {
     public class SqlServerDistributedLockFactory : 
         IDistributedLockRepositoryFactory,

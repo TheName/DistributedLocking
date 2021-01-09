@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DistributedLocking.Abstractions.Initializers;
+using DistributedLocking.Abstractions.Managers;
+using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Initializers;
+using DistributedLocking.Managers;
+using DistributedLocking.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using TheName.DistributedLocking.Abstractions;
-using TheName.DistributedLocking.Abstractions.Initializers;
-using TheName.DistributedLocking.Abstractions.Managers;
-using TheName.DistributedLocking.Abstractions.Repositories;
-using TheName.DistributedLocking.Initializers;
-using TheName.DistributedLocking.Managers;
-using TheName.DistributedLocking.Repositories;
 
-namespace TheName.DistributedLocking.Extensions.DependencyInjection
+namespace DistributedLocking.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {

@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Records;
 
-namespace TheName.DistributedLocking.Abstractions.Managers
+namespace DistributedLocking.Abstractions.Managers
 {
     public interface IDistributedLockManager
     {

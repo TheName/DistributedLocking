@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TheName.DistributedLocking.Abstractions;
-using TheName.DistributedLocking.Abstractions.Records;
-using TheName.DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Abstractions;
+using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions.Repositories;
 
-namespace TheName.DistributedLocking
+namespace DistributedLocking
 {
     internal class DistributedLock : IDistributedLock
     {
