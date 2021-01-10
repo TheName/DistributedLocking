@@ -20,13 +20,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Extensions.DependencyInjection.SqlServer\Extensions.DependencyInjection.SqlServer.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Microsoft.Extensions.DependencyInjection, Version=5.0.0.1, Culture=neutral, PublicKeyToken=adb9793829ddae60">
         <HintPath>..\..\..\Users\dawid\.nuget\packages\microsoft.extensions.dependencyinjection\5.0.1\lib\net5.0\Microsoft.Extensions.DependencyInjection.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Extensions.SqlServer.DependencyInjection\Extensions.SqlServer.DependencyInjection.csproj" />
     </ItemGroup>
 
 </Project>

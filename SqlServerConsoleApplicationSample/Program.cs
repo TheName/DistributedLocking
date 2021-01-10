@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DistributedLocking.Abstractions.Initializers;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Extensions.Abstractions.Repositories;
-using DistributedLocking.Extensions.DependencyInjection.SqlServer;
+using DistributedLocking.Extensions.SqlServer.DependencyInjection;
 using DistributedLocking.SqlServer.Abstractions.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -11,13 +11,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Extensions.DependencyInjection.SqlServer\Extensions.DependencyInjection.SqlServer.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Extensions.SqlServer.DependencyInjection\Extensions.SqlServer.DependencyInjection.csproj" />
     </ItemGroup>
 
 </Project>

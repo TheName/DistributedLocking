@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpers", "TestHelpers\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInjection", "Extensions.DependencyInjection\Extensions.DependencyInjection.csproj", "{8E469476-1DB2-4A4B-BD74-079A678ADBCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.DependencyInjection.SqlServer", "Extensions.DependencyInjection.SqlServer\Extensions.DependencyInjection.SqlServer.csproj", "{36232988-824B-4824-A732-AAABB474C8AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.SqlServer.DependencyInjection", "Extensions.SqlServer.DependencyInjection\Extensions.SqlServer.DependencyInjection.csproj", "{36232988-824B-4824-A732-AAABB474C8AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.SqlServer.UnitTests", "DistributedLocking.SqlServer.UnitTests\DistributedLocking.SqlServer.UnitTests.csproj", "{86762DA1-6528-4C3D-B63F-D3AA1FAD3EF4}"
 EndProject

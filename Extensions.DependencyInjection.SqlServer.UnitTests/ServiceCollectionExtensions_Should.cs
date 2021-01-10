@@ -1,4 +1,4 @@
-﻿using DistributedLocking.Extensions.DependencyInjection.SqlServer;
+﻿using DistributedLocking.Extensions.SqlServer.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
