@@ -8,6 +8,7 @@ using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Retries;
 using DistributedLocking.Extensions;
+using DistributedLocking.Extensions.Abstractions.Repositories;
 
 namespace DistributedLocking.Managers
 {
@@ -37,7 +38,7 @@ namespace DistributedLocking.Managers
             try
             {
                 return await _retryExecutor.ExecuteWithRetriesAsync(
-                        () => TryAcquireLockAsync(
+                        () => _repository.TryAcquireLockAsync(
                             lockIdentifier,
                             lockTimeToLive,
                             cancellationToken),
@@ -61,8 +62,7 @@ namespace DistributedLocking.Managers
             {
                 await _retryExecutor.ExecuteWithRetriesAsync(
                         () => _repository.TryExtendAsync(
-                            distributedLock.LockIdentifier,
-                            distributedLock.LockId,
+                            distributedLock,
                             lockTimeToLive,
                             cancellationToken),
                         retryPolicyProvider,
@@ -87,8 +87,7 @@ namespace DistributedLocking.Managers
             {
                 await _retryExecutor.ExecuteWithRetriesAsync(
                         () => _repository.TryReleaseAsync(
-                            distributedLock.LockIdentifier,
-                            distributedLock.LockId,
+                            distributedLock,
                             cancellationToken),
                         retryPolicyProvider,
                         cancellationToken)
@@ -101,30 +100,6 @@ namespace DistributedLocking.Managers
                     distributedLock.LockId,
                     exception);
             }
-        }
-
-        private async Task<(bool Success, IDistributedLock Result)> TryAcquireLockAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive timeToLive,
-            CancellationToken cancellationToken)
-        {
-            var (success, acquiredLockId) = await _repository.TryAcquireAsync(
-                    lockIdentifier,
-                    timeToLive,
-                    cancellationToken)
-                .ConfigureAwait(false);
-                
-            if (!success)
-            {
-                return (false, null);
-            }
-
-            return (
-                true,
-                new DistributedLock(
-                    acquiredLockId,
-                    lockIdentifier,
-                    _repository));
         }
     }
 }

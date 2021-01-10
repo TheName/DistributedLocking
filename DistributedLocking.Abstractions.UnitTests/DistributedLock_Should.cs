@@ -8,7 +8,7 @@ using Moq;
 using TestHelpers.Attributes;
 using Xunit;
 
-namespace DistributedLocking.UnitTests
+namespace DistributedLocking.Abstractions.UnitTests
 {
     public class DistributedLock_Should
     {

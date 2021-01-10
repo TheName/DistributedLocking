@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DistributedLocking.Abstractions;
 using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
 
-namespace DistributedLocking
+namespace DistributedLocking.Abstractions
 {
-    internal class DistributedLock : IDistributedLock
+    public class DistributedLock : IDistributedLock
     {
         public DistributedLockId LockId { get; }
         
