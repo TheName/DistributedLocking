@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DistributedLocking.Abstractions.Repositories.Exceptions
+namespace DistributedLocking.Abstractions.Facades.Exceptions
 {
     public class CouldNotAcquireLockException : Exception
     {
