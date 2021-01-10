@@ -11,4 +11,10 @@
       <ProjectReference Include="..\Extensions.Abstractions\Extensions.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Abstractions\Facades" />
+      <Folder Include="Extensions\Facades" />
+      <Folder Include="Repositories" />
+    </ItemGroup>
+
 </Project>

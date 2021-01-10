@@ -1,11 +1,11 @@
-﻿using DistributedLocking.Abstractions.Managers;
-using DistributedLocking.Abstractions.Repositories;
+﻿using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Abstractions.Repositories.Managers;
 using DistributedLocking.Extensions.DependencyInjection;
 using DistributedLocking.SqlServer.Abstractions.Configuration;
 using DistributedLocking.SqlServer.Configuration;
 using DistributedLocking.SqlServer.Helpers;
-using DistributedLocking.SqlServer.Managers;
 using DistributedLocking.SqlServer.Repositories;
+using DistributedLocking.SqlServer.Repositories.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;

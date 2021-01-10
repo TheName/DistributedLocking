@@ -1,6 +1,6 @@
 ﻿using System;
-using DistributedLocking.Abstractions.Managers;
 using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Abstractions.Repositories.Managers;
 using DistributedLocking.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using TestHelpers.Attributes;

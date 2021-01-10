@@ -3,12 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using DistributedLocking.Abstractions;
 using DistributedLocking.Abstractions.Facades;
+using DistributedLocking.Abstractions.Facades.Retries;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Repositories.Exceptions;
-using DistributedLocking.Abstractions.Retries;
 using DistributedLocking.Extensions;
 using DistributedLocking.Extensions.Abstractions.Repositories;
-using DistributedLocking.Extensions.Retries;
+using DistributedLocking.Extensions.Facades.Retries;
 
 namespace DistributedLocking.Facades
 {

@@ -28,4 +28,8 @@
       <ProjectReference Include="..\TestHelpers\TestHelpers.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Repositories" />
+    </ItemGroup>
+
 </Project>
