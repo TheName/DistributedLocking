@@ -10,7 +10,7 @@ namespace DistributedLocking.Abstractions.Records
         {
             if (value <= TimeSpan.Zero)
             {
-                throw new ArgumentException("DistributedLockTimeToLive cannot be lower than or equal to zero!", nameof(value));
+                throw new ArgumentException($"{nameof(DistributedLockTimeToLive)} cannot be lower than or equal to zero!", nameof(value));
             }
             
             Value = value;

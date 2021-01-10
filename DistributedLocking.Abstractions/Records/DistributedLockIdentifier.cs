@@ -10,7 +10,7 @@ namespace DistributedLocking.Abstractions.Records
         {
             if (value == Guid.Empty)
             {
-                throw new ArgumentException("DistributedLockIdentifier cannot be empty guid!", nameof(value));
+                throw new ArgumentException($"{nameof(DistributedLockIdentifier)} cannot be empty guid!", nameof(value));
             }
             
             Value = value;
