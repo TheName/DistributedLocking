@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DistributedLocking.Abstractions.Retries;
 
-namespace DistributedLocking.Extensions.Abstractions.Retries
+namespace DistributedLocking.Extensions.Retries
 {
     public static class RetryExecutorExtensions
     {
