@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DistributedLocking.Abstractions;
 using DistributedLocking.Abstractions.Exceptions;
+using DistributedLocking.Abstractions.Facades;
 using DistributedLocking.Abstractions.Managers;
 using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
@@ -12,12 +13,12 @@ using DistributedLocking.Extensions.Abstractions.Repositories;
 
 namespace DistributedLocking.Managers
 {
-    public class DistributedLockManager : IDistributedLockManager
+    public class DistributedLockFacade : IDistributedLockFacade
     {
         private readonly IDistributedLockRepository _repository;
         private readonly IRetryExecutor _retryExecutor;
 
-        public DistributedLockManager(
+        public DistributedLockFacade(
             IDistributedLockRepository repository,
             IRetryExecutor retryExecutor)
         {

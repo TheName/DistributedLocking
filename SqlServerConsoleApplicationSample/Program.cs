@@ -75,8 +75,10 @@ namespace SqlServerConsoleApplicationSample
         private static async Task DistributedLockUsageSampleAsync(IServiceProvider provider)
         {
             var repository = provider.GetRequiredService<IDistributedLockRepository>();
+            
             var identifier = Guid.NewGuid();
             var timeToLive = TimeSpan.FromSeconds(30);
+
             var acquiringResult = await repository.TryAcquireLockAsync(
                 identifier,
                 timeToLive,
@@ -86,11 +88,12 @@ namespace SqlServerConsoleApplicationSample
             {
                 throw new Exception("Could not acquire lock!");
             }
-            
-            Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {acquiringResult.AcquiredLock.Id}!");
+
+            var distributedLock = acquiringResult.AcquiredLock;
+            Console.WriteLine($"Successfully acquired lock {distributedLock}!");
 
             // the lock will be released automatically
-            await using (acquiringResult.AcquiredLock)
+            await using (distributedLock)
             {
                 // do some action ...
 
@@ -109,7 +112,7 @@ namespace SqlServerConsoleApplicationSample
                 
                 // extent the lock lease
                 var extendingResult = await repository.TryExtendAsync(
-                    acquiringResult.AcquiredLock,
+                    distributedLock,
                     timeToLive,
                     CancellationToken.None);
 
@@ -118,8 +121,7 @@ namespace SqlServerConsoleApplicationSample
                     throw new Exception("Could not extend lock lease even though it should be possible.");
                 }
 
-                Console.WriteLine(
-                    $"Successfully extended lease for lock with identifier {identifier} and ID {acquiringResult.AcquiredLock.Id}.");
+                Console.WriteLine($"Successfully extended lease for lock {distributedLock}.");
 
                 // do some more action ...
             }

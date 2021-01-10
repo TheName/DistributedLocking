@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Retries;
 
-namespace DistributedLocking.Abstractions.Managers
+namespace DistributedLocking.Abstractions.Facades
 {
-    public interface IDistributedLockManager
+    public interface IDistributedLockFacade
     {
         Task<IDistributedLock> AcquireAsync(
             DistributedLockIdentifier identifier,

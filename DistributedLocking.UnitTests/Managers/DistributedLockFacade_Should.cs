@@ -14,20 +14,20 @@ using Xunit;
 
 namespace DistributedLocking.UnitTests.Managers
 {
-    public class DistributedLockManager_Should
+    public class DistributedLockFacade_Should
     {
         [Theory]
         [AutoMoqData]
         public void Throw_When_Creating_And_RepositoryIsNull(IRetryExecutor retryExecutor)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLockManager(null, retryExecutor));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLockFacade(null, retryExecutor));
         }
         
         [Theory]
         [AutoMoqData]
         public void Throw_When_Creating_And_RetryExecutorIsNull(IDistributedLockRepository repository)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLockManager(repository, null));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLockFacade(repository, null));
         }
         
         [Theory]
@@ -36,7 +36,7 @@ namespace DistributedLocking.UnitTests.Managers
             IDistributedLockRepository repository,
             IRetryExecutor retryExecutor)
         {
-            _ = new DistributedLockManager(repository, retryExecutor);
+            _ = new DistributedLockFacade(repository, retryExecutor);
         }
 
         [Theory]
@@ -44,7 +44,7 @@ namespace DistributedLocking.UnitTests.Managers
         public async Task Throw_When_Acquiring_And_IdentifierIsNull(
             DistributedLockTimeToLive timeToLive,
             IRetryPolicyProvider retryPolicyProvider,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
                 null,
@@ -58,7 +58,7 @@ namespace DistributedLocking.UnitTests.Managers
         public async Task Throw_When_Acquiring_And_TimeToLiveIsNull(
             DistributedLockIdentifier identifier,
             IRetryPolicyProvider retryPolicyProvider,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
                 identifier,
@@ -72,7 +72,7 @@ namespace DistributedLocking.UnitTests.Managers
         public async Task Throw_When_Acquiring_And_RetryPolicyProviderIsNull(
             DistributedLockIdentifier identifier,
             DistributedLockTimeToLive timeToLive,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
                 identifier,
@@ -89,7 +89,7 @@ namespace DistributedLocking.UnitTests.Managers
             IRetryPolicyProvider retryPolicyProvider,
             Exception exceptionToThrow,
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             retryExecutorMock
                 .Setup(executor => executor.ExecuteWithRetriesAsync(
@@ -119,7 +119,7 @@ namespace DistributedLocking.UnitTests.Managers
             DistributedLockId lockId,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryAcquireAsync(
@@ -159,7 +159,7 @@ namespace DistributedLocking.UnitTests.Managers
             IRetryPolicyProvider retryPolicyProvider,
             Exception exceptionToThrow,
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             retryExecutorMock
                 .Setup(executor => executor.ExecuteWithRetriesAsync(
@@ -186,7 +186,7 @@ namespace DistributedLocking.UnitTests.Managers
             IRetryPolicyProvider retryPolicyProvider,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             retryExecutorMock
                 .Setup(executor => executor.ExecuteWithRetriesAsync(
@@ -231,7 +231,7 @@ namespace DistributedLocking.UnitTests.Managers
             IRetryPolicyProvider retryPolicyProvider,
             Exception exceptionToThrow,
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             retryExecutorMock
                 .Setup(executor => executor.ExecuteWithRetriesAsync(
@@ -260,7 +260,7 @@ namespace DistributedLocking.UnitTests.Managers
             IRetryPolicyProvider retryPolicyProvider,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockManager manager)
+            DistributedLockFacade manager)
         {
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryExtendAsync(
