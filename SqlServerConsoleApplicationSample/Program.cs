@@ -2,10 +2,10 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using DistributedLocking.Abstractions.Exceptions;
 using DistributedLocking.Abstractions.Facades;
 using DistributedLocking.Abstractions.Initializers;
 using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Abstractions.Repositories.Exceptions;
 using DistributedLocking.Extensions.Abstractions.Facades;
 using DistributedLocking.Extensions.Abstractions.Repositories;
 using DistributedLocking.Extensions.SqlServer.DependencyInjection;

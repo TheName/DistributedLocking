@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DistributedLocking.Abstractions.Exceptions
+namespace DistributedLocking.Abstractions.Retries.Exceptions
 {
     public class RetryExecutionFailedException : Exception
     {

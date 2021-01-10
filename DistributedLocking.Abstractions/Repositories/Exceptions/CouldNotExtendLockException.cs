@@ -1,7 +1,7 @@
 ﻿using System;
 using DistributedLocking.Abstractions.Records;
 
-namespace DistributedLocking.Abstractions.Exceptions
+namespace DistributedLocking.Abstractions.Repositories.Exceptions
 {
     public class CouldNotExtendLockException : Exception
     {
