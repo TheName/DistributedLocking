@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DistributedLocking.Abstractions;
-using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
 
 namespace DistributedLocking.Extensions.Abstractions.Repositories

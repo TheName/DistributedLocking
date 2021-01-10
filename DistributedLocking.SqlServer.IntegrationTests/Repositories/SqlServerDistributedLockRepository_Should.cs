@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.SqlServer.IntegrationTests.CollectionDefinitions;
 using DistributedLocking.SqlServer.IntegrationTests.Fixtures;

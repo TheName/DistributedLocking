@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using DistributedLocking.Abstractions;
-using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Repositories.Exceptions;
 using DistributedLocking.Abstractions.Retries;

@@ -1,5 +1,4 @@
 ﻿using System;
-using DistributedLocking.Abstractions.Records;
 using TestHelpers.Attributes;
 using Xunit;
 

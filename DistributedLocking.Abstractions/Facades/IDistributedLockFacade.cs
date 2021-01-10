@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Retries;
 
 namespace DistributedLocking.Abstractions.Facades

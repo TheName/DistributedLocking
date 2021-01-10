@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DistributedLocking.Abstractions.Records;
+using DistributedLocking.Abstractions;
 using DistributedLocking.SqlServer.Abstractions.Configuration;
 using DistributedLocking.SqlServer.Abstractions.Helpers;
 using DistributedLocking.SqlServer.Repositories;

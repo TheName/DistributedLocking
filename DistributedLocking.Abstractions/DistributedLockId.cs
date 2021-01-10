@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DistributedLocking.Abstractions.Records
+namespace DistributedLocking.Abstractions
 {
     public record DistributedLockId
     {
