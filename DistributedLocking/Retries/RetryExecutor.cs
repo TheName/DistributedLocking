@@ -8,16 +8,6 @@ namespace DistributedLocking.Retries
 {
     public class RetryExecutor : IRetryExecutor
     {
-        public async Task ExecuteWithRetriesAsync(
-            Func<Task<bool>> func,
-            IRetryPolicyProvider policyProvider,
-            CancellationToken cancellationToken) =>
-            await ExecuteWithRetriesAsync<object>(
-                    async () => (await func().ConfigureAwait(false), null),
-                    policyProvider,
-                    cancellationToken)
-                .ConfigureAwait(false);
-
         public async Task<T> ExecuteWithRetriesAsync<T>(
             Func<Task<(bool Success, T Result)>> func,
             IRetryPolicyProvider policyProvider, 

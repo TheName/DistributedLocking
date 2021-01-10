@@ -8,6 +8,7 @@ using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Retries;
 using DistributedLocking.Facades;
+using DistributedLocking.UnitTests.Extensions;
 using Moq;
 using TestHelpers.Attributes;
 using Xunit;
@@ -91,12 +92,7 @@ namespace DistributedLocking.UnitTests.Managers
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
             DistributedLockFacade manager)
         {
-            retryExecutorMock
-                .Setup(executor => executor.ExecuteWithRetriesAsync(
-                    It.IsAny<Func<Task<(bool, IDistributedLock)>>>(),
-                    retryPolicyProvider,
-                    It.IsAny<CancellationToken>()))
-                .Throws(exceptionToThrow);
+            retryExecutorMock.SetupException<IDistributedLock>(exceptionToThrow);
 
             var exception = await Assert.ThrowsAsync<CouldNotAcquireLockException>(() =>
                 manager.AcquireAsync(
@@ -121,24 +117,13 @@ namespace DistributedLocking.UnitTests.Managers
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
             DistributedLockFacade manager)
         {
+            retryExecutorMock.Setup<IDistributedLock>();
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryAcquireAsync(
                     identifier,
                     timeToLive,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync((true, lockId));
-
-            retryExecutorMock
-                .Setup(executor => executor.ExecuteWithRetriesAsync(
-                    It.IsAny<Func<Task<(bool, IDistributedLock)>>>(),
-                    retryPolicyProvider,
-                    It.IsAny<CancellationToken>()))
-                .Returns<Func<Task<(bool, IDistributedLock)>>, IRetryPolicyProvider, CancellationToken>(
-                    async (func, _, _) =>
-                    {
-                        var (_, @lock) = await func();
-                        return @lock;
-                    });
 
             var result = await manager.AcquireAsync(
                 identifier,
@@ -161,12 +146,7 @@ namespace DistributedLocking.UnitTests.Managers
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
             DistributedLockFacade manager)
         {
-            retryExecutorMock
-                .Setup(executor => executor.ExecuteWithRetriesAsync(
-                    It.IsAny<Func<Task<bool>>>(),
-                    retryPolicyProvider,
-                    It.IsAny<CancellationToken>()))
-                .Throws(exceptionToThrow);
+            retryExecutorMock.SetupException(exceptionToThrow);
 
             var exception = await Assert.ThrowsAsync<CouldNotReleaseLockException>(() =>
                 manager.ReleaseAsync(
@@ -188,20 +168,7 @@ namespace DistributedLocking.UnitTests.Managers
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
             DistributedLockFacade manager)
         {
-            retryExecutorMock
-                .Setup(executor => executor.ExecuteWithRetriesAsync(
-                    It.IsAny<Func<Task<bool>>>(),
-                    retryPolicyProvider,
-                    It.IsAny<CancellationToken>()))
-                .Returns<Func<Task<bool>>, IRetryPolicyProvider, CancellationToken>(
-                    async (func, _, _) =>
-                    {
-                        if (!await func())
-                        {
-                            throw new Exception();
-                        }
-                    });
-            
+            retryExecutorMock.Setup();
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryReleaseAsync(
                     distributedLock.Identifier,
@@ -233,12 +200,7 @@ namespace DistributedLocking.UnitTests.Managers
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
             DistributedLockFacade manager)
         {
-            retryExecutorMock
-                .Setup(executor => executor.ExecuteWithRetriesAsync(
-                    It.IsAny<Func<Task<bool>>>(),
-                    retryPolicyProvider,
-                    It.IsAny<CancellationToken>()))
-                .Throws(exceptionToThrow);
+            retryExecutorMock.SetupException(exceptionToThrow);
 
             var exception = await Assert.ThrowsAsync<CouldNotExtendLockException>(() =>
                 manager.ExtendAsync(
@@ -262,6 +224,7 @@ namespace DistributedLocking.UnitTests.Managers
             [Frozen] Mock<IRetryExecutor> retryExecutorMock,
             DistributedLockFacade manager)
         {
+            retryExecutorMock.Setup();
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryExtendAsync(
                     distributedLock.Identifier,
@@ -269,20 +232,6 @@ namespace DistributedLocking.UnitTests.Managers
                     additionalTimeToLive,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
-            
-            retryExecutorMock
-                .Setup(executor => executor.ExecuteWithRetriesAsync(
-                    It.IsAny<Func<Task<bool>>>(),
-                    retryPolicyProvider,
-                    It.IsAny<CancellationToken>()))
-                .Returns<Func<Task<bool>>, IRetryPolicyProvider, CancellationToken>(
-                    async (func, _, _) =>
-                    {
-                        if (!await func())
-                        {
-                            throw new Exception();
-                        }
-                    });
 
             await manager.ExtendAsync(
                 distributedLock,

@@ -9,6 +9,7 @@ using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Retries;
 using DistributedLocking.Extensions;
 using DistributedLocking.Extensions.Abstractions.Repositories;
+using DistributedLocking.Extensions.Abstractions.Retries;
 
 namespace DistributedLocking.Facades
 {
