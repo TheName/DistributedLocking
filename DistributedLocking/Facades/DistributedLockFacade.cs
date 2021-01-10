@@ -29,12 +29,12 @@ namespace DistributedLocking.Facades
         public async Task<IDistributedLock> AcquireAsync(
             DistributedLockIdentifier identifier,
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicyProvider retryPolicyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken)
         {
             identifier.EnsureIsNotNull(nameof(identifier));
             timeToLive.EnsureIsNotNull(nameof(timeToLive));
-            retryPolicyProvider.EnsureIsNotNull(nameof(retryPolicyProvider));
+            retryPolicy.EnsureIsNotNull(nameof(retryPolicy));
             
             try
             {
@@ -43,7 +43,7 @@ namespace DistributedLocking.Facades
                             identifier,
                             timeToLive,
                             cancellationToken),
-                        retryPolicyProvider,
+                        retryPolicy,
                         cancellationToken)
                     .ConfigureAwait(false);
             }
@@ -56,7 +56,7 @@ namespace DistributedLocking.Facades
         public async Task ExtendAsync(
             IDistributedLock distributedLock, 
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicyProvider retryPolicyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken)
         {
             try
@@ -66,7 +66,7 @@ namespace DistributedLocking.Facades
                             distributedLock,
                             timeToLive,
                             cancellationToken),
-                        retryPolicyProvider,
+                        retryPolicy,
                         cancellationToken)
                     .ConfigureAwait(false);
             }
@@ -81,7 +81,7 @@ namespace DistributedLocking.Facades
 
         public async Task ReleaseAsync(
             IDistributedLock distributedLock,
-            IRetryPolicyProvider retryPolicyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken)
         {
             try
@@ -90,7 +90,7 @@ namespace DistributedLocking.Facades
                         () => _repository.TryReleaseAsync(
                             distributedLock,
                             cancellationToken),
-                        retryPolicyProvider,
+                        retryPolicy,
                         cancellationToken)
                     .ConfigureAwait(false);
             }

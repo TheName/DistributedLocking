@@ -10,18 +10,18 @@ namespace DistributedLocking.Abstractions.Facades
         Task<IDistributedLock> AcquireAsync(
             DistributedLockIdentifier identifier,
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicyProvider retryPolicyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken);
 
         Task ExtendAsync(
             IDistributedLock distributedLock,
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicyProvider retryPolicyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken);
 
         Task ReleaseAsync(
             IDistributedLock distributedLock,
-            IRetryPolicyProvider retryPolicyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken);
     }
 }

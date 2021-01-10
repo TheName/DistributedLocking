@@ -2,8 +2,11 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
+using DistributedLocking.Abstractions.Exceptions;
+using DistributedLocking.Abstractions.Facades;
 using DistributedLocking.Abstractions.Initializers;
 using DistributedLocking.Abstractions.Repositories;
+using DistributedLocking.Extensions.Abstractions.Facades;
 using DistributedLocking.Extensions.Abstractions.Repositories;
 using DistributedLocking.Extensions.SqlServer.DependencyInjection;
 using DistributedLocking.SqlServer.Abstractions.Configuration;
@@ -20,7 +23,8 @@ namespace SqlServerConsoleApplicationSample
 
             await InitializeAsync(provider);
 
-            await DistributedLockUsageSampleAsync(provider);
+            await DistributedLockWithRepositoryUsageSampleAsync(provider);
+            await DistributedLockWithFacadeUsageSampleAsync(provider);
             await RawRepositoryUsageSampleAsync(provider);
         }
 
@@ -72,31 +76,40 @@ namespace SqlServerConsoleApplicationSample
             await command.ExecuteNonQueryAsync();
         }
 
-        private static async Task DistributedLockUsageSampleAsync(IServiceProvider provider)
+        private static async Task DistributedLockWithRepositoryUsageSampleAsync(IServiceProvider provider)
         {
             var repository = provider.GetRequiredService<IDistributedLockRepository>();
             
             var identifier = Guid.NewGuid();
             var timeToLive = TimeSpan.FromSeconds(30);
 
-            var acquiringResult = await repository.TryAcquireLockAsync(
+            // try acquiring
+            var (success, distributedLock) = await repository.TryAcquireLockAsync(
                 identifier,
                 timeToLive,
                 CancellationToken.None);
 
-            if (!acquiringResult.Success)
+            // acquiring can fail;
+            // a common case for failure would be lock identifier being currently used by another lock
+            // of course it can also by any other reason
+            if (!success)
             {
                 throw new Exception("Could not acquire lock!");
             }
 
-            var distributedLock = acquiringResult.AcquiredLock;
             Console.WriteLine($"Successfully acquired lock {distributedLock}!");
+            
+            // there are two ways to release lock;
+            //  - dispose the lock itself
+            //  - explicitly call TryRelease on repository and pass the lock
 
-            // the lock will be released automatically
+            // the lock will be released using disposing method
             await using (distributedLock)
             {
                 // do some action ...
 
+                // trying to acquire a lock for the same identifier will fail,
+                // because the current lock is using it.
                 var secondAcquiringResult = await repository.TryAcquireAsync(
                     identifier,
                     timeToLive,
@@ -110,7 +123,8 @@ namespace SqlServerConsoleApplicationSample
                 Console.WriteLine(
                     $"Failed to acquire another lock with the same identifier ({identifier}) because the first one is still acquired.");
                 
-                // extent the lock lease
+                // if you realize that the work might take longer than the original TTL (time to live) / lease time
+                // you can extend the lock.
                 var extendingResult = await repository.TryExtendAsync(
                     distributedLock,
                     timeToLive,
@@ -127,6 +141,8 @@ namespace SqlServerConsoleApplicationSample
             }
             
             var thirdTimeToLive = TimeSpan.FromSeconds(3);
+            
+            // now, that the identifier has been released, we can acquire a new lock with same identifier
             var thirdAcquiringResult = await repository.TryAcquireLockAsync(
                 identifier,
                 thirdTimeToLive,
@@ -139,8 +155,11 @@ namespace SqlServerConsoleApplicationSample
 
             var newLockId = thirdAcquiringResult.AcquiredLock.Id;
             Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {newLockId}!");
+            
+            // let's wait for the lock's TTL (time to live) / lease time to expire
             await Task.Delay(thirdTimeToLive);
             
+            // now, after TTL has expired we cannot extend the lock anymore as it's already expired.
             var extendingNewLockResult = await repository.TryExtendAsync(
                 identifier,
                 newLockId,
@@ -155,6 +174,7 @@ namespace SqlServerConsoleApplicationSample
             Console.WriteLine(
                 $"Could not extend lease for new lock with identifier {identifier} and ID {newLockId} because the lease (TTL / time to live) has expired.");
 
+            // releasing the lock after TTL has expired will also not succeed.
             var releasingNewLockResult = await repository.TryReleaseAsync(
                 identifier,
                 newLockId,
@@ -169,24 +189,126 @@ namespace SqlServerConsoleApplicationSample
                 $"Could not release new lock with identifier {identifier} and ID {newLockId} because the lease (TTL / time to live) has expired and thus it was automatically released.");
         }
 
-        private static async Task RawRepositoryUsageSampleAsync(IServiceProvider provider)
+        private static async Task DistributedLockWithFacadeUsageSampleAsync(IServiceProvider provider)
         {
-            var repository = provider.GetRequiredService<IDistributedLockRepository>();
+            var distributedLockFacade = provider.GetRequiredService<IDistributedLockFacade>();
+            
             var identifier = Guid.NewGuid();
             var timeToLive = TimeSpan.FromSeconds(30);
-            var acquiringResult = await repository.TryAcquireAsync(
+
+            // with the facade, you can acquire lock or throw
+            var distributedLock = await distributedLockFacade.AcquireAsync(
                 identifier,
                 timeToLive,
                 CancellationToken.None);
 
-            if (!acquiringResult.Success)
+            Console.WriteLine($"Successfully acquired lock {distributedLock}!");
+
+            // the lock will be released using disposing method
+            await using (distributedLock)
+            {
+                // do some action ...
+
+                try
+                {
+                    // trying to acquire a lock for the same identifier will fail,
+                    // because the current lock is using it.
+                    var _ = await distributedLockFacade.AcquireAsync(
+                        identifier,
+                        timeToLive,
+                        CancellationToken.None);
+                    
+                    throw new Exception(
+                        "Could acquire lock with the same identifier even though it should not be possible.");
+                }
+                catch (CouldNotAcquireLockException)
+                {
+                    Console.WriteLine(
+                        $"Failed to acquire another lock with the same identifier ({identifier}) because the first one is still acquired.");
+                }
+                
+                // if you realize that the work might take longer than the original TTL (time to live) / lease time
+                // you can extend the lock.
+                await distributedLockFacade.ExtendAsync(
+                    distributedLock,
+                    timeToLive,
+                    CancellationToken.None);
+
+                Console.WriteLine($"Successfully extended lease for lock {distributedLock}.");
+
+                // do some more action ...
+            }
+            
+            var thirdTimeToLive = TimeSpan.FromSeconds(3);
+            
+            // now, that the identifier has been released, we can acquire a new lock with same identifier
+            var thirdAcquiringDistributedLock = await distributedLockFacade.AcquireAsync(
+                identifier,
+                thirdTimeToLive,
+                CancellationToken.None);
+
+            Console.WriteLine($"Successfully acquired lock {thirdAcquiringDistributedLock}!");
+            
+            // let's wait for the lock's TTL (time to live) / lease time to expire
+            await Task.Delay(thirdTimeToLive);
+            
+            try
+            {
+                // now, after TTL has expired we cannot extend the lock anymore as it's already expired.
+                await distributedLockFacade.ExtendAsync(
+                    thirdAcquiringDistributedLock,
+                    timeToLive,
+                    CancellationToken.None);
+                
+                throw new Exception("Extended new lock lease even though it should not be possible.");
+            }
+            catch (CouldNotExtendLockException)
+            {
+                Console.WriteLine(
+                    $"Could not extend lease for new lock {thirdAcquiringDistributedLock} because the lease (TTL / time to live) has expired.");
+            }
+
+            try
+            {
+                // releasing the lock after TTL has expired will also not succeed.
+                await distributedLockFacade.ReleaseAsync(
+                    thirdAcquiringDistributedLock,
+                    CancellationToken.None);
+                
+                throw new Exception("Released lock even though it should not be possible.");
+            }
+            catch (CouldNotReleaseLockException)
+            {
+                Console.WriteLine(
+                    $"Could not release new lock {thirdAcquiringDistributedLock} because the lease (TTL / time to live) has expired and thus it was automatically released.");
+            }
+        }
+
+        private static async Task RawRepositoryUsageSampleAsync(IServiceProvider provider)
+        {
+            var repository = provider.GetRequiredService<IDistributedLockRepository>();
+            
+            var identifier = Guid.NewGuid();
+            var timeToLive = TimeSpan.FromSeconds(30);
+            
+            // try acquiring
+            var (success, lockId) = await repository.TryAcquireAsync(
+                identifier,
+                timeToLive,
+                CancellationToken.None);
+
+            // acquiring can fail;
+            // a common case for failure would be lock identifier being currently used by another lock
+            // of course it can also by any other reason
+            if (!success)
             {
                 throw new Exception("Could not acquire lock!");
             }
 
-            var lockId = acquiringResult.AcquiredLockId;
             Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {lockId}!");
 
+            // trying to acquire a lock for the same identifier will fail,
+            // because the current lock is using it.
             var secondAcquiringResult = await repository.TryAcquireAsync(
                 identifier,
                 timeToLive,
@@ -200,6 +322,8 @@ namespace SqlServerConsoleApplicationSample
             Console.WriteLine(
                 $"Failed to acquire another lock with the same identifier ({identifier}) because the first one is still acquired.");
 
+            // if you realize that the work might take longer than the original TTL (time to live) / lease time
+            // you can extend the lock.
             var extendingResult = await repository.TryExtendAsync(
                 identifier,
                 lockId,
@@ -214,6 +338,7 @@ namespace SqlServerConsoleApplicationSample
             Console.WriteLine(
                 $"Successfully extended lease for lock with identifier {identifier} and ID {lockId}.");
 
+            // you can wait for the TTL to expire or release the lock explicitly
             var releasingResult = await repository.TryReleaseAsync(
                 identifier,
                 lockId,
@@ -228,6 +353,8 @@ namespace SqlServerConsoleApplicationSample
                 $"Successfully released lock with identifier {identifier} and ID {lockId}.");
 
             var thirdTimeToLive = TimeSpan.FromSeconds(3);
+            
+            // now, that the identifier has been released, we can acquire a new lock with same identifier
             var thirdAcquiringResult = await repository.TryAcquireAsync(
                 identifier,
                 thirdTimeToLive,
@@ -240,8 +367,11 @@ namespace SqlServerConsoleApplicationSample
 
             var newLockId = thirdAcquiringResult.AcquiredLockId;
             Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {newLockId}!");
+            
+            // let's wait for the lock's TTL (time to live) / lease time to expire
             await Task.Delay(thirdTimeToLive);
             
+            // now, after TTL has expired we cannot extend the lock anymore as it's already expired.
             var extendingNewLockResult = await repository.TryExtendAsync(
                 identifier,
                 newLockId,
@@ -256,6 +386,7 @@ namespace SqlServerConsoleApplicationSample
             Console.WriteLine(
                 $"Could not extend lease for new lock with identifier {identifier} and ID {newLockId} because the lease (TTL / time to live) has expired.");
 
+            // releasing the lock after TTL has expired will also not succeed.
             var releasingNewLockResult = await repository.TryReleaseAsync(
                 identifier,
                 newLockId,

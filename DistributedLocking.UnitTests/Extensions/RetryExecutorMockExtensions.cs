@@ -13,7 +13,7 @@ namespace DistributedLocking.UnitTests.Extensions
             retryExecutorMock
                 .Setup(executor => executor.ExecuteWithRetriesAsync(
                     It.IsAny<Func<Task<(bool, T)>>>(),
-                    It.IsAny<IRetryPolicyProvider>(),
+                    It.IsAny<IRetryPolicy>(),
                     It.IsAny<CancellationToken>()))
                 .Throws(exception);
         }
@@ -28,9 +28,9 @@ namespace DistributedLocking.UnitTests.Extensions
             retryExecutorMock
                 .Setup(executor => executor.ExecuteWithRetriesAsync(
                     It.IsAny<Func<Task<(bool, T)>>>(),
-                    It.IsAny<IRetryPolicyProvider>(),
+                    It.IsAny<IRetryPolicy>(),
                     It.IsAny<CancellationToken>()))
-                .Returns<Func<Task<(bool, T)>>, IRetryPolicyProvider, CancellationToken>(
+                .Returns<Func<Task<(bool, T)>>, IRetryPolicy, CancellationToken>(
                     async (func, _, _) =>
                     {
                         var (_, result) = await func();

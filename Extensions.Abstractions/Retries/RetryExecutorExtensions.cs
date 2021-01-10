@@ -10,7 +10,7 @@ namespace DistributedLocking.Extensions.Abstractions.Retries
         public static async Task ExecuteWithRetriesAsync(
             this IRetryExecutor retryExecutor,
             Func<Task<bool>> func,
-            IRetryPolicyProvider policyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken)
         {
             if (retryExecutor == null)
@@ -20,7 +20,7 @@ namespace DistributedLocking.Extensions.Abstractions.Retries
 
             await retryExecutor.ExecuteWithRetriesAsync<object>(
                     async () => (await func().ConfigureAwait(false), null),
-                    policyProvider,
+                    retryPolicy,
                     cancellationToken)
                 .ConfigureAwait(false);
         }

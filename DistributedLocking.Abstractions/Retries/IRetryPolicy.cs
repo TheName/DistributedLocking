@@ -4,8 +4,8 @@ namespace DistributedLocking.Abstractions.Retries
 {
     public interface IRetryPolicy
     {
-        TimeSpan DelayBetweenRetries { get; }
-        
-        bool CanRetry();
+        bool CanRetry(RetryExecutionMetadata metadata);
+
+        TimeSpan GetDelayBeforeNextRetry(RetryExecutionMetadata metadata);
     }
 }

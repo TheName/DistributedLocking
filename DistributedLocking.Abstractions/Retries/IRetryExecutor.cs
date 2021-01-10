@@ -8,7 +8,7 @@ namespace DistributedLocking.Abstractions.Retries
     {
         Task<T> ExecuteWithRetriesAsync<T>(
             Func<Task<(bool Success, T Result)>> func,
-            IRetryPolicyProvider policyProvider,
+            IRetryPolicy retryPolicy,
             CancellationToken cancellationToken);
     }
 }
