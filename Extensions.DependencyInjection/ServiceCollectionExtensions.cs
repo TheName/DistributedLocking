@@ -1,4 +1,5 @@
-﻿using DistributedLocking.Abstractions.Initializers;
+﻿using System;
+using DistributedLocking.Abstractions.Initializers;
 using DistributedLocking.Abstractions.Managers;
 using DistributedLocking.Abstractions.Retries;
 using DistributedLocking.Initializers;
@@ -13,6 +14,11 @@ namespace DistributedLocking.Extensions.DependencyInjection
     {
         public static IServiceCollection AddDistributedLocking(this IServiceCollection services)
         {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+            
             services.TryAddSingleton<IDistributedLockRepositoryInitializer, DistributedLockRepositoryInitializer>();
             services.TryAddTransient<IDistributedLockManager, DistributedLockManager>();
             services.TryAddTransient<IRetryExecutor, RetryExecutor>();

@@ -11,6 +11,13 @@ namespace Extensions.DependencyInjection.UnitTests
     public class ServiceCollectionExtensions_Should
     {
         [Fact]
+        public void Throw_When_PassedServicesCollectionIsNull()
+        {
+            IServiceCollection serviceCollection = null;
+            Assert.Throws<ArgumentNullException>(() => serviceCollection.AddDistributedLocking());
+        }
+
+        [Fact]
         public void Throw_When_RepositoryFactory_And_RepositoryManagerFactory_AreNotRegistered()
         {
             Assert.Throws<AggregateException>(() => new ServiceCollection()
