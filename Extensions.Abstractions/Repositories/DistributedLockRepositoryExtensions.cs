@@ -11,8 +11,8 @@ namespace DistributedLocking.Extensions.Abstractions.Repositories
     {
         public static async Task<(bool Success, IDistributedLock AcquiredLock)> TryAcquireLockAsync(
             this IDistributedLockRepository repository,
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
             if (repository == null)
@@ -21,8 +21,8 @@ namespace DistributedLocking.Extensions.Abstractions.Repositories
             }
 
             var (success, acquiredLockId) = await repository.TryAcquireAsync(   
-                    lockIdentifier,
-                    lockTimeToLive,
+                    identifier,
+                    timeToLive,
                     cancellationToken)
                 .ConfigureAwait(false);
 
@@ -34,15 +34,15 @@ namespace DistributedLocking.Extensions.Abstractions.Repositories
             return (
                 true,
                 new DistributedLock(
+                    identifier,
                     acquiredLockId,
-                    lockIdentifier,
                     repository));
         }
 
         public static async Task<bool> TryExtendAsync(
             this IDistributedLockRepository repository,
             IDistributedLock distributedLock,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
             if (repository == null)
@@ -51,9 +51,9 @@ namespace DistributedLocking.Extensions.Abstractions.Repositories
             }
 
             return await repository.TryExtendAsync(
-                    distributedLock.LockIdentifier,
-                    distributedLock.LockId,
-                    lockTimeToLive,
+                    distributedLock.Identifier,
+                    distributedLock.Id,
+                    timeToLive,
                     cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -69,8 +69,8 @@ namespace DistributedLocking.Extensions.Abstractions.Repositories
             }
 
             return await repository.TryReleaseAsync(
-                    distributedLock.LockIdentifier,
-                    distributedLock.LockId,
+                    distributedLock.Identifier,
+                    distributedLock.Id,
                     cancellationToken)
                 .ConfigureAwait(false);
         }

@@ -41,7 +41,7 @@ namespace DistributedLocking.UnitTests.Managers
 
         [Theory]
         [AutoMoqData]
-        public async Task Throw_When_Acquiring_And_LockIdentifierIsNull(
+        public async Task Throw_When_Acquiring_And_IdentifierIsNull(
             DistributedLockTimeToLive timeToLive,
             IRetryPolicyProvider retryPolicyProvider,
             DistributedLockManager manager)
@@ -56,12 +56,12 @@ namespace DistributedLocking.UnitTests.Managers
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Acquiring_And_TimeToLiveIsNull(
-            DistributedLockIdentifier lockIdentifier,
+            DistributedLockIdentifier identifier,
             IRetryPolicyProvider retryPolicyProvider,
             DistributedLockManager manager)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
-                lockIdentifier,
+                identifier,
                 null,
                 retryPolicyProvider,
                 CancellationToken.None));
@@ -70,12 +70,12 @@ namespace DistributedLocking.UnitTests.Managers
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Acquiring_And_RetryPolicyProviderIsNull(
-            DistributedLockIdentifier lockIdentifier,
+            DistributedLockIdentifier identifier,
             DistributedLockTimeToLive timeToLive,
             DistributedLockManager manager)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
-                lockIdentifier,
+                identifier,
                 timeToLive,
                 null,
                 CancellationToken.None));
@@ -105,8 +105,8 @@ namespace DistributedLocking.UnitTests.Managers
                     retryPolicyProvider,
                     CancellationToken.None));
             
-            Assert.Equal(identifier, exception.LockIdentifier);
-            Assert.Equal(timeToLive, exception.LockTimeToLive);
+            Assert.Equal(identifier, exception.Identifier);
+            Assert.Equal(timeToLive, exception.TimeToLive);
             Assert.Equal(exceptionToThrow, exception.InnerException);
         }
 
@@ -148,8 +148,8 @@ namespace DistributedLocking.UnitTests.Managers
             
             var distributedLock = Assert.IsType<DistributedLock>(result);
             Assert.NotNull(distributedLock);
-            Assert.Equal(lockId, distributedLock.LockId);
-            Assert.Equal(identifier, distributedLock.LockIdentifier);
+            Assert.Equal(lockId, distributedLock.Id);
+            Assert.Equal(identifier, distributedLock.Identifier);
         }
 
         [Theory]
@@ -174,8 +174,8 @@ namespace DistributedLocking.UnitTests.Managers
                     retryPolicyProvider,
                     CancellationToken.None));
             
-            Assert.Equal(distributedLock.LockIdentifier, exception.LockIdentifier);
-            Assert.Equal(distributedLock.LockId, exception.LockId);
+            Assert.Equal(distributedLock.Identifier, exception.Identifier);
+            Assert.Equal(distributedLock.Id, exception.Id);
             Assert.Equal(exceptionToThrow, exception.InnerException);
         }
 
@@ -204,8 +204,8 @@ namespace DistributedLocking.UnitTests.Managers
             
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryReleaseAsync(
-                    distributedLock.LockIdentifier,
-                    distributedLock.LockId,
+                    distributedLock.Identifier,
+                    distributedLock.Id,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
@@ -216,8 +216,8 @@ namespace DistributedLocking.UnitTests.Managers
 
             repositoryMock
                 .Verify(repository => repository.TryReleaseAsync(
-                        distributedLock.LockIdentifier,
-                        distributedLock.LockId,
+                        distributedLock.Identifier,
+                        distributedLock.Id,
                         It.IsAny<CancellationToken>()),
                     Times.Once);
             repositoryMock.VerifyNoOtherCalls();
@@ -247,8 +247,8 @@ namespace DistributedLocking.UnitTests.Managers
                     retryPolicyProvider,
                     CancellationToken.None));
             
-            Assert.Equal(distributedLock.LockIdentifier, exception.LockIdentifier);
-            Assert.Equal(distributedLock.LockId, exception.LockId);
+            Assert.Equal(distributedLock.Identifier, exception.Identifier);
+            Assert.Equal(distributedLock.Id, exception.Id);
             Assert.Equal(exceptionToThrow, exception.InnerException);
         }
 
@@ -264,8 +264,8 @@ namespace DistributedLocking.UnitTests.Managers
         {
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryExtendAsync(
-                    distributedLock.LockIdentifier,
-                    distributedLock.LockId,
+                    distributedLock.Identifier,
+                    distributedLock.Id,
                     additionalTimeToLive,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
@@ -292,8 +292,8 @@ namespace DistributedLocking.UnitTests.Managers
 
             repositoryMock
                 .Verify(repository => repository.TryExtendAsync(
-                        distributedLock.LockIdentifier,
-                        distributedLock.LockId,
+                        distributedLock.Identifier,
+                        distributedLock.Id,
                         additionalTimeToLive,
                         It.IsAny<CancellationToken>()),
                     Times.Once);

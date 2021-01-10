@@ -74,11 +74,11 @@ namespace SqlServerConsoleApplicationSample
 
         private static async Task DistributedLockUsageSampleAsync(IServiceProvider provider)
         {
-            var lockRepository = provider.GetRequiredService<IDistributedLockRepository>();
-            var lockIdentifier = Guid.NewGuid();
+            var repository = provider.GetRequiredService<IDistributedLockRepository>();
+            var identifier = Guid.NewGuid();
             var timeToLive = TimeSpan.FromSeconds(30);
-            var acquiringResult = await lockRepository.TryAcquireLockAsync(
-                lockIdentifier,
+            var acquiringResult = await repository.TryAcquireLockAsync(
+                identifier,
                 timeToLive,
                 CancellationToken.None);
 
@@ -87,15 +87,15 @@ namespace SqlServerConsoleApplicationSample
                 throw new Exception("Could not acquire lock!");
             }
             
-            Console.WriteLine($"Successfully acquired lock with identifier {lockIdentifier} and ID {acquiringResult.AcquiredLock.LockId}!");
+            Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {acquiringResult.AcquiredLock.Id}!");
 
             // the lock will be released automatically
             await using (acquiringResult.AcquiredLock)
             {
                 // do some action ...
 
-                var secondAcquiringResult = await lockRepository.TryAcquireAsync(
-                    lockIdentifier,
+                var secondAcquiringResult = await repository.TryAcquireAsync(
+                    identifier,
                     timeToLive,
                     CancellationToken.None);
                 if (secondAcquiringResult.Success)
@@ -105,10 +105,10 @@ namespace SqlServerConsoleApplicationSample
                 }
 
                 Console.WriteLine(
-                    $"Failed to acquire another lock with the same identifier ({lockIdentifier}) because the first one is still acquired.");
+                    $"Failed to acquire another lock with the same identifier ({identifier}) because the first one is still acquired.");
                 
                 // extent the lock lease
-                var extendingResult = await lockRepository.TryExtendAsync(
+                var extendingResult = await repository.TryExtendAsync(
                     acquiringResult.AcquiredLock,
                     timeToLive,
                     CancellationToken.None);
@@ -119,14 +119,14 @@ namespace SqlServerConsoleApplicationSample
                 }
 
                 Console.WriteLine(
-                    $"Successfully extended lease for lock with identifier {lockIdentifier} and ID {acquiringResult.AcquiredLock.LockId}.");
+                    $"Successfully extended lease for lock with identifier {identifier} and ID {acquiringResult.AcquiredLock.Id}.");
 
                 // do some more action ...
             }
             
             var thirdTimeToLive = TimeSpan.FromSeconds(3);
-            var thirdAcquiringResult = await lockRepository.TryAcquireLockAsync(
-                lockIdentifier,
+            var thirdAcquiringResult = await repository.TryAcquireLockAsync(
+                identifier,
                 thirdTimeToLive,
                 CancellationToken.None);
 
@@ -135,12 +135,12 @@ namespace SqlServerConsoleApplicationSample
                 throw new Exception("Could not acquire lock!");
             }
 
-            var newLockId = thirdAcquiringResult.AcquiredLock.LockId;
-            Console.WriteLine($"Successfully acquired lock with identifier {lockIdentifier} and ID {newLockId}!");
+            var newLockId = thirdAcquiringResult.AcquiredLock.Id;
+            Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {newLockId}!");
             await Task.Delay(thirdTimeToLive);
             
-            var extendingNewLockResult = await lockRepository.TryExtendAsync(
-                lockIdentifier,
+            var extendingNewLockResult = await repository.TryExtendAsync(
+                identifier,
                 newLockId,
                 timeToLive,
                 CancellationToken.None);
@@ -151,10 +151,10 @@ namespace SqlServerConsoleApplicationSample
             }
 
             Console.WriteLine(
-                $"Could not extend lease for new lock with identifier {lockIdentifier} and ID {newLockId} because the lease (TTL / time to live) has expired.");
+                $"Could not extend lease for new lock with identifier {identifier} and ID {newLockId} because the lease (TTL / time to live) has expired.");
 
-            var releasingNewLockResult = await lockRepository.TryReleaseAsync(
-                lockIdentifier,
+            var releasingNewLockResult = await repository.TryReleaseAsync(
+                identifier,
                 newLockId,
                 CancellationToken.None);
 
@@ -164,16 +164,16 @@ namespace SqlServerConsoleApplicationSample
             }
             
             Console.WriteLine(
-                $"Could not release new lock with identifier {lockIdentifier} and ID {newLockId} because the lease (TTL / time to live) has expired and thus it was automatically released.");
+                $"Could not release new lock with identifier {identifier} and ID {newLockId} because the lease (TTL / time to live) has expired and thus it was automatically released.");
         }
 
         private static async Task RawRepositoryUsageSampleAsync(IServiceProvider provider)
         {
-            var lockRepository = provider.GetRequiredService<IDistributedLockRepository>();
-            var lockIdentifier = Guid.NewGuid();
+            var repository = provider.GetRequiredService<IDistributedLockRepository>();
+            var identifier = Guid.NewGuid();
             var timeToLive = TimeSpan.FromSeconds(30);
-            var acquiringResult = await lockRepository.TryAcquireAsync(
-                lockIdentifier,
+            var acquiringResult = await repository.TryAcquireAsync(
+                identifier,
                 timeToLive,
                 CancellationToken.None);
 
@@ -183,10 +183,10 @@ namespace SqlServerConsoleApplicationSample
             }
 
             var lockId = acquiringResult.AcquiredLockId;
-            Console.WriteLine($"Successfully acquired lock with identifier {lockIdentifier} and ID {lockId}!");
+            Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {lockId}!");
 
-            var secondAcquiringResult = await lockRepository.TryAcquireAsync(
-                lockIdentifier,
+            var secondAcquiringResult = await repository.TryAcquireAsync(
+                identifier,
                 timeToLive,
                 CancellationToken.None);
             if (secondAcquiringResult.Success)
@@ -196,10 +196,10 @@ namespace SqlServerConsoleApplicationSample
             }
 
             Console.WriteLine(
-                $"Failed to acquire another lock with the same identifier ({lockIdentifier}) because the first one is still acquired.");
+                $"Failed to acquire another lock with the same identifier ({identifier}) because the first one is still acquired.");
 
-            var extendingResult = await lockRepository.TryExtendAsync(
-                lockIdentifier,
+            var extendingResult = await repository.TryExtendAsync(
+                identifier,
                 lockId,
                 timeToLive,
                 CancellationToken.None);
@@ -210,10 +210,10 @@ namespace SqlServerConsoleApplicationSample
             }
 
             Console.WriteLine(
-                $"Successfully extended lease for lock with identifier {lockIdentifier} and ID {lockId}.");
+                $"Successfully extended lease for lock with identifier {identifier} and ID {lockId}.");
 
-            var releasingResult = await lockRepository.TryReleaseAsync(
-                lockIdentifier,
+            var releasingResult = await repository.TryReleaseAsync(
+                identifier,
                 lockId,
                 CancellationToken.None);
 
@@ -223,11 +223,11 @@ namespace SqlServerConsoleApplicationSample
             }
             
             Console.WriteLine(
-                $"Successfully released lock with identifier {lockIdentifier} and ID {lockId}.");
+                $"Successfully released lock with identifier {identifier} and ID {lockId}.");
 
             var thirdTimeToLive = TimeSpan.FromSeconds(3);
-            var thirdAcquiringResult = await lockRepository.TryAcquireAsync(
-                lockIdentifier,
+            var thirdAcquiringResult = await repository.TryAcquireAsync(
+                identifier,
                 thirdTimeToLive,
                 CancellationToken.None);
 
@@ -237,11 +237,11 @@ namespace SqlServerConsoleApplicationSample
             }
 
             var newLockId = thirdAcquiringResult.AcquiredLockId;
-            Console.WriteLine($"Successfully acquired lock with identifier {lockIdentifier} and ID {newLockId}!");
+            Console.WriteLine($"Successfully acquired lock with identifier {identifier} and ID {newLockId}!");
             await Task.Delay(thirdTimeToLive);
             
-            var extendingNewLockResult = await lockRepository.TryExtendAsync(
-                lockIdentifier,
+            var extendingNewLockResult = await repository.TryExtendAsync(
+                identifier,
                 newLockId,
                 timeToLive,
                 CancellationToken.None);
@@ -252,10 +252,10 @@ namespace SqlServerConsoleApplicationSample
             }
 
             Console.WriteLine(
-                $"Could not extend lease for new lock with identifier {lockIdentifier} and ID {newLockId} because the lease (TTL / time to live) has expired.");
+                $"Could not extend lease for new lock with identifier {identifier} and ID {newLockId} because the lease (TTL / time to live) has expired.");
 
-            var releasingNewLockResult = await lockRepository.TryReleaseAsync(
-                lockIdentifier,
+            var releasingNewLockResult = await repository.TryReleaseAsync(
+                identifier,
                 newLockId,
                 CancellationToken.None);
 
@@ -265,7 +265,7 @@ namespace SqlServerConsoleApplicationSample
             }
             
             Console.WriteLine(
-                $"Could not release new lock with identifier {lockIdentifier} and ID {newLockId} because the lease (TTL / time to live) has expired and thus it was automatically released.");
+                $"Could not release new lock with identifier {identifier} and ID {newLockId} because the lease (TTL / time to live) has expired and thus it was automatically released.");
         }
     }
 }

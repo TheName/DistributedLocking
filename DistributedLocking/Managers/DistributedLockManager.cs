@@ -26,21 +26,21 @@ namespace DistributedLocking.Managers
         }
         
         public async Task<IDistributedLock> AcquireAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockTimeToLive timeToLive,
             IRetryPolicyProvider retryPolicyProvider,
             CancellationToken cancellationToken)
         {
-            lockIdentifier.EnsureIsNotNull(nameof(lockIdentifier));
-            lockTimeToLive.EnsureIsNotNull(nameof(lockTimeToLive));
+            identifier.EnsureIsNotNull(nameof(identifier));
+            timeToLive.EnsureIsNotNull(nameof(timeToLive));
             retryPolicyProvider.EnsureIsNotNull(nameof(retryPolicyProvider));
             
             try
             {
                 return await _retryExecutor.ExecuteWithRetriesAsync(
                         () => _repository.TryAcquireLockAsync(
-                            lockIdentifier,
-                            lockTimeToLive,
+                            identifier,
+                            timeToLive,
                             cancellationToken),
                         retryPolicyProvider,
                         cancellationToken)
@@ -48,13 +48,13 @@ namespace DistributedLocking.Managers
             }
             catch (Exception exception)
             {
-                throw new CouldNotAcquireLockException(lockIdentifier, lockTimeToLive, exception);
+                throw new CouldNotAcquireLockException(identifier, timeToLive, exception);
             }
         }
 
         public async Task ExtendAsync(
             IDistributedLock distributedLock, 
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockTimeToLive timeToLive,
             IRetryPolicyProvider retryPolicyProvider,
             CancellationToken cancellationToken)
         {
@@ -63,7 +63,7 @@ namespace DistributedLocking.Managers
                 await _retryExecutor.ExecuteWithRetriesAsync(
                         () => _repository.TryExtendAsync(
                             distributedLock,
-                            lockTimeToLive,
+                            timeToLive,
                             cancellationToken),
                         retryPolicyProvider,
                         cancellationToken)
@@ -72,8 +72,8 @@ namespace DistributedLocking.Managers
             catch (Exception exception)
             {
                 throw new CouldNotExtendLockException(
-                    distributedLock.LockIdentifier,
-                    distributedLock.LockId,
+                    distributedLock.Identifier,
+                    distributedLock.Id,
                     exception);
             }
         }
@@ -96,8 +96,8 @@ namespace DistributedLocking.Managers
             catch (Exception exception)
             {
                 throw new CouldNotReleaseLockException(
-                    distributedLock.LockIdentifier,
-                    distributedLock.LockId,
+                    distributedLock.Identifier,
+                    distributedLock.Id,
                     exception);
             }
         }

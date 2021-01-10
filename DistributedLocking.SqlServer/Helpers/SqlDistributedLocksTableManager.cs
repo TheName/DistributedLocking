@@ -9,12 +9,12 @@ namespace DistributedLocking.SqlServer.Helpers
     {
         private const string CreateDistributedLockTableSqlCommandFormat =
             "CREATE TABLE [{0}].{1} ( " +
-            "   LockIdentifier          CHAR(36)    NOT NULL UNIQUE, " +
-            "   LockId                  CHAR(36)    NOT NULL UNIQUE, " +
+            "   Identifier              CHAR(36)    NOT NULL UNIQUE, " +
+            "   Id                      CHAR(36)    NOT NULL UNIQUE, " +
             "   ExpiryDateTimestamp     DATETIME2   NOT NULL, " +
-            "   CONSTRAINT PK_{1}       PRIMARY KEY (LockIdentifier)); " +
-            "CREATE INDEX IDX_LockIdentifier_ExpiryDateTimestamp ON [{0}].{1} (LockIdentifier, ExpiryDateTimestamp); " +
-            "CREATE INDEX IDX_LockId_ExpiryDateTimestamp ON [{0}].{1} (LockId, ExpiryDateTimestamp); ";
+            "   CONSTRAINT PK_{1}       PRIMARY KEY (Identifier)); " +
+            "CREATE INDEX IDX_Identifier_ExpiryDateTimestamp ON [{0}].{1} (Identifier, ExpiryDateTimestamp); " +
+            "CREATE INDEX IDX_Id_ExpiryDateTimestamp ON [{0}].{1} (Id, ExpiryDateTimestamp); ";
         
         private readonly ISqlDataDefinitionLanguageExecutor _dataDefinitionLanguageExecutor;
 

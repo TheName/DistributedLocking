@@ -7,19 +7,19 @@ namespace DistributedLocking.Abstractions.Repositories
     public interface IDistributedLockRepository
     {
         Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
 
         Task<bool> TryExtendAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockId lockId,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockId id,
+            DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
 
         Task<bool> TryReleaseAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockId lockId,
+            DistributedLockIdentifier identifier,
+            DistributedLockId id,
             CancellationToken cancellationToken);
     }
 }

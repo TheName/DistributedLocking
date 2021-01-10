@@ -5,22 +5,22 @@ namespace DistributedLocking.Abstractions.Exceptions
 {
     public class CouldNotAcquireLockException : Exception
     {
-        public DistributedLockIdentifier LockIdentifier { get; }
-        public DistributedLockTimeToLive LockTimeToLive { get; }
+        public DistributedLockIdentifier Identifier { get; }
+        public DistributedLockTimeToLive TimeToLive { get; }
 
         public CouldNotAcquireLockException(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockTimeToLive timeToLive,
             Exception innerException = null)
-            : base(CreateExceptionMessage(lockIdentifier, lockTimeToLive), innerException)
+            : base(CreateExceptionMessage(identifier, timeToLive), innerException)
         {
-            LockIdentifier = lockIdentifier ?? throw new ArgumentNullException(nameof(lockIdentifier));
-            LockTimeToLive = lockTimeToLive ?? throw new ArgumentNullException(nameof(lockTimeToLive));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            TimeToLive = timeToLive ?? throw new ArgumentNullException(nameof(timeToLive));
         }
 
         private static string CreateExceptionMessage(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeToLive) =>
-            $"Could not acquire lock with identifier {lockIdentifier} and time to live {lockTimeToLive}.";
+            DistributedLockIdentifier identifier,
+            DistributedLockTimeToLive timeToLive) =>
+            $"Could not acquire lock with identifier {identifier} and time to live {timeToLive}.";
     }
 }

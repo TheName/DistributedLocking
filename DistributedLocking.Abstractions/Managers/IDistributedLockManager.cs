@@ -8,14 +8,14 @@ namespace DistributedLocking.Abstractions.Managers
     public interface IDistributedLockManager
     {
         Task<IDistributedLock> AcquireAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockTimeToLive timeToLive,
             IRetryPolicyProvider retryPolicyProvider,
             CancellationToken cancellationToken);
 
         Task ExtendAsync(
             IDistributedLock distributedLock,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockTimeToLive timeToLive,
             IRetryPolicyProvider retryPolicyProvider,
             CancellationToken cancellationToken);
 

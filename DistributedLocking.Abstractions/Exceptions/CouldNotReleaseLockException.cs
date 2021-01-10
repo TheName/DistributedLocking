@@ -5,22 +5,22 @@ namespace DistributedLocking.Abstractions.Exceptions
 {
     public class CouldNotReleaseLockException : Exception
     {
-        public DistributedLockIdentifier LockIdentifier { get; }
-        public DistributedLockId LockId { get; }
+        public DistributedLockIdentifier Identifier { get; }
+        public DistributedLockId Id { get; }
 
         public CouldNotReleaseLockException(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockId lockId,
+            DistributedLockIdentifier identifier,
+            DistributedLockId id,
             Exception innerException = null) 
-            : base(CreateExceptionMessage(lockIdentifier, lockId), innerException)
+            : base(CreateExceptionMessage(identifier, id), innerException)
         {
-            LockIdentifier = lockIdentifier ?? throw new ArgumentNullException(nameof(lockIdentifier));
-            LockId = lockId ?? throw new ArgumentNullException(nameof(lockId));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            Id = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         private static string CreateExceptionMessage(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockId lockId) =>
-            $"Could not release lock with identifier {lockIdentifier} and  ID {lockId}";
+            DistributedLockIdentifier identifier,
+            DistributedLockId id) =>
+            $"Could not release lock with identifier {identifier} and  ID {id}";
     }
 }

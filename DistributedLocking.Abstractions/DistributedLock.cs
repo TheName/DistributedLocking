@@ -8,27 +8,27 @@ namespace DistributedLocking.Abstractions
 {
     public class DistributedLock : IDistributedLock
     {
-        public DistributedLockId LockId { get; }
+        public DistributedLockId Id { get; }
         
-        public DistributedLockIdentifier LockIdentifier { get; }
+        public DistributedLockIdentifier Identifier { get; }
 
-        private readonly IDistributedLockRepository _distributedLockRepository;
+        private readonly IDistributedLockRepository _repository;
 
         public DistributedLock(
-            DistributedLockId lockId,
-            DistributedLockIdentifier lockIdentifier,
-            IDistributedLockRepository distributedLockRepository)
+            DistributedLockIdentifier identifier,
+            DistributedLockId id,
+            IDistributedLockRepository repository)
         {
-            LockId = lockId ?? throw new ArgumentNullException(nameof(lockId));
-            LockIdentifier = lockIdentifier ?? throw new ArgumentNullException(nameof(lockIdentifier));
-            _distributedLockRepository = distributedLockRepository ?? throw new ArgumentNullException(nameof(distributedLockRepository));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            Id = id ?? throw new ArgumentNullException(nameof(id));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public async ValueTask DisposeAsync()
         {
-            await _distributedLockRepository.TryReleaseAsync(
-                    LockIdentifier,
-                    LockId,
+            await _repository.TryReleaseAsync(
+                    Identifier,
+                    Id,
                     CancellationToken.None)
                 .ConfigureAwait(false);
         }

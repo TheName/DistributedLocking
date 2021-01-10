@@ -14,6 +14,10 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
 {
     public class SqlDistributedLocksTable_Should
     {
+        private const string ExpectedIdentifierParameterName = "@Identifier";
+        private const string ExpectedIdParameterName = "@Id";
+        private const string ExpectedExpiryDateTimeSpanInMillisecondsParameterName = "@ExpiryDateTimeSpanInMilliseconds";
+        
         private Mock<ISqlClient> SqlClientMock { get; } = new();
 
         private SqlDistributedLocksTable SqlDistributedLocksTable => new(SqlClientMock.Object);
@@ -35,18 +39,18 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedCommandText_When_TryingToInsertAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan timeToLiveTimeSpan)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             var expectedCommandText = GetExpectedInsertIfNotExistsCommandText(schemaName, tableName);
             
             await SqlDistributedLocksTable.TryInsertAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                timeToLiveTimeSpan,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None);
 
             SqlClientMock
@@ -63,35 +67,35 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedSqlParameters_When_TryingToInsertAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan timeToLiveTimeSpan)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             await SqlDistributedLocksTable.TryInsertAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                timeToLiveTimeSpan,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None);
 
             var assertSqlParameters = new Func<SqlParameter[], bool>(parameters =>
             {
                 Assert.Equal(3, parameters.Length);
                 
-                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == "@LockIdentifier");
+                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedIdentifierParameterName);
                 Assert.Equal(SqlDbType.Char, lockIdentifierParameter.SqlDbType);
-                Assert.Equal(lockIdentifier.ToString().Length, lockIdentifierParameter.Size);
-                Assert.Equal(lockIdentifier.ToString(), lockIdentifierParameter.Value);
+                Assert.Equal(identifier.ToString().Length, lockIdentifierParameter.Size);
+                Assert.Equal(identifier.ToString(), lockIdentifierParameter.Value);
                 
-                var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == "@LockId");
+                var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedIdParameterName);
                 Assert.Equal(SqlDbType.Char, lockIdParameter.SqlDbType);
-                Assert.Equal(lockId.ToString().Length, lockIdParameter.Size);
-                Assert.Equal(lockId.ToString(), lockIdParameter.Value);
+                Assert.Equal(id.ToString().Length, lockIdParameter.Size);
+                Assert.Equal(id.ToString(), lockIdParameter.Value);
                 
-                var expiryDateTimeSpanInMillisecondsParameter = parameters.Single(parameter => parameter.ParameterName == "@ExpiryDateTimeSpanInMilliseconds");
+                var expiryDateTimeSpanInMillisecondsParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedExpiryDateTimeSpanInMillisecondsParameterName);
                 Assert.Equal(SqlDbType.BigInt, expiryDateTimeSpanInMillisecondsParameter.SqlDbType);
-                Assert.Equal(timeToLiveTimeSpan.TotalMilliseconds, expiryDateTimeSpanInMillisecondsParameter.Value);
+                Assert.Equal(timeToLive.TotalMilliseconds, expiryDateTimeSpanInMillisecondsParameter.Value);
 
                 return true;
             });
@@ -113,9 +117,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan timeToLiveTimeSpan)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -127,9 +131,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             var result = await SqlDistributedLocksTable.TryInsertAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                timeToLiveTimeSpan,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None);
             
             Assert.Equal(expectedResult, result);
@@ -142,9 +146,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan timeToLiveTimeSpan)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -156,9 +160,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlDistributedLocksTable.TryInsertAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                timeToLiveTimeSpan,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None));
         }
 
@@ -167,16 +171,16 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedCommandText_When_TryingToDeleteAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId)
+            Guid identifier,
+            Guid id)
         {
             var expectedCommandText = GetExpectedDeleteCommandText(schemaName, tableName);
             
             await SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
+                identifier,
+                id,
                 CancellationToken.None);
 
             SqlClientMock
@@ -193,29 +197,29 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedSqlParameters_When_TryingToDeleteAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId)
+            Guid identifier,
+            Guid id)
         {
             await SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
+                identifier,
+                id,
                 CancellationToken.None);
 
             var assertSqlParameters = new Func<SqlParameter[], bool>(parameters =>
             {
                 Assert.Equal(2, parameters.Length);
                 
-                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == "@LockIdentifier");
+                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedIdentifierParameterName);
                 Assert.Equal(SqlDbType.Char, lockIdentifierParameter.SqlDbType);
-                Assert.Equal(lockIdentifier.ToString().Length, lockIdentifierParameter.Size);
-                Assert.Equal(lockIdentifier.ToString(), lockIdentifierParameter.Value);
+                Assert.Equal(identifier.ToString().Length, lockIdentifierParameter.Size);
+                Assert.Equal(identifier.ToString(), lockIdentifierParameter.Value);
                 
-                var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == "@LockId");
+                var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedIdParameterName);
                 Assert.Equal(SqlDbType.Char, lockIdParameter.SqlDbType);
-                Assert.Equal(lockId.ToString().Length, lockIdParameter.Size);
-                Assert.Equal(lockId.ToString(), lockIdParameter.Value);
+                Assert.Equal(id.ToString().Length, lockIdParameter.Size);
+                Assert.Equal(id.ToString(), lockIdParameter.Value);
 
                 return true;
             });
@@ -237,8 +241,8 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId)
+            Guid identifier,
+            Guid id)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -250,8 +254,8 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             var result = await SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
+                identifier,
+                id,
                 CancellationToken.None);
             
             Assert.Equal(expectedResult, result);
@@ -264,8 +268,8 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId)
+            Guid identifier,
+            Guid id)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -277,8 +281,8 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlDistributedLocksTable.TryDeleteAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
+                identifier,
+                id,
                 CancellationToken.None));
         }
 
@@ -287,18 +291,18 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedCommandText_When_TryingToUpdateAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan additionalTimeToLive)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             var expectedCommandText = GetExpectedUpdateCommandText(schemaName, tableName);
             
             await SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                additionalTimeToLive,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None);
 
             SqlClientMock
@@ -315,35 +319,35 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
         public async Task PassExpectedSqlParameters_When_TryingToUpdateAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan additionalTimeToLive)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             await SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                additionalTimeToLive,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None);
 
             var assertSqlParameters = new Func<SqlParameter[], bool>(parameters =>
             {
                 Assert.Equal(3, parameters.Length);
                 
-                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == "@LockIdentifier");
+                var lockIdentifierParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedIdentifierParameterName);
                 Assert.Equal(SqlDbType.Char, lockIdentifierParameter.SqlDbType);
-                Assert.Equal(lockIdentifier.ToString().Length, lockIdentifierParameter.Size);
-                Assert.Equal(lockIdentifier.ToString(), lockIdentifierParameter.Value);
+                Assert.Equal(identifier.ToString().Length, lockIdentifierParameter.Size);
+                Assert.Equal(identifier.ToString(), lockIdentifierParameter.Value);
                 
-                var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == "@LockId");
+                var lockIdParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedIdParameterName);
                 Assert.Equal(SqlDbType.Char, lockIdParameter.SqlDbType);
-                Assert.Equal(lockId.ToString().Length, lockIdParameter.Size);
-                Assert.Equal(lockId.ToString(), lockIdParameter.Value);
+                Assert.Equal(id.ToString().Length, lockIdParameter.Size);
+                Assert.Equal(id.ToString(), lockIdParameter.Value);
                 
-                var expiryDateTimeSpanInMillisecondsParameter = parameters.Single(parameter => parameter.ParameterName == "@ExpiryDateTimeSpanInMilliseconds");
+                var expiryDateTimeSpanInMillisecondsParameter = parameters.Single(parameter => parameter.ParameterName == ExpectedExpiryDateTimeSpanInMillisecondsParameterName);
                 Assert.Equal(SqlDbType.BigInt, expiryDateTimeSpanInMillisecondsParameter.SqlDbType);
-                Assert.Equal(additionalTimeToLive.TotalMilliseconds, expiryDateTimeSpanInMillisecondsParameter.Value);
+                Assert.Equal(timeToLive.TotalMilliseconds, expiryDateTimeSpanInMillisecondsParameter.Value);
 
                 return true;
             });
@@ -365,9 +369,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan additionalTimeToLive)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -379,9 +383,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             var result = await SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                additionalTimeToLive,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None);
             
             Assert.Equal(expectedResult, result);
@@ -394,9 +398,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             int numberOfAffectedRows,
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
-            TimeSpan additionalTimeToLive)
+            Guid identifier,
+            Guid id,
+            TimeSpan timeToLive)
         {
             SqlClientMock
                 .Setup(client => client.ExecuteNonQueryAsync(
@@ -408,54 +412,53 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlDistributedLocksTable.TryUpdateAsync(
                 schemaName,
                 tableName,
-                lockIdentifier,
-                lockId,
-                additionalTimeToLive,
+                identifier,
+                id,
+                timeToLive,
                 CancellationToken.None));
         }
 
         private static string GetExpectedInsertIfNotExistsCommandText(string schemaName, string tableName) =>
             "BEGIN TRANSACTION; " +
-            "SET NOCOUNT ON; " +
-            $"DELETE FROM [{schemaName}].[{tableName}] " +
-            "  WHERE LockIdentifier = @LockIdentifier AND ExpiryDateTimestamp < SYSUTCDATETIME(); " +
-            "SET NOCOUNT OFF; " +
+            "   SET NOCOUNT ON; " +
+            "   DELETE" + 
+            $"       FROM [{schemaName}].[{tableName}] " +
+            $"      WHERE Identifier = {ExpectedIdentifierParameterName} AND ExpiryDateTimestamp < SYSUTCDATETIME(); " +
+            "   SET NOCOUNT OFF; " +
             "COMMIT TRANSACTION; " +
             "BEGIN TRANSACTION; " +
-            $"INSERT INTO [{schemaName}].[{tableName}] " +
-            "SELECT " +
-            "   @LockIdentifier," +
-            "   @LockId," +
-            "   DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,SYSUTCDATETIME()) " +
-            "WHERE" +
-            "   NOT EXISTS " +
-            "   (SELECT *" +
-            $"   FROM [{schemaName}].[{tableName}] WITH (UPDLOCK, HOLDLOCK)" +
-            "   WHERE  LockIdentifier = @LockIdentifier" +
-            "    AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
+            $"   INSERT INTO [{schemaName}].[{tableName}] " +
+            "       SELECT " +
+            $"          {ExpectedIdentifierParameterName}," +
+            $"          {ExpectedIdParameterName}," +
+            $"          DATEADD(millisecond,{ExpectedExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
+            "       WHERE" +
+            "           NOT EXISTS " +
+            "           (SELECT *" +
+            $"           FROM [{schemaName}].[{tableName}] WITH (UPDLOCK, HOLDLOCK)" +
+            $"          WHERE  Identifier = {ExpectedIdentifierParameterName}" +
+            "           AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
             "COMMIT TRANSACTION; ";
 
         private static string GetExpectedDeleteCommandText(string schemaName, string tableName) =>
-            $"DELETE FROM [{schemaName}].[{tableName}] " +
-            "WHERE" +
-            "  LockIdentifier = @LockIdentifier" +
-            "  AND LockId = @LockId " +
-            "   AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
+            "DELETE " +
+            $"   FROM [{schemaName}].[{tableName}] " +
+            $"  WHERE   Identifier = {ExpectedIdentifierParameterName}" +
+            $"  AND     Id = {ExpectedIdParameterName} " +
+            "   AND     ExpiryDateTimestamp > SYSUTCDATETIME();";
 
         private static string GetExpectedUpdateCommandText(string schemaName, string tableName) =>
             "BEGIN TRANSACTION; " +
-            $"UPDATE [{schemaName}].[{tableName}] " +
-            "SET" +
-            "   ExpiryDateTimestamp = DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,SYSUTCDATETIME()) " +
-            "WHERE" +
-            "  LockIdentifier = @LockIdentifier" +
-            "  AND LockId = @LockId " +
-            "   AND " +
-            "   EXISTS " +
-            "   (SELECT *" +
-            $"   FROM [{schemaName}].[{tableName}] WITH (UPDLOCK, HOLDLOCK)" +
-            "  WHERE LockId = @LockId " +
-            "   AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
+            $"   UPDATE [{schemaName}].[{tableName}] " +
+            "   SET" +
+            $"      ExpiryDateTimestamp = DATEADD(millisecond,{ExpectedExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
+            $"  WHERE   Identifier = {ExpectedIdentifierParameterName}" +
+            $"  AND     Id = {ExpectedIdParameterName} " +
+            "   AND     EXISTS " +
+            "       (SELECT *" +
+            $"       FROM [{schemaName}].[{tableName}] WITH (UPDLOCK, HOLDLOCK)" +
+            $"      WHERE  Id = {ExpectedIdParameterName} " +
+            "       AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
             "COMMIT TRANSACTION; ";
     }
 }

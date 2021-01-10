@@ -15,28 +15,27 @@ namespace DistributedLocking.Abstractions.UnitTests.Records
 
         [Theory]
         [AutoMoqData]
-        public void NotThrow_When_TryingToCreateWithNonEmptyGuid(
-            Guid lockId)
+        public void NotThrow_When_TryingToCreateWithNonEmptyGuid(Guid id)
         {
-            _ = new DistributedLockId(lockId);
+            _ = new DistributedLockId(id);
         }
 
         [Theory]
         [AutoMoqData]
         public void ImplicitlyConvertFromGuidToDistributedLockId(Guid value)
         {
-            DistributedLockId lockId = value;
+            DistributedLockId id = value;
             
-            Assert.Equal(value, lockId.Value);
+            Assert.Equal(value, id.Value);
         }
 
         [Theory]
         [AutoMoqData]
-        public void ImplicitlyConvertFromDistributedLockIdToGuid(DistributedLockId lockId)
+        public void ImplicitlyConvertFromDistributedLockIdToGuid(DistributedLockId id)
         {
-            Guid value = lockId;
+            Guid value = id;
             
-            Assert.Equal(lockId.Value, value);
+            Assert.Equal(id.Value, value);
         }
     }
 }

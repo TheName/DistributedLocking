@@ -10,13 +10,13 @@ namespace DistributedLocking.Abstractions.Records
         {
             if (value == Guid.Empty)
             {
-                throw new ArgumentException("DistributedLockIdentifier identifier cannot be empty guid!", nameof(value));
+                throw new ArgumentException("DistributedLockIdentifier cannot be empty guid!", nameof(value));
             }
             
             Value = value;
         }
         
-        public static implicit operator Guid(DistributedLockIdentifier lockIdentifier) => lockIdentifier.Value;
-        public static implicit operator DistributedLockIdentifier(Guid lockIdentifier) => new(lockIdentifier);
+        public static implicit operator Guid(DistributedLockIdentifier identifier) => identifier.Value;
+        public static implicit operator DistributedLockIdentifier(Guid identifier) => new(identifier);
     }
 }

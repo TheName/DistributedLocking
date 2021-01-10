@@ -73,11 +73,11 @@ namespace DistributedLocking.SqlServer.UnitTests.Helpers
 
         private static string GetExpectedCreateTableCommandText(string schemaName, string tableName) =>
             $"CREATE TABLE [{schemaName}].{tableName} ( " +
-            "   LockIdentifier          CHAR(36)    NOT NULL UNIQUE, " +
-            "   LockId                  CHAR(36)    NOT NULL UNIQUE, " +
+            "   Identifier              CHAR(36)    NOT NULL UNIQUE, " +
+            "   Id                      CHAR(36)    NOT NULL UNIQUE, " +
             "   ExpiryDateTimestamp     DATETIME2   NOT NULL, " +
-            $"   CONSTRAINT PK_{tableName}       PRIMARY KEY (LockIdentifier)); " +
-            $"CREATE INDEX IDX_LockIdentifier_ExpiryDateTimestamp ON [{schemaName}].{tableName} (LockIdentifier, ExpiryDateTimestamp); " +
-            $"CREATE INDEX IDX_LockId_ExpiryDateTimestamp ON [{schemaName}].{tableName} (LockId, ExpiryDateTimestamp); ";
+            $"   CONSTRAINT PK_{tableName}       PRIMARY KEY (Identifier)); " +
+            $"CREATE INDEX IDX_Identifier_ExpiryDateTimestamp ON [{schemaName}].{tableName} (Identifier, ExpiryDateTimestamp); " +
+            $"CREATE INDEX IDX_Id_ExpiryDateTimestamp ON [{schemaName}].{tableName} (Id, ExpiryDateTimestamp); ";
     }
 }

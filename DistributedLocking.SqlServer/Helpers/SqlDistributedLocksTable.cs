@@ -9,52 +9,51 @@ namespace DistributedLocking.SqlServer.Helpers
 {
     internal class SqlDistributedLocksTable : ISqlDistributedLocksTable
     {
-        private const string LockIdentifierParameterName = "@LockIdentifier";
-        private const string LockIdParameterName = "@LockId";
+        private const string IdentifierParameterName = "@Identifier";
+        private const string IdParameterName = "@Id";
         private const string ExpiryDateTimeSpanInMillisecondsParameterName = "@ExpiryDateTimeSpanInMilliseconds";
 
         private static readonly string InsertIfNotExistsSqlCommandFormat =
             "BEGIN TRANSACTION; " +
-            "SET NOCOUNT ON; " +
-            "DELETE FROM [{0}].[{1}] " +
-            $"  WHERE LockIdentifier = {LockIdentifierParameterName} AND ExpiryDateTimestamp < SYSUTCDATETIME(); " +
-            "SET NOCOUNT OFF; " +
+            "   SET NOCOUNT ON; " +
+            "   DELETE" + 
+            "       FROM [{0}].[{1}] " +
+            $"      WHERE Identifier = {IdentifierParameterName} AND ExpiryDateTimestamp < SYSUTCDATETIME(); " +
+            "   SET NOCOUNT OFF; " +
             "COMMIT TRANSACTION; " +
             "BEGIN TRANSACTION; " +
-            "INSERT INTO [{0}].[{1}] " +
-            "SELECT " +
-            $"   {LockIdentifierParameterName}," +
-            $"   {LockIdParameterName}," +
-            $"   DATEADD(millisecond,{ExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
-            "WHERE" +
-            "   NOT EXISTS " +
-            "   (SELECT *" +
-            "   FROM [{0}].[{1}] WITH (UPDLOCK, HOLDLOCK)" +
-            $"   WHERE  LockIdentifier = {LockIdentifierParameterName}" +
-            "    AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
+            "   INSERT INTO [{0}].[{1}] " +
+            "       SELECT " +
+            $"          {IdentifierParameterName}," +
+            $"          {IdParameterName}," +
+            $"          DATEADD(millisecond,{ExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
+            "       WHERE" +
+            "           NOT EXISTS " +
+            "           (SELECT *" +
+            "           FROM [{0}].[{1}] WITH (UPDLOCK, HOLDLOCK)" +
+            $"          WHERE  Identifier = {IdentifierParameterName}" +
+            "           AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
             "COMMIT TRANSACTION; ";
 
         private static readonly string DeleteDistributedLockIfExistsSqlCommandFormat =
-            "DELETE FROM [{0}].[{1}] " +
-            "WHERE" +
-            $"  LockIdentifier = {LockIdentifierParameterName}" +
-            $"  AND LockId = {LockIdParameterName} " +
-            "   AND    ExpiryDateTimestamp > SYSUTCDATETIME();";
+            "DELETE " +
+            "   FROM [{0}].[{1}] " +
+            $"  WHERE   Identifier = {IdentifierParameterName}" +
+            $"  AND     Id = {IdParameterName} " +
+            "   AND     ExpiryDateTimestamp > SYSUTCDATETIME();";
 
         private static readonly string UpdateDistributedLockIfExistsSqlCommandFormat =
             "BEGIN TRANSACTION; " +
-            "UPDATE [{0}].[{1}] " +
-            "SET" +
-            $"   ExpiryDateTimestamp = DATEADD(millisecond,{ExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
-            "WHERE" +
-            $"  LockIdentifier = {LockIdentifierParameterName}" +
-            $"  AND LockId = {LockIdParameterName} " +
-            "   AND " +
-            "   EXISTS " +
-            "   (SELECT *" +
-            "   FROM [{0}].[{1}] WITH (UPDLOCK, HOLDLOCK)" +
-            $"  WHERE LockId = {LockIdParameterName} " +
-            "   AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
+            "   UPDATE [{0}].[{1}] " +
+            "   SET" +
+            $"      ExpiryDateTimestamp = DATEADD(millisecond,{ExpiryDateTimeSpanInMillisecondsParameterName},SYSUTCDATETIME()) " +
+            $"  WHERE   Identifier = {IdentifierParameterName}" +
+            $"  AND     Id = {IdParameterName} " +
+            "   AND     EXISTS " +
+            "       (SELECT *" +
+            "       FROM [{0}].[{1}] WITH (UPDLOCK, HOLDLOCK)" +
+            $"      WHERE  Id = {IdParameterName} " +
+            "       AND    ExpiryDateTimestamp > SYSUTCDATETIME()); " +
             "COMMIT TRANSACTION; ";
         
         private readonly ISqlClient _sqlClient;
@@ -67,8 +66,8 @@ namespace DistributedLocking.SqlServer.Helpers
         public async Task<bool> TryInsertAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
+            Guid identifier,
+            Guid id,
             TimeSpan timeToLiveTimeSpan,
             CancellationToken cancellationToken)
         {
@@ -76,8 +75,8 @@ namespace DistributedLocking.SqlServer.Helpers
                     GetInsertDistributedLockIfNotExistsSqlCommandText(schemaName, tableName),
                     new[]
                     {
-                        GetLockIdentifierParameter(lockIdentifier),
-                        GetLockIdParameter(lockId),
+                        GetIdentifierParameter(identifier),
+                        GetIdParameter(id),
                         GetExpiryDateTimeSpanInMillisecondsParameter(timeToLiveTimeSpan)
                     },
                     cancellationToken)
@@ -95,8 +94,8 @@ namespace DistributedLocking.SqlServer.Helpers
         public async Task<bool> TryUpdateAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
+            Guid identifier,
+            Guid id,
             TimeSpan additionalTimeToLiveTimeSpan,
             CancellationToken cancellationToken)
         {
@@ -104,8 +103,8 @@ namespace DistributedLocking.SqlServer.Helpers
                     GetUpdateDistributedLockIfExistsSqlCommandText(schemaName, tableName),
                     new[] 
                     {
-                        GetLockIdentifierParameter(lockIdentifier),
-                        GetLockIdParameter(lockId),
+                        GetIdentifierParameter(identifier),
+                        GetIdParameter(id),
                         GetExpiryDateTimeSpanInMillisecondsParameter(additionalTimeToLiveTimeSpan)
                     },
                     cancellationToken)
@@ -123,16 +122,16 @@ namespace DistributedLocking.SqlServer.Helpers
         public async Task<bool> TryDeleteAsync(
             string schemaName,
             string tableName,
-            Guid lockIdentifier,
-            Guid lockId,
+            Guid identifier,
+            Guid id,
             CancellationToken cancellationToken)
         {
             var numberOfAffectedRows = await _sqlClient.ExecuteNonQueryAsync(
                     GetDeleteDistributedLockIfExistsSqlCommandText(schemaName, tableName),
                     new[]
                     {
-                        GetLockIdentifierParameter(lockIdentifier),
-                        GetLockIdParameter(lockId)
+                        GetIdentifierParameter(identifier),
+                        GetIdParameter(id)
                     },
                     cancellationToken)
                 .ConfigureAwait(false);
@@ -155,16 +154,16 @@ namespace DistributedLocking.SqlServer.Helpers
         private static string GetUpdateDistributedLockIfExistsSqlCommandText(string schemaName, string tableName) =>
             string.Format(UpdateDistributedLockIfExistsSqlCommandFormat, schemaName, tableName);
 
-        private static SqlParameter GetLockIdentifierParameter(Guid lockIdentifier) =>
-            new(LockIdentifierParameterName, SqlDbType.Char, 36)
+        private static SqlParameter GetIdentifierParameter(Guid identifier) =>
+            new(IdentifierParameterName, SqlDbType.Char, 36)
             {
-                Value = lockIdentifier.ToString()
+                Value = identifier.ToString()
             };
 
-        private static SqlParameter GetLockIdParameter(Guid lockId) =>
-            new(LockIdParameterName, SqlDbType.Char, 36)
+        private static SqlParameter GetIdParameter(Guid id) =>
+            new(IdParameterName, SqlDbType.Char, 36)
             {
-                Value = lockId.ToString()
+                Value = id.ToString()
             };
 
         private static SqlParameter GetExpiryDateTimeSpanInMillisecondsParameter(TimeSpan timeSpan) =>

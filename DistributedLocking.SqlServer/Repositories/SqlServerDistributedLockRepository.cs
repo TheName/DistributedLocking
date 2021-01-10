@@ -25,38 +25,38 @@ namespace DistributedLocking.SqlServer.Repositories
         }
         
         public async Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
-            var lockId = Guid.NewGuid();
+            var id = Guid.NewGuid();
             var result = await _sqlDistributedLocksTable.TryInsertAsync(
                     SchemaName,
                     TableName,
-                    lockIdentifier.Value,
-                    lockId,
-                    lockTimeToLive.Value,
+                    identifier.Value,
+                    id,
+                    timeToLive.Value,
                     cancellationToken)
                 .ConfigureAwait(false);
 
-            return (result, result ? new DistributedLockId(lockId) : null);
+            return (result, result ? new DistributedLockId(id) : null);
         }
 
         public async Task<bool> TryExtendAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockId lockId,
-            DistributedLockTimeToLive lockTimeToLive,
+            DistributedLockIdentifier identifier,
+            DistributedLockId id,
+            DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken) =>
             await _sqlDistributedLocksTable
-                .TryUpdateAsync(SchemaName, TableName, lockIdentifier.Value, lockId.Value, lockTimeToLive.Value, cancellationToken)
+                .TryUpdateAsync(SchemaName, TableName, identifier.Value, id.Value, timeToLive.Value, cancellationToken)
                 .ConfigureAwait(false);
 
         public async Task<bool> TryReleaseAsync(
-            DistributedLockIdentifier lockIdentifier,
-            DistributedLockId lockId,
+            DistributedLockIdentifier identifier,
+            DistributedLockId id,
             CancellationToken cancellationToken) =>
             await _sqlDistributedLocksTable
-                .TryDeleteAsync(SchemaName, TableName, lockIdentifier.Value, lockId.Value, cancellationToken)
+                .TryDeleteAsync(SchemaName, TableName, identifier.Value, id.Value, cancellationToken)
                 .ConfigureAwait(false);
     }
 }

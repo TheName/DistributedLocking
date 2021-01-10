@@ -14,39 +14,39 @@ namespace DistributedLocking.Abstractions.UnitTests
     {
         [Theory]
         [AutoMoqData]
-        public void Throw_When_TryingToCreateWithNullLockId(
-            DistributedLockIdentifier lockIdentifier,
+        public void Throw_When_TryingToCreateWithNullId(
+            DistributedLockIdentifier identifier,
             IDistributedLockRepository distributedLockRepository)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLock(null, lockIdentifier, distributedLockRepository));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLock(identifier, null, distributedLockRepository));
         }
         
         [Theory]
         [AutoMoqData]
-        public void Throw_When_TryingToCreateWithNullLockIdentifier(
-            DistributedLockId lockId,
+        public void Throw_When_TryingToCreateWithNullIdentifier(
+            DistributedLockId id,
             IDistributedLockRepository distributedLockRepository)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLock(lockId, null, distributedLockRepository));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLock(null, id, distributedLockRepository));
         }
         
         [Theory]
         [AutoMoqData]
         public void Throw_When_TryingToCreateWithNullRepository(
-            DistributedLockId lockId,
-            DistributedLockIdentifier lockIdentifier)
+            DistributedLockId id,
+            DistributedLockIdentifier identifier)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLock(lockId, lockIdentifier, null));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLock(identifier, id, null));
         }
         
         [Theory]
         [AutoMoqData]
         public void NotThrow_When_TryingToCreateWithoutNullValues(
-            DistributedLockId lockId,
-            DistributedLockIdentifier lockIdentifier,
+            DistributedLockId id,
+            DistributedLockIdentifier identifier,
             IDistributedLockRepository repository)
         {
-            _ = new DistributedLock(lockId, lockIdentifier, repository);
+            _ = new DistributedLock(identifier, id, repository);
         }
 
         [Theory]
@@ -60,8 +60,8 @@ namespace DistributedLocking.Abstractions.UnitTests
             distributedLockRepositoryMock
                 .Verify(
                     repository => repository.TryReleaseAsync(
-                        distributedLock.LockIdentifier,
-                        distributedLock.LockId,
+                        distributedLock.Identifier,
+                        distributedLock.Id,
                         CancellationToken.None),
                     Times.Once);
         }
