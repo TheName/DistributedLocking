@@ -23,6 +23,10 @@ namespace DistributedLocking.Abstractions
             Id = id ?? throw new ArgumentNullException(nameof(id));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
+        
+        public async Task<bool> TryExtendAsync(DistributedLockTimeToLive timeToLive, CancellationToken cancellationToken) =>
+            await _repository.TryExtendAsync(Identifier, Id, timeToLive, cancellationToken)
+                .ConfigureAwait(false);
 
         public async ValueTask DisposeAsync()
         {

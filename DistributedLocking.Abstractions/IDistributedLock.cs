@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using DistributedLocking.Abstractions.Records;
 
 namespace DistributedLocking.Abstractions
@@ -8,5 +10,7 @@ namespace DistributedLocking.Abstractions
         DistributedLockId Id { get; }
         
         DistributedLockIdentifier Identifier { get; }
+
+        Task<bool> TryExtendAsync(DistributedLockTimeToLive timeToLive, CancellationToken cancellationToken);
     }
 }
