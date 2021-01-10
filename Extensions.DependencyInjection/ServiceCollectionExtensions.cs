@@ -2,8 +2,8 @@
 using DistributedLocking.Abstractions.Facades;
 using DistributedLocking.Abstractions.Initializers;
 using DistributedLocking.Abstractions.Retries;
+using DistributedLocking.Facades;
 using DistributedLocking.Initializers;
-using DistributedLocking.Managers;
 using DistributedLocking.Retries;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

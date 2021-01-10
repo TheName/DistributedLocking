@@ -4,14 +4,13 @@ using System.Threading.Tasks;
 using DistributedLocking.Abstractions;
 using DistributedLocking.Abstractions.Exceptions;
 using DistributedLocking.Abstractions.Facades;
-using DistributedLocking.Abstractions.Managers;
 using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Retries;
 using DistributedLocking.Extensions;
 using DistributedLocking.Extensions.Abstractions.Repositories;
 
-namespace DistributedLocking.Managers
+namespace DistributedLocking.Facades
 {
     public class DistributedLockFacade : IDistributedLockFacade
     {

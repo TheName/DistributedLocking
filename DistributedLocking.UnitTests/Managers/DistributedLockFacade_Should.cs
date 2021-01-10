@@ -7,7 +7,7 @@ using DistributedLocking.Abstractions.Exceptions;
 using DistributedLocking.Abstractions.Records;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Retries;
-using DistributedLocking.Managers;
+using DistributedLocking.Facades;
 using Moq;
 using TestHelpers.Attributes;
 using Xunit;
