@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Extensions.SqlServer.DependencyInjection\Extensions.SqlServer.DependencyInjection.csproj" />
+      <ProjectReference Include="..\..\Extensions.SqlServer.DependencyInjection\Extensions.SqlServer.DependencyInjection.csproj" />
     </ItemGroup>
 
 </Project>
