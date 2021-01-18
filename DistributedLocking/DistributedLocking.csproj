@@ -12,8 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions\Facades" />
-      <Folder Include="Extensions\Facades" />
       <Folder Include="Repositories" />
     </ItemGroup>
 

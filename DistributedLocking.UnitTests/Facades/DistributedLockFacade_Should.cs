@@ -4,10 +4,8 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using DistributedLocking.Abstractions;
 using DistributedLocking.Abstractions.Facades.Exceptions;
-using DistributedLocking.Abstractions.Facades.Retries;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Facades;
-using DistributedLocking.UnitTests.Extensions;
 using Moq;
 using TestHelpers.Attributes;
 using Xunit;
@@ -16,40 +14,28 @@ namespace DistributedLocking.UnitTests.Facades
 {
     public class DistributedLockFacade_Should
     {
-        [Theory]
-        [AutoMoqData]
-        public void Throw_When_Creating_And_RepositoryIsNull(IRetryExecutor retryExecutor)
+        [Fact]
+        public void Throw_When_Creating_And_RepositoryIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLockFacade(null, retryExecutor));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLockFacade(null));
         }
         
         [Theory]
         [AutoMoqData]
-        public void Throw_When_Creating_And_RetryExecutorIsNull(IDistributedLockRepository repository)
+        public void NotThrow_When_Creating_And_AllParametersAreNotNull(IDistributedLockRepository repository)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLockFacade(repository, null));
-        }
-        
-        [Theory]
-        [AutoMoqData]
-        public void NotThrow_When_Creating_And_RetryExecutorIsNull(
-            IDistributedLockRepository repository,
-            IRetryExecutor retryExecutor)
-        {
-            _ = new DistributedLockFacade(repository, retryExecutor);
+            _ = new DistributedLockFacade(repository);
         }
 
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Acquiring_And_IdentifierIsNull(
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicy retryPolicy,
-            DistributedLockFacade manager)
+            DistributedLockFacade facade)
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
+            await Assert.ThrowsAsync<ArgumentNullException>(() => facade.AcquireAsync(
                 null,
                 timeToLive,
-                retryPolicy,
                 CancellationToken.None));
         }
 
@@ -57,52 +43,37 @@ namespace DistributedLocking.UnitTests.Facades
         [AutoMoqData]
         public async Task Throw_When_Acquiring_And_TimeToLiveIsNull(
             DistributedLockIdentifier identifier,
-            IRetryPolicy retryPolicy,
-            DistributedLockFacade manager)
+            DistributedLockFacade facade)
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
+            await Assert.ThrowsAsync<ArgumentNullException>(() => facade.AcquireAsync(
                 identifier,
-                null,
-                retryPolicy,
-                CancellationToken.None));
-        }
-
-        [Theory]
-        [AutoMoqData]
-        public async Task Throw_When_Acquiring_And_RetryPolicyProviderIsNull(
-            DistributedLockIdentifier identifier,
-            DistributedLockTimeToLive timeToLive,
-            DistributedLockFacade manager)
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => manager.AcquireAsync(
-                identifier,
-                timeToLive,
                 null,
                 CancellationToken.None));
         }
 
         [Theory]
         [AutoMoqData]
-        public async Task Throw_When_Acquiring_And_RetryExecutorThrows(
+        public async Task Throw_When_Acquiring_And_RepositoryFails(
             DistributedLockIdentifier identifier,
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicy retryPolicy,
-            Exception exceptionToThrow,
-            [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockFacade manager)
+            [Frozen] Mock<IDistributedLockRepository> repositoryMock,
+            DistributedLockFacade facade)
         {
-            retryExecutorMock.SetupException<IDistributedLock>(exceptionToThrow);
-
-            var exception = await Assert.ThrowsAsync<CouldNotAcquireLockException>(() =>
-                manager.AcquireAsync(
+            repositoryMock
+                .Setup(lockRepository => lockRepository.TryAcquireAsync(
                     identifier,
                     timeToLive,
-                    retryPolicy,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync((false, null));
+
+            var exception = await Assert.ThrowsAsync<CouldNotAcquireLockException>(() =>
+                facade.AcquireAsync(
+                    identifier,
+                    timeToLive,
                     CancellationToken.None));
             
             Assert.Equal(identifier, exception.Identifier);
             Assert.Equal(timeToLive, exception.TimeToLive);
-            Assert.Equal(exceptionToThrow, exception.InnerException);
         }
 
         [Theory]
@@ -110,13 +81,10 @@ namespace DistributedLocking.UnitTests.Facades
         public async Task ReturnLock_When_Acquiring_And_RepositorySucceeds(
             DistributedLockIdentifier identifier,
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicy retryPolicy,
             DistributedLockId lockId,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
-            [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockFacade manager)
+            DistributedLockFacade facade)
         {
-            retryExecutorMock.Setup<IDistributedLock>();
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryAcquireAsync(
                     identifier,
@@ -124,10 +92,9 @@ namespace DistributedLocking.UnitTests.Facades
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync((true, lockId));
 
-            var result = await manager.AcquireAsync(
+            var result = await facade.AcquireAsync(
                 identifier,
                 timeToLive,
-                retryPolicy,
                 CancellationToken.None);
             
             var distributedLock = Assert.IsType<DistributedLock>(result);
@@ -138,79 +105,28 @@ namespace DistributedLocking.UnitTests.Facades
 
         [Theory]
         [AutoMoqData]
-        public async Task Throw_When_Releasing_And_RetryExecutorThrows(
-            IDistributedLock distributedLock,
-            IRetryPolicy retryPolicy,
-            Exception exceptionToThrow,
-            [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockFacade manager)
-        {
-            retryExecutorMock.SetupException(exceptionToThrow);
-
-            var exception = await Assert.ThrowsAsync<CouldNotReleaseLockException>(() =>
-                manager.ReleaseAsync(
-                    distributedLock,
-                    retryPolicy,
-                    CancellationToken.None));
-            
-            Assert.Equal(distributedLock.Identifier, exception.Identifier);
-            Assert.Equal(distributedLock.Id, exception.Id);
-            Assert.Equal(exceptionToThrow, exception.InnerException);
-        }
-
-        [Theory]
-        [AutoMoqData]
-        public async Task NotThrow_When_Releasing_And_RepositorySucceeds(
-            IDistributedLock distributedLock,
-            IRetryPolicy retryPolicy,
-            [Frozen] Mock<IDistributedLockRepository> repositoryMock,
-            [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockFacade manager)
-        {
-            retryExecutorMock.Setup();
-            repositoryMock
-                .Setup(lockRepository => lockRepository.TryReleaseAsync(
-                    distributedLock.Identifier,
-                    distributedLock.Id,
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(true);
-
-            await manager.ReleaseAsync(
-                distributedLock,
-                retryPolicy,
-                CancellationToken.None);
-
-            repositoryMock
-                .Verify(repository => repository.TryReleaseAsync(
-                        distributedLock.Identifier,
-                        distributedLock.Id,
-                        It.IsAny<CancellationToken>()),
-                    Times.Once);
-            repositoryMock.VerifyNoOtherCalls();
-        }
-
-        [Theory]
-        [AutoMoqData]
-        public async Task Throw_When_Extending_And_RetryExecutorThrows(
+        public async Task Throw_When_Extending_And_RepositoryFails(
             IDistributedLock distributedLock,
             DistributedLockTimeToLive timeToLive,
-            IRetryPolicy retryPolicy,
-            Exception exceptionToThrow,
-            [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockFacade manager)
+            [Frozen] Mock<IDistributedLockRepository> repositoryMock,
+            DistributedLockFacade facade)
         {
-            retryExecutorMock.SetupException(exceptionToThrow);
+            repositoryMock
+                .Setup(lockRepository => lockRepository.TryExtendAsync(
+                    distributedLock.Identifier,
+                    distributedLock.Id,
+                    timeToLive,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
 
             var exception = await Assert.ThrowsAsync<CouldNotExtendLockException>(() =>
-                manager.ExtendAsync(
+                facade.ExtendAsync(
                     distributedLock,
                     timeToLive,
-                    retryPolicy,
                     CancellationToken.None));
             
             Assert.Equal(distributedLock.Identifier, exception.Identifier);
             Assert.Equal(distributedLock.Id, exception.Id);
-            Assert.Equal(exceptionToThrow, exception.InnerException);
         }
 
         [Theory]
@@ -218,12 +134,9 @@ namespace DistributedLocking.UnitTests.Facades
         public async Task NotThrow_When_Extending_And_RepositorySucceeds(
             IDistributedLock distributedLock,
             DistributedLockTimeToLive additionalTimeToLive,
-            IRetryPolicy retryPolicy,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
-            [Frozen] Mock<IRetryExecutor> retryExecutorMock,
-            DistributedLockFacade manager)
+            DistributedLockFacade facade)
         {
-            retryExecutorMock.Setup();
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryExtendAsync(
                     distributedLock.Identifier,
@@ -232,10 +145,9 @@ namespace DistributedLocking.UnitTests.Facades
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
-            await manager.ExtendAsync(
+            await facade.ExtendAsync(
                 distributedLock,
                 additionalTimeToLive,
-                retryPolicy,
                 CancellationToken.None);
 
             repositoryMock
@@ -243,6 +155,56 @@ namespace DistributedLocking.UnitTests.Facades
                         distributedLock.Identifier,
                         distributedLock.Id,
                         additionalTimeToLive,
+                        It.IsAny<CancellationToken>()),
+                    Times.Once);
+            repositoryMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task Throw_When_Releasing_And_RepositoryFails(
+            IDistributedLock distributedLock,
+            [Frozen] Mock<IDistributedLockRepository> repositoryMock,
+            DistributedLockFacade facade)
+        {
+            repositoryMock
+                .Setup(lockRepository => lockRepository.TryReleaseAsync(
+                    distributedLock.Identifier,
+                    distributedLock.Id,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+
+            var exception = await Assert.ThrowsAsync<CouldNotReleaseLockException>(() =>
+                facade.ReleaseAsync(
+                    distributedLock,
+                    CancellationToken.None));
+            
+            Assert.Equal(distributedLock.Identifier, exception.Identifier);
+            Assert.Equal(distributedLock.Id, exception.Id);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public async Task NotThrow_When_Releasing_And_RepositorySucceeds(
+            IDistributedLock distributedLock,
+            [Frozen] Mock<IDistributedLockRepository> repositoryMock,
+            DistributedLockFacade facade)
+        {
+            repositoryMock
+                .Setup(lockRepository => lockRepository.TryReleaseAsync(
+                    distributedLock.Identifier,
+                    distributedLock.Id,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            await facade.ReleaseAsync(
+                distributedLock,
+                CancellationToken.None);
+
+            repositoryMock
+                .Verify(repository => repository.TryReleaseAsync(
+                        distributedLock.Identifier,
+                        distributedLock.Id,
                         It.IsAny<CancellationToken>()),
                     Times.Once);
             repositoryMock.VerifyNoOtherCalls();

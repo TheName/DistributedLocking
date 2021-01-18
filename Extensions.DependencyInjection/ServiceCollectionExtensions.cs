@@ -1,9 +1,7 @@
 ﻿using System;
 using DistributedLocking.Abstractions.Facades;
-using DistributedLocking.Abstractions.Facades.Retries;
 using DistributedLocking.Abstractions.Repositories.Initializers;
 using DistributedLocking.Facades;
-using DistributedLocking.Facades.Retries;
 using DistributedLocking.Repositories.Initializers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -21,7 +19,6 @@ namespace DistributedLocking.Extensions.DependencyInjection
             
             services.TryAddSingleton<IDistributedLockRepositoryInitializer, DistributedLockRepositoryInitializer>();
             services.TryAddTransient<IDistributedLockFacade, DistributedLockFacade>();
-            services.TryAddTransient<IRetryExecutor, RetryExecutor>();
 
             return services;
         }

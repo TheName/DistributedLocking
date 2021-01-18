@@ -6,7 +6,6 @@ using DistributedLocking.Abstractions.Facades;
 using DistributedLocking.Abstractions.Facades.Exceptions;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Abstractions.Repositories.Initializers;
-using DistributedLocking.Extensions.Abstractions.Facades;
 using DistributedLocking.Extensions.Abstractions.Repositories;
 using DistributedLocking.Extensions.SqlServer.DependencyInjection;
 using DistributedLocking.SqlServer.Abstractions.Configuration;
