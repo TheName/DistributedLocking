@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Abstractions</RootNamespace>
         <AssemblyName>TheName.DistributedLocking.Abstractions</AssemblyName>
     </PropertyGroup>
+    
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
+    </ItemGroup>
 
     <!-- NuGet metadata -->
     <PropertyGroup>

@@ -2,7 +2,7 @@
 
 namespace DistributedLocking.Abstractions
 {
-    public record DistributedLockId
+    public sealed class DistributedLockId
     {
         public Guid Value { get; }
 
@@ -15,8 +15,30 @@ namespace DistributedLocking.Abstractions
 
             Value = value;
         }
-        
-        public static implicit operator Guid(DistributedLockId id) => id.Value;
-        public static implicit operator DistributedLockId(Guid id) => new(id);
+
+        #region Operators
+
+        public static implicit operator Guid(DistributedLockId id) => 
+            id.Value;
+        public static implicit operator DistributedLockId(Guid id) => 
+            new DistributedLockId(id);
+
+        public static bool operator ==(DistributedLockId lockId, DistributedLockId otherLockId) =>
+            Equals(lockId, otherLockId);
+
+        public static bool operator !=(DistributedLockId lockId, DistributedLockId otherLockId) =>
+            !(lockId == otherLockId);
+
+        #endregion
+
+        public override bool Equals(object obj) =>
+            obj is DistributedLockId other &&
+            other.GetHashCode() == Value.GetHashCode();
+
+        public override int GetHashCode() =>
+            Value.GetHashCode();
+
+        public override string ToString() => 
+            Value.ToString();
     }
 }

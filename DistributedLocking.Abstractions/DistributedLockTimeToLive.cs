@@ -2,7 +2,7 @@
 
 namespace DistributedLocking.Abstractions
 {
-    public record DistributedLockTimeToLive
+    public sealed class DistributedLockTimeToLive
     {
         public TimeSpan Value { get; }
 
@@ -15,8 +15,31 @@ namespace DistributedLocking.Abstractions
             
             Value = value;
         }
+
+        #region Operators
         
-        public static implicit operator TimeSpan(DistributedLockTimeToLive timeToLive) => timeToLive.Value;
-        public static implicit operator DistributedLockTimeToLive(TimeSpan timeToLive) => new(timeToLive);
+        public static implicit operator TimeSpan(DistributedLockTimeToLive timeToLive) =>
+            timeToLive.Value;
+        
+        public static implicit operator DistributedLockTimeToLive(TimeSpan timeToLive) => 
+            new DistributedLockTimeToLive(timeToLive);
+
+        public static bool operator ==(DistributedLockTimeToLive timeToLive, DistributedLockTimeToLive otherTimeToLive) =>
+            Equals(timeToLive, otherTimeToLive);
+
+        public static bool operator !=(DistributedLockTimeToLive timeToLive, DistributedLockTimeToLive otherTimeToLive) =>
+            !(timeToLive == otherTimeToLive);
+
+        #endregion
+
+        public override bool Equals(object obj) =>
+            obj is DistributedLockTimeToLive other &&
+            other.GetHashCode() == Value.GetHashCode();
+
+        public override int GetHashCode() =>
+            Value.GetHashCode();
+
+        public override string ToString() => 
+            Value.ToString();
     }
 }

@@ -29,6 +29,30 @@ namespace DistributedLocking.Abstractions.UnitTests
 
         [Theory]
         [AutoMoqData]
+        public void ReturnTrue_When_ComparingDifferentObjectsWithSameValue(TimeSpan value)
+        {
+            DistributedLockTimeToLive id1 = value;
+            DistributedLockTimeToLive id2 = value;
+            
+            Assert.Equal(id1, id2);
+            Assert.True(id1 == id2);
+            Assert.False(id1 != id2);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public void ReturnFalse_When_ComparingDifferentObjectsWithDifferentValue(TimeSpan value, TimeSpan otherValue)
+        {
+            DistributedLockTimeToLive id1 = value;
+            DistributedLockTimeToLive id2 = otherValue;
+            
+            Assert.NotEqual(id1, id2);
+            Assert.False(id1 == id2);
+            Assert.True(id1 != id2);
+        }
+
+        [Theory]
+        [AutoMoqData]
         public void ImplicitlyConvertFromTimeSpanToDistributedLockTimeToLive(TimeSpan value)
         {
             DistributedLockTimeToLive timeToLive = value;

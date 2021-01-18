@@ -21,6 +21,30 @@ namespace DistributedLocking.Abstractions.UnitTests
 
         [Theory]
         [AutoMoqData]
+        public void ReturnTrue_When_ComparingDifferentObjectsWithSameValue(Guid value)
+        {
+            DistributedLockIdentifier id1 = value;
+            DistributedLockIdentifier id2 = value;
+            
+            Assert.Equal(id1, id2);
+            Assert.True(id1 == id2);
+            Assert.False(id1 != id2);
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public void ReturnFalse_When_ComparingDifferentObjectsWithDifferentValue(Guid value, Guid otherValue)
+        {
+            DistributedLockIdentifier id1 = value;
+            DistributedLockIdentifier id2 = otherValue;
+            
+            Assert.NotEqual(id1, id2);
+            Assert.False(id1 == id2);
+            Assert.True(id1 != id2);
+        }
+
+        [Theory]
+        [AutoMoqData]
         public void ImplicitlyConvertFromGuidToDistributedLockIdentifier(Guid value)
         {
             DistributedLockIdentifier identifier = value;
