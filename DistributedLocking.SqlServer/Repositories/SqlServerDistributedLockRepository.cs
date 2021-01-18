@@ -23,14 +23,13 @@ namespace DistributedLocking.SqlServer.Repositories
             _sqlDistributedLocksTable = sqlDistributedLocksTable ?? throw new ArgumentNullException(nameof(sqlDistributedLocksTable));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
-        
-        public async Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
+
+        public async Task<bool> TryInsertIfIdentifierNotExistsAsync(
             DistributedLockIdentifier identifier,
+            DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
-            CancellationToken cancellationToken)
-        {
-            var id = Guid.NewGuid();
-            var result = await _sqlDistributedLocksTable.TryInsertAsync(
+            CancellationToken cancellationToken) =>
+            await _sqlDistributedLocksTable.TryInsertAsync(
                     SchemaName,
                     TableName,
                     identifier.Value,
@@ -38,9 +37,6 @@ namespace DistributedLocking.SqlServer.Repositories
                     timeToLive.Value,
                     cancellationToken)
                 .ConfigureAwait(false);
-
-            return (result, result ? new DistributedLockId(id) : null);
-        }
 
         public async Task<bool> TryExtendAsync(
             DistributedLockIdentifier identifier,

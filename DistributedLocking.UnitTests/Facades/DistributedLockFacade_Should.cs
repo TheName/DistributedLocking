@@ -60,11 +60,12 @@ namespace DistributedLocking.UnitTests.Facades
             DistributedLockFacade facade)
         {
             repositoryMock
-                .Setup(lockRepository => lockRepository.TryAcquireAsync(
+                .Setup(lockRepository => lockRepository.TryInsertIfIdentifierNotExistsAsync(
                     identifier,
+                    It.IsAny<DistributedLockId>(),
                     timeToLive,
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync((false, null));
+                .ReturnsAsync(false);
 
             var exception = await Assert.ThrowsAsync<CouldNotAcquireLockException>(() =>
                 facade.AcquireAsync(
@@ -81,16 +82,19 @@ namespace DistributedLocking.UnitTests.Facades
         public async Task ReturnLock_When_Acquiring_And_RepositorySucceeds(
             DistributedLockIdentifier identifier,
             DistributedLockTimeToLive timeToLive,
-            DistributedLockId lockId,
             [Frozen] Mock<IDistributedLockRepository> repositoryMock,
             DistributedLockFacade facade)
         {
+            DistributedLockId lockId = null;
             repositoryMock
-                .Setup(lockRepository => lockRepository.TryAcquireAsync(
+                .Setup(lockRepository => lockRepository.TryInsertIfIdentifierNotExistsAsync(
                     identifier,
+                    It.IsAny<DistributedLockId>(),
                     timeToLive,
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync((true, lockId));
+                .ReturnsAsync(true)
+                .Callback<DistributedLockIdentifier, DistributedLockId, DistributedLockTimeToLive, CancellationToken>(
+                    (_, id, _, _) => lockId = id);
 
             var result = await facade.AcquireAsync(
                 identifier,
@@ -99,6 +103,7 @@ namespace DistributedLocking.UnitTests.Facades
             
             var distributedLock = Assert.IsType<DistributedLock>(result);
             Assert.NotNull(distributedLock);
+            Assert.NotNull(lockId);
             Assert.Equal(lockId, distributedLock.Id);
             Assert.Equal(identifier, distributedLock.Identifier);
         }

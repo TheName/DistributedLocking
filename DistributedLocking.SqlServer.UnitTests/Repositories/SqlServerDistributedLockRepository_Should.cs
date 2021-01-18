@@ -47,8 +47,9 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
 
         [Theory]
         [AutoMoqData]
-        public async Task ReturnFalseAndNullAcquiredLockId_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
+        public async Task ReturnFalse_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
             DistributedLockIdentifier identifier,
+            DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive,
             string schemaName,
             string tableName)
@@ -62,24 +63,25 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                     schemaName,
                     tableName,
                     identifier.Value,
-                    It.Is<Guid>(guid => guid != Guid.Empty),
+                    lockId,
                     timeToLive.Value,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
-            var (success, acquiredLockId) = await SqlServerDistributedLockRepository.TryAcquireAsync(   
+            var success = await SqlServerDistributedLockRepository.TryInsertIfIdentifierNotExistsAsync(   
                 identifier,
+                lockId,
                 timeToLive,
                 CancellationToken.None);
             
             Assert.False(success);
-            Assert.Null(acquiredLockId);
         }
 
         [Theory]
         [AutoMoqData]
-        public async Task ReturnTrueAndAcquiredLockId_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
+        public async Task ReturnTrue_When_TryingToAcquireLock_And_SqlDistributedLocksTableReturnsFalse(
             DistributedLockIdentifier identifier,
+            DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive,
             string schemaName,
             string tableName)
@@ -88,28 +90,23 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                 .SetupSchemaName(schemaName)
                 .SetupTableName(tableName);
 
-            var lockIdPassedToTable = Guid.Empty;
-
             SqlDistributedLocksTableMock
                 .Setup(table => table.TryInsertAsync(
                     schemaName,
                     tableName,
                     identifier.Value,
-                    It.Is<Guid>(guid => guid != Guid.Empty),
+                    lockId,
                     timeToLive.Value,
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(true)
-                .Callback<string, string, Guid, Guid, TimeSpan, CancellationToken>((_, _, _, lockIdValue, _, _) =>
-                    lockIdPassedToTable = lockIdValue);
+                .ReturnsAsync(true);
 
-            var (success, acquiredLockId) = await SqlServerDistributedLockRepository.TryAcquireAsync(   
+            var success = await SqlServerDistributedLockRepository.TryInsertIfIdentifierNotExistsAsync(
                 identifier,
+                lockId,
                 timeToLive,
                 CancellationToken.None);
             
             Assert.True(success);
-            Assert.NotEqual(Guid.Empty, acquiredLockId.Value);
-            Assert.Equal(lockIdPassedToTable, acquiredLockId.Value);
         }
 
         [Theory]

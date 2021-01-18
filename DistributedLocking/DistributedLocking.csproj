@@ -8,11 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Extensions.Abstractions\Extensions.Abstractions.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Repositories" />
+      <ProjectReference Include="..\DistributedLocking.Abstractions\DistributedLocking.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

@@ -6,7 +6,6 @@ using DistributedLocking.Abstractions.Facades;
 using DistributedLocking.Abstractions.Facades.Exceptions;
 using DistributedLocking.Abstractions.Repositories;
 using DistributedLocking.Extensions;
-using DistributedLocking.Extensions.Abstractions.Repositories;
 
 namespace DistributedLocking.Facades
 {
@@ -27,7 +26,13 @@ namespace DistributedLocking.Facades
             identifier.EnsureIsNotNull(nameof(identifier));
             timeToLive.EnsureIsNotNull(nameof(timeToLive));
 
-            var (success, acquiredLock) = await _repository.TryAcquireLockAsync(identifier, timeToLive, cancellationToken)
+            var lockId = Guid.NewGuid();
+
+            var success = await _repository.TryInsertIfIdentifierNotExistsAsync(
+                    identifier,
+                    lockId,
+                    timeToLive,
+                    cancellationToken)
                 .ConfigureAwait(false);
 
             if (!success)
@@ -35,7 +40,10 @@ namespace DistributedLocking.Facades
                 throw new CouldNotAcquireLockException(identifier, timeToLive);
             }
 
-            return acquiredLock;
+            return new DistributedLock(
+                identifier,
+                lockId,
+                _repository);
         }
 
         public async Task ExtendAsync(
@@ -43,7 +51,11 @@ namespace DistributedLocking.Facades
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
-            var success = await _repository.TryExtendAsync(distributedLock, timeToLive, cancellationToken)
+            var success = await _repository.TryExtendAsync(
+                    distributedLock.Identifier,
+                    distributedLock.Id,
+                    timeToLive,
+                    cancellationToken)
                 .ConfigureAwait(false);
 
             if (!success)
@@ -56,7 +68,10 @@ namespace DistributedLocking.Facades
             IDistributedLock distributedLock,
             CancellationToken cancellationToken)
         {
-            var success = await _repository.TryReleaseAsync(distributedLock, cancellationToken)
+            var success = await _repository.TryReleaseAsync(
+                    distributedLock.Identifier,
+                    distributedLock.Id,
+                    cancellationToken)
                 .ConfigureAwait(false);
 
             if (!success)

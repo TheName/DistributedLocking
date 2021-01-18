@@ -5,8 +5,9 @@ namespace DistributedLocking.Abstractions.Repositories
 {
     public interface IDistributedLockRepository
     {
-        Task<(bool Success, DistributedLockId AcquiredLockId)> TryAcquireAsync(
+        Task<bool> TryInsertIfIdentifierNotExistsAsync(
             DistributedLockIdentifier identifier,
+            DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
 
