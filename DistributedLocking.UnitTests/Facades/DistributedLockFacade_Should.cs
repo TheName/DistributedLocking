@@ -117,7 +117,7 @@ namespace DistributedLocking.UnitTests.Facades
             DistributedLockFacade facade)
         {
             repositoryMock
-                .Setup(lockRepository => lockRepository.TryExtendAsync(
+                .Setup(lockRepository => lockRepository.TryUpdateTimeToLiveAsync(
                     distributedLock.Identifier,
                     distributedLock.Id,
                     timeToLive,
@@ -143,7 +143,7 @@ namespace DistributedLocking.UnitTests.Facades
             DistributedLockFacade facade)
         {
             repositoryMock
-                .Setup(lockRepository => lockRepository.TryExtendAsync(
+                .Setup(lockRepository => lockRepository.TryUpdateTimeToLiveAsync(
                     distributedLock.Identifier,
                     distributedLock.Id,
                     additionalTimeToLive,
@@ -156,7 +156,7 @@ namespace DistributedLocking.UnitTests.Facades
                 CancellationToken.None);
 
             repositoryMock
-                .Verify(repository => repository.TryExtendAsync(
+                .Verify(repository => repository.TryUpdateTimeToLiveAsync(
                         distributedLock.Identifier,
                         distributedLock.Id,
                         additionalTimeToLive,
@@ -173,7 +173,7 @@ namespace DistributedLocking.UnitTests.Facades
             DistributedLockFacade facade)
         {
             repositoryMock
-                .Setup(lockRepository => lockRepository.TryReleaseAsync(
+                .Setup(lockRepository => lockRepository.TryDeleteIfExistsAsync(
                     distributedLock.Identifier,
                     distributedLock.Id,
                     It.IsAny<CancellationToken>()))
@@ -196,7 +196,7 @@ namespace DistributedLocking.UnitTests.Facades
             DistributedLockFacade facade)
         {
             repositoryMock
-                .Setup(lockRepository => lockRepository.TryReleaseAsync(
+                .Setup(lockRepository => lockRepository.TryDeleteIfExistsAsync(
                     distributedLock.Identifier,
                     distributedLock.Id,
                     It.IsAny<CancellationToken>()))
@@ -207,7 +207,7 @@ namespace DistributedLocking.UnitTests.Facades
                 CancellationToken.None);
 
             repositoryMock
-                .Verify(repository => repository.TryReleaseAsync(
+                .Verify(repository => repository.TryDeleteIfExistsAsync(
                         distributedLock.Identifier,
                         distributedLock.Id,
                         It.IsAny<CancellationToken>()),

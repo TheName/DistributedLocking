@@ -11,13 +11,13 @@ namespace DistributedLocking.Abstractions.Repositories
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
 
-        Task<bool> TryExtendAsync(
+        Task<bool> TryUpdateTimeToLiveAsync(
             DistributedLockIdentifier identifier,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
 
-        Task<bool> TryReleaseAsync(
+        Task<bool> TryDeleteIfExistsAsync(
             DistributedLockIdentifier identifier,
             DistributedLockId id,
             CancellationToken cancellationToken);

@@ -132,7 +132,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(success);
 
-            var result = await SqlServerDistributedLockRepository.TryReleaseAsync(identifier, id, CancellationToken.None);
+            var result = await SqlServerDistributedLockRepository.TryDeleteIfExistsAsync(identifier, id, CancellationToken.None);
             
             Assert.Equal(success, result);
         }
@@ -162,7 +162,7 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(success);
 
-            var result = await SqlServerDistributedLockRepository.TryExtendAsync(
+            var result = await SqlServerDistributedLockRepository.TryUpdateTimeToLiveAsync(
                 identifier,
                 id,
                 timeToLive,

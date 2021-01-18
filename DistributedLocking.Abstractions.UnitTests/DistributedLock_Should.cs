@@ -58,7 +58,7 @@ namespace DistributedLocking.Abstractions.UnitTests
 
             distributedLockRepositoryMock
                 .Verify(
-                    repository => repository.TryReleaseAsync(
+                    repository => repository.TryDeleteIfExistsAsync(
                         distributedLock.Identifier,
                         distributedLock.Id,
                         CancellationToken.None),

@@ -24,12 +24,12 @@ namespace DistributedLocking.Abstractions
         }
         
         public async Task<bool> TryExtendAsync(DistributedLockTimeToLive timeToLive, CancellationToken cancellationToken) =>
-            await _repository.TryExtendAsync(Identifier, Id, timeToLive, cancellationToken)
+            await _repository.TryUpdateTimeToLiveAsync(Identifier, Id, timeToLive, cancellationToken)
                 .ConfigureAwait(false);
 
         public async ValueTask DisposeAsync()
         {
-            await _repository.TryReleaseAsync(
+            await _repository.TryDeleteIfExistsAsync(
                     Identifier,
                     Id,
                     CancellationToken.None)

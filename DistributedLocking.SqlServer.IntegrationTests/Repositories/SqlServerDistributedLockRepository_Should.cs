@@ -104,7 +104,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
                 CancellationToken.None);
             Assert.True(success);
 
-            var result = await DistributedLockRepository.TryReleaseAsync(identifier, lockId, CancellationToken.None);
+            var result = await DistributedLockRepository.TryDeleteIfExistsAsync(identifier, lockId, CancellationToken.None);
             
             Assert.True(result);
         }
@@ -127,7 +127,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             Assert.True(success);
 
             await Task.Delay(maxMillisecondsTimeout);
-            var result = await DistributedLockRepository.TryReleaseAsync(identifier, lockId, CancellationToken.None);
+            var result = await DistributedLockRepository.TryDeleteIfExistsAsync(identifier, lockId, CancellationToken.None);
             
             Assert.False(result);
         }
@@ -138,7 +138,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             DistributedLockIdentifier identifier,
             DistributedLockId id)
         {
-            var result = await DistributedLockRepository.TryReleaseAsync(identifier, id, CancellationToken.None);
+            var result = await DistributedLockRepository.TryDeleteIfExistsAsync(identifier, id, CancellationToken.None);
             
             Assert.False(result);
         }
@@ -158,7 +158,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
                 timeToLive,
                 CancellationToken.None);
             Assert.True(success);
-            var result = await DistributedLockRepository.TryReleaseAsync(identifier, lockId, CancellationToken.None);
+            var result = await DistributedLockRepository.TryDeleteIfExistsAsync(identifier, lockId, CancellationToken.None);
             Assert.True(result);
             
             success = await DistributedLockRepository.TryInsertIfIdentifierNotExistsAsync(
@@ -189,7 +189,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             Assert.True(success);
 
             await Task.Delay(maxMillisecondsTimeout);
-            var result = await DistributedLockRepository.TryReleaseAsync(
+            var result = await DistributedLockRepository.TryDeleteIfExistsAsync(
                 anotherIdentifier,
                 lockId,
                 CancellationToken.None);
@@ -216,7 +216,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             Assert.True(success);
 
             await Task.Delay(maxMillisecondsTimeout);
-            var result = await DistributedLockRepository.TryReleaseAsync(
+            var result = await DistributedLockRepository.TryDeleteIfExistsAsync(
                 identifier,
                 anotherId,
                 CancellationToken.None);
@@ -240,7 +240,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
                 CancellationToken.None);
             Assert.True(success);
 
-            var result = await DistributedLockRepository.TryExtendAsync(
+            var result = await DistributedLockRepository.TryUpdateTimeToLiveAsync(
                 identifier,
                 lockId,
                 timeToLive,
@@ -267,7 +267,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             Assert.True(success);
 
             await Task.Delay(maxMillisecondsTimeout);
-            var result = await DistributedLockRepository.TryExtendAsync(
+            var result = await DistributedLockRepository.TryUpdateTimeToLiveAsync(
                 identifier,
                 lockId,
                 timeToLive,
@@ -295,7 +295,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             Assert.True(success);
 
             await Task.Delay(maxMillisecondsTimeout);
-            var result = await DistributedLockRepository.TryExtendAsync(
+            var result = await DistributedLockRepository.TryUpdateTimeToLiveAsync(
                 anotherIdentifier,
                 lockId,
                 timeToLive,
@@ -323,7 +323,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             Assert.True(success);
 
             await Task.Delay(maxMillisecondsTimeout);
-            var result = await DistributedLockRepository.TryExtendAsync(
+            var result = await DistributedLockRepository.TryUpdateTimeToLiveAsync(
                 identifier,
                 anotherId,
                 timeToLive,
@@ -339,7 +339,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive)
         {
-            var result = await DistributedLockRepository.TryExtendAsync(
+            var result = await DistributedLockRepository.TryUpdateTimeToLiveAsync(
                 identifier,
                 id,
                 timeToLive,

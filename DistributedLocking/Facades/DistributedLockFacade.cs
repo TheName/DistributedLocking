@@ -51,7 +51,7 @@ namespace DistributedLocking.Facades
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
-            var success = await _repository.TryExtendAsync(
+            var success = await _repository.TryUpdateTimeToLiveAsync(
                     distributedLock.Identifier,
                     distributedLock.Id,
                     timeToLive,
@@ -68,7 +68,7 @@ namespace DistributedLocking.Facades
             IDistributedLock distributedLock,
             CancellationToken cancellationToken)
         {
-            var success = await _repository.TryReleaseAsync(
+            var success = await _repository.TryDeleteIfExistsAsync(
                     distributedLock.Identifier,
                     distributedLock.Id,
                     cancellationToken)

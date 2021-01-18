@@ -38,7 +38,7 @@ namespace DistributedLocking.SqlServer.Repositories
                     cancellationToken)
                 .ConfigureAwait(false);
 
-        public async Task<bool> TryExtendAsync(
+        public async Task<bool> TryUpdateTimeToLiveAsync(
             DistributedLockIdentifier identifier,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
@@ -47,7 +47,7 @@ namespace DistributedLocking.SqlServer.Repositories
                 .TryUpdateAsync(SchemaName, TableName, identifier.Value, id.Value, timeToLive.Value, cancellationToken)
                 .ConfigureAwait(false);
 
-        public async Task<bool> TryReleaseAsync(
+        public async Task<bool> TryDeleteIfExistsAsync(
             DistributedLockIdentifier identifier,
             DistributedLockId id,
             CancellationToken cancellationToken) =>
