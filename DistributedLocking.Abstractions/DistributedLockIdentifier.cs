@@ -34,7 +34,7 @@ namespace DistributedLocking.Abstractions
 
         public override bool Equals(object obj) =>
             obj is DistributedLockIdentifier other &&
-            other.GetHashCode() == Value.GetHashCode();
+            other.GetHashCode() == GetHashCode();
 
         public override int GetHashCode() =>
             Value.GetHashCode();
