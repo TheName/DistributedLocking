@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RootNamespace>DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</RootNamespace>
+        <AssemblyName>TheName.DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</AssemblyName>
+    </PropertyGroup>
+
+    <!-- NuGet metadata -->
+    <PropertyGroup>
+        <Title>DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</Title>
+        <Description>This package contains dependency injection extensions for TheName.DistributedLocking.Repositories.SqlServer package.</Description>
+        <Authors>Dawid Szmidka</Authors>
+        <PackageId>TheName.DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <PackageReleaseNotes>
+            - Initial version of DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection project
+        </PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Extensions;TheName.DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection;DistributedLocking</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
+        <RepositoryUrl>https://github.com/TheName/DistributedLocking</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\DistributedLocking.Repositories.SqlServer\DistributedLocking.Repositories.SqlServer.csproj" />
+      <ProjectReference Include="..\..\..\..\Extensions\Extensions.DependencyInjection\Extensions.DependencyInjection.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RootNamespace>DistributedLocking.Abstractions.Repositories.Migrations</RootNamespace>
+        <AssemblyName>TheName.DistributedLocking.Abstractions.Repositories.Migrations</AssemblyName>
+    </PropertyGroup>
+
+    <!-- NuGet metadata -->
+    <PropertyGroup>
+        <Title>DistributedLocking.Abstractions.Repositories.Migrations</Title>
+        <Description>This package contains abstractions over TheName.DistributedLocking repositories migration scripts.</Description>
+        <Authors>Dawid Szmidka</Authors>
+        <PackageId>TheName.DistributedLocking.Abstractions.Repositories.Migrations</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <PackageReleaseNotes>
+            - Initial version of DistributedLocking.Abstractions.Repositories.Migrations project
+        </PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions;TheName.DistributedLocking.Abstractions.Repositories;TheName.DistributedLocking.Abstractions.Repositories.Migrations;DistributedLocking</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
+        <RepositoryUrl>https://github.com/TheName/DistributedLocking</RepositoryUrl>
+    </PropertyGroup>
+
+</Project>

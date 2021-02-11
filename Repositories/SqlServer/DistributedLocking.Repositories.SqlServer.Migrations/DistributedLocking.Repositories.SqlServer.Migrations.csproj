@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RootNamespace>DistributedLocking.Repositories.SqlServer.Migrations</RootNamespace>
+        <AssemblyName>TheName.DistributedLocking.Repositories.SqlServer.Migrations</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Abstractions\DistributedLocking.Abstractions.Repositories.Migrations\DistributedLocking.Abstractions.Repositories.Migrations.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Scripts\CreateDistributedLocksTable.sql" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Scripts\001_CreateDistributedLocksTable.sql" />
+      <EmbeddedResource Include="Scripts\001_CreateDistributedLocksTable.sql" />
+    </ItemGroup>
+
+    <!-- NuGet metadata -->
+    <PropertyGroup>
+        <Title>DistributedLocking.Repositories.SqlServer.Migrations</Title>
+        <Description>This package contains migration scripts for TheName.DistributedLocking.Repositories.SqlServer package.</Description>
+        <Authors>Dawid Szmidka</Authors>
+        <PackageId>TheName.DistributedLocking.Repositories.SqlServer.Migrations</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <PackageReleaseNotes>
+            - Initial version of DistributedLocking.Repositories.SqlServer.Migrations project
+        </PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Repositories.SqlServer;TheName.DistributedLocking.Repositories.SqlServer.Migrations;DistributedLocking</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
+        <RepositoryUrl>https://github.com/TheName/DistributedLocking</RepositoryUrl>
+    </PropertyGroup>
+
+</Project>

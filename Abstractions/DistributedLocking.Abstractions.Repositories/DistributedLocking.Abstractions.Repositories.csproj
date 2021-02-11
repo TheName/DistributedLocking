@@ -4,27 +4,26 @@
         <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <RootNamespace>DistributedLocking</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking</AssemblyName>
+        <RootNamespace>DistributedLocking.Abstractions.Repositories</RootNamespace>
+        <AssemblyName>TheName.DistributedLocking.Abstractions.Repositories</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Abstractions\DistributedLocking.Abstractions.Repositories\DistributedLocking.Abstractions.Repositories.csproj" />
-      <ProjectReference Include="..\Abstractions\DistributedLocking.Abstractions\DistributedLocking.Abstractions.csproj" />
+      <ProjectReference Include="..\DistributedLocking.Abstractions\DistributedLocking.Abstractions.csproj" />
     </ItemGroup>
 
     <!-- NuGet metadata -->
     <PropertyGroup>
-        <Title>DistributedLocking</Title>
-        <Description>This package contains default implementation of TheName.DistributedLocking.Abstractions package.</Description>
+        <Title>DistributedLocking.Abstractions.Repositories</Title>
+        <Description>This package contains abstractions over TheName.DistributedLocking repositories.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking</PackageId>
+        <PackageId>TheName.DistributedLocking.Abstractions.Repositories</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
-            - Initial version of DistributedLocking project
+            - Initial version of DistributedLocking.Abstractions.Repositories project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking;DistributedLocking</PackageTags>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions;TheName.DistributedLocking.Abstractions.Repositories;DistributedLocking</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

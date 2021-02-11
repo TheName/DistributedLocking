@@ -4,27 +4,26 @@
         <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <RootNamespace>DistributedLocking</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking</AssemblyName>
+        <RootNamespace>DistributedLocking.Extensions</RootNamespace>
+        <AssemblyName>TheName.DistributedLocking.Extensions</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Abstractions\DistributedLocking.Abstractions.Repositories\DistributedLocking.Abstractions.Repositories.csproj" />
-      <ProjectReference Include="..\Abstractions\DistributedLocking.Abstractions\DistributedLocking.Abstractions.csproj" />
+      <ProjectReference Include="..\..\Abstractions\DistributedLocking.Abstractions\DistributedLocking.Abstractions.csproj" />
     </ItemGroup>
 
     <!-- NuGet metadata -->
     <PropertyGroup>
-        <Title>DistributedLocking</Title>
-        <Description>This package contains default implementation of TheName.DistributedLocking.Abstractions package.</Description>
+        <Title>DistributedLocking.Extensions</Title>
+        <Description>This package contains extensions for TheName.DistributedLocking.Abstractions package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking</PackageId>
+        <PackageId>TheName.DistributedLocking.Extensions</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
-            - Initial version of DistributedLocking project
+            - Initial version of DistributedLocking.Extensions project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking;DistributedLocking</PackageTags>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Extensions;DistributedLocking</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>
