@@ -56,7 +56,7 @@ This library is designed to work with any kind of repository as long as it imple
 
 Currently supported databases:
 
-- [SqlServer](./Repositories/SqlServer/README.md)
+- [SqlServer](./Repositories/SqlServer/README.MD)
 
 ### Migrations
 
