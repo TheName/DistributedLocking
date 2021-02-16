@@ -49,3 +49,19 @@ await using(distributedLock)
     // do your work.
 }
 ```
+
+## Repositories
+
+This library is designed to work with any kind of repository as long as it implements required interface.
+
+Currently supported databases:
+
+- [SqlServer](./Repositories/SqlServer/README.md)
+
+### Migrations
+
+Remember to run migrations before using the code.
+
+Migration scripts are exposed by `IDistributedLocksRepositoryMigrationsProvider` and you can find packages with extensions to other known database migrations management packages;
+
+- [DbUp extensions](./Repositories/Migrations/Repositories.Migrations.DbUp)

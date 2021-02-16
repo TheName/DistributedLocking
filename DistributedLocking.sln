@@ -36,6 +36,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{B9E2DC75-4C44-4680-9BF3-A58ABA19DAF6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{D2D146AB-0F1C-4EB0-9449-2B87DE5AE112}"
+ProjectSection(SolutionItems) = preProject
+	Repositories\SqlServer\README.MD = Repositories\SqlServer\README.MD
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{572B3B4B-9C19-4F46-8D7F-9C3E46E386FF}"
 EndProject
