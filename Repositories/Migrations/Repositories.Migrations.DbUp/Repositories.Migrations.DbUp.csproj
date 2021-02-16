@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RootNamespace>DistributedLocking.Repositories.Migrations.DbUp</RootNamespace>
+        <AssemblyName>TheName.DistributedLocking.Repositories.Migrations.DbUp</AssemblyName>
+    </PropertyGroup>
+
+    <!-- NuGet metadata -->
+    <PropertyGroup>
+        <Title>DistributedLocking.Repositories.Migrations.DbUp</Title>
+        <Description>This package contains DbUp IScriptProvider for TheName.DistributedLocking.Abstractions.Repositories.Migrations package.</Description>
+        <Authors>Dawid Szmidka</Authors>
+        <PackageId>TheName.DistributedLocking.Repositories.Migrations.DbUp</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <PackageReleaseNotes>
+            - Initial version of DistributedLocking.Repositories.Migrations.DbUp project
+        </PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Repositories.Migrations;DistributedLocking.Repositories.Migrations.DbUp;DistributedLocking</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
+        <RepositoryUrl>https://github.com/TheName/DistributedLocking</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="dbup-core" Version="4.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Abstractions\DistributedLocking.Abstractions.Repositories.Migrations\DistributedLocking.Abstractions.Repositories.Migrations.csproj" />
+    </ItemGroup>
+
+</Project>

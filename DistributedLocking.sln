@@ -61,6 +61,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.UnitTests", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.Abstractions.Repositories.Migrations.UnitTests", "Tests\Abstractions\DistributedLocking.Abstractions.Repositories.Migrations.UnitTests\DistributedLocking.Abstractions.Repositories.Migrations.UnitTests.csproj", "{0B43710B-2A2A-41EE-BAC5-7D8E081DA1D6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{493EE2D1-64C0-47FF-844A-75F47597153B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories.Migrations.DbUp", "Repositories\Migrations\Repositories.Migrations.DbUp\Repositories.Migrations.DbUp.csproj", "{F9814E3F-DFCA-48CD-92A5-7D724492DC8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.SqlServer.Migrations.DbUp", "Repositories\SqlServer\Extensions\Extensions.SqlServer.Migrations.DbUp\Extensions.SqlServer.Migrations.DbUp.csproj", "{8BFA5BCA-918A-49E7-BA81-A327EE850D76}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{3A5DE660-707A-4DAE-AE2E-E33C7E0491EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLocking.Repositories.SqlServer.Samples", "Repositories\SqlServer\Samples\DistributedLocking.Repositories.SqlServer.Samples\DistributedLocking.Repositories.SqlServer.Samples.csproj", "{5E670BAE-057E-4CA0-B7D1-DBB257101A9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +149,18 @@ Global
 		{0B43710B-2A2A-41EE-BAC5-7D8E081DA1D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B43710B-2A2A-41EE-BAC5-7D8E081DA1D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B43710B-2A2A-41EE-BAC5-7D8E081DA1D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9814E3F-DFCA-48CD-92A5-7D724492DC8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9814E3F-DFCA-48CD-92A5-7D724492DC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9814E3F-DFCA-48CD-92A5-7D724492DC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9814E3F-DFCA-48CD-92A5-7D724492DC8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BFA5BCA-918A-49E7-BA81-A327EE850D76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BFA5BCA-918A-49E7-BA81-A327EE850D76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BFA5BCA-918A-49E7-BA81-A327EE850D76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BFA5BCA-918A-49E7-BA81-A327EE850D76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E670BAE-057E-4CA0-B7D1-DBB257101A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E670BAE-057E-4CA0-B7D1-DBB257101A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E670BAE-057E-4CA0-B7D1-DBB257101A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E670BAE-057E-4CA0-B7D1-DBB257101A9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AD99ECA2-FC27-4205-A0A6-B6BD17EDFDBC} = {8A452AE4-2D76-4619-91EC-4DA17321DDFB}
@@ -164,5 +186,10 @@ Global
 		{7B968A07-721B-4B51-A0B1-AE46B2315DD0} = {AF4ED8BF-F7A2-4147-BAAA-1082183D5EB3}
 		{5CAA4241-081A-4A06-A9AE-CDDD3CF9C9FF} = {9F7C88AE-B6A9-4EDB-95C9-B1214E466EA5}
 		{0B43710B-2A2A-41EE-BAC5-7D8E081DA1D6} = {AF4ED8BF-F7A2-4147-BAAA-1082183D5EB3}
+		{493EE2D1-64C0-47FF-844A-75F47597153B} = {B9E2DC75-4C44-4680-9BF3-A58ABA19DAF6}
+		{F9814E3F-DFCA-48CD-92A5-7D724492DC8A} = {493EE2D1-64C0-47FF-844A-75F47597153B}
+		{8BFA5BCA-918A-49E7-BA81-A327EE850D76} = {572B3B4B-9C19-4F46-8D7F-9C3E46E386FF}
+		{3A5DE660-707A-4DAE-AE2E-E33C7E0491EC} = {D2D146AB-0F1C-4EB0-9449-2B87DE5AE112}
+		{5E670BAE-057E-4CA0-B7D1-DBB257101A9E} = {3A5DE660-707A-4DAE-AE2E-E33C7E0491EC}
 	EndGlobalSection
 EndGlobal
