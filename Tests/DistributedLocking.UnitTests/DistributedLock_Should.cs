@@ -164,6 +164,30 @@ namespace DistributedLocking.UnitTests
                     Times.Once);
         }
 
+        [Theory]
+        [AutoMoqData]
+        public async Task NotTryToReleaseLock_When_Disposing_And_LockWasAlreadyReleased(
+            DistributedLockResourceId resourceId,
+            DistributedLockTimeToLive timeToLive,
+            [Frozen] Mock<IDistributedLocksRepository> distributedLocksRepositoryMock)
+        {
+            var distributedLock = await AcquireDistributedLockAsync(
+                resourceId,
+                timeToLive,
+                distributedLocksRepositoryMock);
+
+            await distributedLock.TryReleaseAsync(CancellationToken.None);
+            await distributedLock.DisposeAsync();
+
+            distributedLocksRepositoryMock
+                .Verify(
+                    repository => repository.TryDelete(
+                        distributedLock.ResourceId,
+                        distributedLock.Id,
+                        CancellationToken.None),
+                    Times.Once);
+        }
+
         private static async Task<DistributedLock> AcquireDistributedLockAsync(
             DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
