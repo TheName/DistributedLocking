@@ -10,6 +10,8 @@ namespace DistributedLocking.Abstractions
     /// </summary>
     public sealed class DistributedLockResourceId
     {
+        private const int MaxResourceIdLength = 900;
+        
         private string Value { get; }
 
         private DistributedLockResourceId(string value)
@@ -17,6 +19,12 @@ namespace DistributedLocking.Abstractions
             if (string.IsNullOrWhiteSpace(value))
             {
                 throw new ArgumentException($"{nameof(DistributedLockResourceId)} cannot be null or whitespace!", nameof(value));
+            }
+
+            if (value.Length > MaxResourceIdLength)
+            {
+                throw new ArgumentException(
+                    $"{nameof(DistributedLockResourceId)} cannot be longer than {MaxResourceIdLength} characters.");
             }
             
             Value = value;

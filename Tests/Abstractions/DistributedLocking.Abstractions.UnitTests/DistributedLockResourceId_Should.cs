@@ -16,6 +16,16 @@ namespace DistributedLocking.Abstractions.UnitTests
         {
             Assert.Throws<ArgumentException>(() => (DistributedLockResourceId) resourceId);
         }
+        
+        [Theory]
+        [InlineAutoData(901)]
+        public void Throw_When_TryingToCreateWithTooLongValue(
+            int stringLength,
+            char c)
+        {
+            var value = new string(c, stringLength);
+            Assert.Throws<ArgumentException>(() => (DistributedLockResourceId) value);
+        }
 
         [Theory]
         [AutoMoqData]

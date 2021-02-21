@@ -42,6 +42,25 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         }
 
         [Theory]
+        [AutoMoqWithInlineData(900)]
+        public async Task AcquireLockWithLongResourceId(
+            int numberOfCharacters,
+            char c,
+            DistributedLockId lockId,
+            DistributedLockTimeToLive timeToLive)
+        {
+            var resourceId = new string(c, numberOfCharacters);
+            
+            var success = await DistributedLockRepository.TryInsert(
+                resourceId,
+                lockId,
+                timeToLive,
+                CancellationToken.None);
+            
+            Assert.True(success);
+        }
+
+        [Theory]
         [AutoMoqData]
         public async Task FailToAcquireLock_When_TryingToAcquire_And_ResourceIdIsAlreadyAcquired(
             DistributedLockResourceId resourceId,
