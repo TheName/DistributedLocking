@@ -23,16 +23,7 @@ namespace DistributedLocking.Abstractions
         /// </summary>
         public Guid Value { get; }
 
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        /// <param name="value">
-        /// The id.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// Thrown when provided <paramref name="value"/> is an empty <see cref="Guid"/>.
-        /// </exception>
-        public DistributedLockId(Guid value)
+        private DistributedLockId(Guid value)
         {
             if (value == Guid.Empty)
             {

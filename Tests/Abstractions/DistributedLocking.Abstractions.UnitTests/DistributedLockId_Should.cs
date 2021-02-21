@@ -9,14 +9,14 @@ namespace DistributedLocking.Abstractions.UnitTests
         [Fact]
         public void Throw_When_TryingToCreateWithEmptyGuid()
         {
-            Assert.Throws<ArgumentException>(() => new DistributedLockId(Guid.Empty));
+            Assert.Throws<ArgumentException>(() => (DistributedLockId) Guid.Empty);
         }
 
         [Theory]
         [AutoMoqData]
         public void NotThrow_When_TryingToCreateWithNonEmptyGuid(Guid id)
         {
-            _ = new DistributedLockId(id);
+            DistributedLockId _ = id;
         }
 
         [Theory]
