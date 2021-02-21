@@ -54,7 +54,7 @@ namespace DistributedLocking.Abstractions.UnitTests
         {
             DistributedLockResourceId resourceId = value;
             
-            Assert.Equal(value.ToString(), resourceId.Value);
+            Assert.Equal(value.ToString(), resourceId.ToString());
         }
 
         [Theory]
@@ -63,7 +63,7 @@ namespace DistributedLocking.Abstractions.UnitTests
         {
             DistributedLockResourceId resourceId = value;
             
-            Assert.Equal(value, resourceId.Value);
+            Assert.Equal(value, resourceId.ToString());
         }
 
         [Theory]
@@ -72,14 +72,16 @@ namespace DistributedLocking.Abstractions.UnitTests
         {
             string value = resourceId;
             
-            Assert.Equal(resourceId.Value, value);
+            Assert.Equal(resourceId.ToString(), value);
         }
 
         [Theory]
         [AutoMoqData]
         public void ReturnValueToString_When_CallingToString(DistributedLockResourceId resourceId)
         {
-            Assert.Equal(resourceId.Value, resourceId.ToString());
+            var resourceIdAsString = (string) resourceId;
+            
+            Assert.Equal(resourceIdAsString, resourceId.ToString());
         }
     }
 }

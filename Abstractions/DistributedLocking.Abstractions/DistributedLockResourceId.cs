@@ -10,10 +10,7 @@ namespace DistributedLocking.Abstractions
     /// </summary>
     public sealed class DistributedLockResourceId
     {
-        /// <summary>
-        /// The resource id value.
-        /// </summary>
-        public string Value { get; }
+        private string Value { get; }
 
         private DistributedLockResourceId(string value)
         {
