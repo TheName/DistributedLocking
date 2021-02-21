@@ -37,18 +37,14 @@ namespace DistributedLocking
             EnsureIsNotNull(resourceId, nameof(resourceId));
             EnsureIsNotNull(timeToLive, nameof(timeToLive));
 
-            var lockId = Guid.NewGuid();
-
-            var success = await _repository.TryInsert(
+            var distributedLock = await DistributedLock.TryAcquireAsync(
                     resourceId,
-                    lockId,
                     timeToLive,
+                    _repository,
                     cancellationToken)
                 .ConfigureAwait(false);
 
-            var @lock = success ? new DistributedLock(resourceId, lockId, this) : null;
-
-            return (success, @lock);
+            return (distributedLock != null, distributedLock);
         }
 
         /// <inheritdoc />

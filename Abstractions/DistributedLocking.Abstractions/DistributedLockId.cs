@@ -11,6 +11,14 @@ namespace DistributedLocking.Abstractions
     public sealed class DistributedLockId
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="DistributedLockId"/>.
+        /// </summary>
+        /// <returns>
+        /// A new <see cref="DistributedLockId"/> object.
+        /// </returns>
+        public static DistributedLockId NewLockId() => Guid.NewGuid();
+        
+        /// <summary>
         /// The ID value.
         /// </summary>
         public Guid Value { get; }

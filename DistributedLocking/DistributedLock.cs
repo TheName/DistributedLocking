@@ -2,13 +2,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DistributedLocking.Abstractions;
+using DistributedLocking.Abstractions.Repositories;
 
 namespace DistributedLocking
 {
     /// <inheritdoc />
     public class DistributedLock : IDistributedLock
     {
-        private readonly IDistributedLockFacade _distributedLockFacade;
+        private readonly IDistributedLocksRepository _distributedLocksRepository;
 
         /// <inheritdoc />
         public DistributedLockResourceId ResourceId { get; }
@@ -16,34 +17,72 @@ namespace DistributedLocking
         /// <inheritdoc />
         public DistributedLockId Id { get; }
 
+        private DistributedLock(
+            DistributedLockResourceId resourceId,
+            DistributedLockId id,
+            IDistributedLocksRepository repository)
+        {
+            ResourceId = resourceId ?? throw new ArgumentNullException(nameof(resourceId));
+            Id = id ?? throw new ArgumentNullException(nameof(id));
+            _distributedLocksRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
         /// <summary>
-        /// The constructor.
+        /// Tries to acquire a new distributed lock.
         /// </summary>
         /// <param name="resourceId">
         /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
-        /// <param name="id">
-        /// The <see cref="DistributedLockId"/>.
+        /// <param name="timeToLive">
+        /// The <see cref="DistributedLockTimeToLive"/>.
         /// </param>
-        /// <param name="distributedLockFacade">
-        /// The <see cref="IDistributedLockFacade"/>.
+        /// <param name="repository">
+        /// The <see cref="IDistributedLocksRepository"/>.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>.
+        /// </param>
+        /// <returns>
+        /// The acquired <see cref="DistributedLock"/>.
+        /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when provided <paramref name="resourceId"/>, <paramref name="id"/> or <paramref name="distributedLockFacade"/> is null.
+        /// Thrown when provided <paramref name="resourceId"/>, <paramref name="timeToLive"/> or <paramref name="repository"/> is null.
         /// </exception>
-        public DistributedLock(
+        public static async Task<DistributedLock> TryAcquireAsync(
             DistributedLockResourceId resourceId,
-            DistributedLockId id,
-            IDistributedLockFacade distributedLockFacade)
+            DistributedLockTimeToLive timeToLive,
+            IDistributedLocksRepository repository,
+            CancellationToken cancellationToken)
         {
-            ResourceId = resourceId ?? throw new ArgumentNullException(nameof(resourceId));
-            Id = id ?? throw new ArgumentNullException(nameof(id));
-            _distributedLockFacade = distributedLockFacade ?? throw new ArgumentNullException(nameof(distributedLockFacade));
+            if (resourceId == null)
+            {
+                throw new ArgumentNullException(nameof(resourceId));
+            }
+
+            if (timeToLive == null)
+            {
+                throw new ArgumentNullException(nameof(timeToLive));
+            }
+
+            if (repository == null)
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+            
+            var lockId = DistributedLockId.NewLockId();
+            var success = await repository.TryInsert(
+                    resourceId,
+                    lockId,
+                    timeToLive,
+                    cancellationToken)
+                .ConfigureAwait(false);
+
+            return success ? new DistributedLock(resourceId, lockId, repository) : null;
         }
 
         /// <inheritdoc />
         public async Task<bool> TryExtendAsync(DistributedLockTimeToLive timeToLive, CancellationToken cancellationToken) =>
-            await _distributedLockFacade.TryExtendAsync(
+            await _distributedLocksRepository.TryUpdateTimeToLiveAsync(
                     ResourceId,
                     Id,
                     timeToLive,
@@ -52,7 +91,7 @@ namespace DistributedLocking
 
         /// <inheritdoc />
         public async ValueTask DisposeAsync() =>
-            await _distributedLockFacade.TryReleaseAsync(
+            await _distributedLocksRepository.TryDelete(
                     ResourceId,
                     Id,
                     CancellationToken.None)
