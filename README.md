@@ -1,6 +1,6 @@
 # Distributed Locking
 
-Simple C# implementation of distributed lock that can be used in multi-threaded environment focused on extensibility.
+Simple C# implementation of distributed lock that can be used in multi-client (process) environment focused on extensibility.
 
 ## Quickstart
 
@@ -16,28 +16,27 @@ In order to acquire a lock, you need to provide:
 
 To do that, you have a simple interface:
 ```csharp
-IDistributedLockFacade facade = ...
-var resourceId = new DistributedLockResourceId("Resource ID");
-var ttl = new DistributedLockTimeToLive(TimeSpan.FromMinutes(5);
-var (success, distributedLock) = await facade.TryAcquireAsync(resourceId, ttl, CancellationToken.None);
+// IDistributedLockProvider provider = ... 
+var resourceId = "Resource ID";
+var ttl = TimeSpan.FromMinutes(5);
+var distributedLock = await provider.TryAcquireAsync(
+    resourceId,
+    ttl,
+    CancellationToken.None);
 ```
 
-If `success` is `False`, the `distributedLock` will be `null` - the lock was not acquired; most likely the resource is already locked.
-
-If `success` is `True`, the `distributedLock` will be not null - the lock was successfully acquired.
+If acquiring fails, the `distributedLock` variable will be null.
 
 ### Extend the lock
 
 In case your work requires more time than the previous TTL you've provided, simply extend it:
 
+**NOTE:** The provided TTL overwrites previously assigned TTL.
+
 ```csharp
-var ttl = new DistributedLockTimeToLive(TimeSpan.FromMinutes(5);
+var ttl = TimeSpan.FromMinutes(5);
 var success = await distributedLock.TryExtendAsync(ttl, CancellationToken.None);
 ```
-
-If `success` is `False` - extending the lock failed; most likely it's already inactive. You should acquire a new lock to continue the work.
-
-If `success` is `True` - extending the lock succeed. Your lock is active for the provided TTL value (5 minutes in this case).
 
 ### Release the lock
 
@@ -48,6 +47,12 @@ await using(distributedLock)
 {
     // do your work.
 }
+```
+
+You can also release the lock explicitly:
+
+```csharp
+var success = await distributedLock.TryReleaseAsync(CancellationToken.None);
 ```
 
 ## Repositories
