@@ -18,10 +18,7 @@ namespace DistributedLocking.Abstractions
         /// </returns>
         public static DistributedLockId NewLockId() => Guid.NewGuid();
         
-        /// <summary>
-        /// The ID value.
-        /// </summary>
-        public Guid Value { get; }
+        private Guid Value { get; }
 
         private DistributedLockId(Guid value)
         {

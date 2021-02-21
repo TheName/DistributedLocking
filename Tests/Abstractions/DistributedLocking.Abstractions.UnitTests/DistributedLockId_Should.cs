@@ -49,7 +49,7 @@ namespace DistributedLocking.Abstractions.UnitTests
         {
             DistributedLockId id = value;
             
-            Assert.Equal(value, id.Value);
+            Assert.Equal(value.ToString(), id.ToString());
         }
 
         [Theory]
@@ -58,14 +58,16 @@ namespace DistributedLocking.Abstractions.UnitTests
         {
             Guid value = id;
             
-            Assert.Equal(id.Value, value);
+            Assert.Equal(id.ToString(), value.ToString());
         }
 
         [Theory]
         [AutoMoqData]
         public void ReturnValueToString_When_CallingToString(DistributedLockId id)
         {
-            Assert.Equal(id.Value.ToString(), id.ToString());
+            var idAsGuid = (Guid) id;
+            
+            Assert.Equal(idAsGuid.ToString(), id.ToString());
         }
     }
 }
