@@ -7,15 +7,15 @@ namespace DistributedLocking.Exceptions
     /// <summary>
     /// The <see cref="CouldNotReleaseDistributedLockException"/>.
     /// <remarks>
-    /// Thrown when releasing of a distributed lock with provided <see cref="DistributedLockIdentifier"/> and <see cref="DistributedLockId"/> fails.
+    /// Thrown when releasing of a distributed lock with provided <see cref="DistributedLockResourceId"/> and <see cref="DistributedLockId"/> fails.
     /// </remarks>
     /// </summary>
     public class CouldNotReleaseDistributedLockException : Exception
     {
         /// <summary>
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </summary>
-        public DistributedLockIdentifier Identifier { get; }
+        public DistributedLockResourceId ResourceId { get; }
 
         /// <summary>
         /// The <see cref="DistributedLockId"/>.
@@ -25,8 +25,8 @@ namespace DistributedLocking.Exceptions
         /// <summary>
         /// The constructor.
         /// </summary>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// The <see cref="DistributedLockId"/>.
@@ -35,21 +35,21 @@ namespace DistributedLocking.Exceptions
         /// The <see cref="Exception"/>.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when provided <paramref name="identifier"/> is null.
+        /// Thrown when provided <paramref name="resourceId"/> is null.
         /// </exception>
         public CouldNotReleaseDistributedLockException(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             Exception innerException = null)
-            : base(CreateExceptionMessage(identifier, id), innerException)
+            : base(CreateExceptionMessage(resourceId, id), innerException)
         {
-            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            ResourceId = resourceId ?? throw new ArgumentNullException(nameof(resourceId));
             Id = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         private static string CreateExceptionMessage(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id) =>
-            $"Could not release lock with identifier {identifier} and  ID {id}";
+            $"Could not release lock with resource id {resourceId} and lock id {id}";
     }
 }

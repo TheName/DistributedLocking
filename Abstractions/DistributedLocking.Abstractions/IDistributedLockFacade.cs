@@ -9,13 +9,13 @@ namespace DistributedLocking.Abstractions
     public interface IDistributedLockFacade
     {
         /// <summary>
-        /// Tries to acquire a distributed lock with provided <paramref name="identifier"/> for a period defined by <paramref name="timeToLive"/>. 
+        /// Tries to acquire a distributed lock with provided <paramref name="resourceId"/> for a period defined by <paramref name="timeToLive"/>. 
         /// </summary>
-        /// <param name="identifier">
-        /// The unique identifier of <see cref="IDistributedLock"/>.
+        /// <param name="resourceId">
+        /// The unique <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="timeToLive">
-        /// The period for which the provided <paramref name="identifier"/> should be locked if acquiring succeeds.
+        /// The period for which the provided <paramref name="resourceId"/> should be locked if acquiring succeeds.
         /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/>.
@@ -26,24 +26,24 @@ namespace DistributedLocking.Abstractions
         ///     - acquired <see cref="IDistributedLock"/> if acquiring succeeded (null otherwise).
         /// </returns>
         Task<(bool Success, IDistributedLock distributedLock)> TryAcquireAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
         
         /// <summary>
-        /// Tries to extend already acquired lock defined by <paramref name="identifier"/> and <paramref name="id"/> for provided <paramref name="timeToLive"/> period.
+        /// Tries to extend already acquired lock defined by <paramref name="resourceId"/> and <paramref name="id"/> for provided <paramref name="timeToLive"/> period.
         /// <remarks>
         /// Successful extension can only happen if the lock is still active (the previously provided TTL has not yet expired).
         /// </remarks>
         /// </summary>
-        /// <param name="identifier">
-        /// The unique identifier of <see cref="IDistributedLock"/>.
+        /// <param name="resourceId">
+        /// The unique <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// Acquired lock's <see cref="DistributedLockId"/>.
         /// </param>
         /// <param name="timeToLive">
-        /// The period for which the provided <paramref name="identifier"/> and <paramref name="id"/> should be locked if extending succeeds.
+        /// The period for which the provided <paramref name="resourceId"/> and <paramref name="id"/> should be locked if extending succeeds.
         /// <remarks>
         /// The provided period does NOT extend already existing TTL but replaces it.
         /// </remarks>
@@ -57,19 +57,19 @@ namespace DistributedLocking.Abstractions
         /// - false, if lock was not active (either does not exist at all, or its TTL has expired).
         /// </returns>
         Task<bool> TryExtendAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
 
         /// <summary>
-        /// Tries to release already acquired lock defined by <paramref name="identifier"/> and <paramref name="id"/>.
+        /// Tries to release already acquired lock defined by <paramref name="resourceId"/> and <paramref name="id"/>.
         /// <remarks>
         /// Successful release can only happen if the lock is still active (the previously provided TTL has not yet expired).
         /// </remarks>
         /// </summary>
-        /// <param name="identifier">
-        /// The unique identifier of <see cref="IDistributedLock"/>.
+        /// <param name="resourceId">
+        /// The unique <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// Acquired lock's <see cref="DistributedLockId"/>.
@@ -83,7 +83,7 @@ namespace DistributedLocking.Abstractions
         /// - false, if lock was not active (either does not exist at all, or its TTL has expired) and thus releasing was unsuccessful, because the lock was already released due to TTL expiration.
         /// </returns>
         Task<bool> TryReleaseAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             CancellationToken cancellationToken);
     }

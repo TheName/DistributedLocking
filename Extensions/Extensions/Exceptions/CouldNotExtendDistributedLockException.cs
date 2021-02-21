@@ -7,15 +7,15 @@ namespace DistributedLocking.Exceptions
     /// <summary>
     /// The <see cref="CouldNotExtendDistributedLockException"/>.
     /// <remarks>
-    /// Thrown when extending a distributed lock with provided <see cref="DistributedLockIdentifier"/> and <see cref="DistributedLockId"/> fails.
+    /// Thrown when extending a distributed lock with provided <see cref="DistributedLockResourceId"/> and <see cref="DistributedLockId"/> fails.
     /// </remarks>
     /// </summary>
     public class CouldNotExtendDistributedLockException : Exception
     {
         /// <summary>
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </summary>
-        public DistributedLockIdentifier Identifier { get; }
+        public DistributedLockResourceId ResourceId { get; }
         
         /// <summary>
         /// The <see cref="DistributedLockId"/>.
@@ -30,8 +30,8 @@ namespace DistributedLocking.Exceptions
         /// <summary>
         /// The constructor.
         /// </summary>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// The <see cref="DistributedLockId"/>.
@@ -43,24 +43,24 @@ namespace DistributedLocking.Exceptions
         /// The <see cref="Exception"/>.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when provided <paramref name="identifier"/> or <paramref name="timeToLive"/> is null.
+        /// Thrown when provided <paramref name="resourceId"/> or <paramref name="timeToLive"/> is null.
         /// </exception>
         public CouldNotExtendDistributedLockException(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             Exception innerException = null)
-            : base(CreateExceptionMessage(identifier, id, timeToLive), innerException)
+            : base(CreateExceptionMessage(resourceId, id, timeToLive), innerException)
         {
-            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            ResourceId = resourceId ?? throw new ArgumentNullException(nameof(resourceId));
             Id = id ?? throw new ArgumentNullException(nameof(id));
             TimeToLive = timeToLive ?? throw new ArgumentNullException(nameof(timeToLive));
         }
 
         private static string CreateExceptionMessage(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive) =>
-            $"Could not extend lock with identifier {identifier} and  ID {id} with TTL {timeToLive}";
+            $"Could not extend lock with resource id {resourceId} and lock id {id} with TTL {timeToLive}";
     }
 }

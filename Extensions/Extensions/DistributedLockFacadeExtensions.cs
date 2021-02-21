@@ -17,8 +17,8 @@ namespace DistributedLocking.Extensions
         /// <param name="facade">
         /// The <see cref="IDistributedLockFacade"/>.
         /// </param>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="timeToLive">
         /// The <see cref="DistributedLockTimeToLive"/>.
@@ -37,7 +37,7 @@ namespace DistributedLocking.Extensions
         /// </exception>
         public static async Task<IDistributedLock> AcquireAsync(
             this IDistributedLockFacade facade,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
@@ -46,25 +46,25 @@ namespace DistributedLocking.Extensions
                 throw new ArgumentNullException(nameof(facade));
             }
             
-            var (success, distributedLock) = await facade.TryAcquireAsync(identifier, timeToLive, cancellationToken)
+            var (success, distributedLock) = await facade.TryAcquireAsync(resourceId, timeToLive, cancellationToken)
                 .ConfigureAwait(false);
 
             if (!success)
             {
-                throw new CouldNotAcquireDistributedLockException(identifier, timeToLive);
+                throw new CouldNotAcquireDistributedLockException(resourceId, timeToLive);
             }
 
             return distributedLock;
         }
 
         /// <summary>
-        /// Extends distributed lock with provided <paramref name="identifier"/> and <paramref name="id"/> or throws.
+        /// Extends distributed lock with provided <paramref name="resourceId"/> and <paramref name="id"/> or throws.
         /// </summary>
         /// <param name="facade">
         /// The <see cref="IDistributedLockFacade"/>.
         /// </param>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// The <see cref="DistributedLockId"/>.
@@ -86,7 +86,7 @@ namespace DistributedLocking.Extensions
         /// </exception>
         public static async Task ExtendAsync(
             this IDistributedLockFacade facade,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
@@ -97,7 +97,7 @@ namespace DistributedLocking.Extensions
             }
 
             var success = await facade.TryExtendAsync(
-                    identifier,
+                    resourceId,
                     id,
                     timeToLive,
                     cancellationToken)
@@ -105,18 +105,18 @@ namespace DistributedLocking.Extensions
 
             if (!success)
             {
-                throw new CouldNotExtendDistributedLockException(identifier, id, timeToLive);
+                throw new CouldNotExtendDistributedLockException(resourceId, id, timeToLive);
             }
         }
 
         /// <summary>
-        /// Releases distributed lock with provided <paramref name="identifier"/> and <paramref name="id"/> or throws.
+        /// Releases distributed lock with provided <paramref name="resourceId"/> and <paramref name="id"/> or throws.
         /// </summary>
         /// <param name="facade">
         /// The <see cref="IDistributedLockFacade"/>.
         /// </param>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// The <see cref="DistributedLockId"/>.
@@ -135,7 +135,7 @@ namespace DistributedLocking.Extensions
         /// </exception>
         public static async Task ReleaseAsync(
             this IDistributedLockFacade facade,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             CancellationToken cancellationToken)
         {
@@ -144,11 +144,11 @@ namespace DistributedLocking.Extensions
                 throw new ArgumentNullException(nameof(facade));
             }
 
-            var success = await facade.TryReleaseAsync(identifier, id, cancellationToken).ConfigureAwait(false);
+            var success = await facade.TryReleaseAsync(resourceId, id, cancellationToken).ConfigureAwait(false);
 
             if (!success)
             {
-                throw new CouldNotReleaseDistributedLockException(identifier, id);
+                throw new CouldNotReleaseDistributedLockException(resourceId, id);
             }
         }
     }

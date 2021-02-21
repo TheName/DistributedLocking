@@ -7,15 +7,15 @@ namespace DistributedLocking.Exceptions
     /// <summary>
     /// The <see cref="CouldNotAcquireDistributedLockException"/>.
     /// <remarks>
-    /// Thrown when acquiring of a distributed lock with provided <see cref="DistributedLockIdentifier"/> fails.
+    /// Thrown when acquiring of a distributed lock with provided <see cref="DistributedLockResourceId"/> fails.
     /// </remarks>
     /// </summary>
     public class CouldNotAcquireDistributedLockException : Exception
     {
         /// <summary>
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </summary>
-        public DistributedLockIdentifier Identifier { get; }
+        public DistributedLockResourceId ResourceId { get; }
 
         /// <summary>
         /// The <see cref="DistributedLockTimeToLive"/>.
@@ -25,8 +25,8 @@ namespace DistributedLocking.Exceptions
         /// <summary>
         /// The constructor.
         /// </summary>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="timeToLive">
         /// The <see cref="DistributedLockTimeToLive"/>.
@@ -35,21 +35,21 @@ namespace DistributedLocking.Exceptions
         /// The <see cref="Exception"/>.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when provided <paramref name="identifier"/> or <paramref name="timeToLive"/> is null.
+        /// Thrown when provided <paramref name="resourceId"/> or <paramref name="timeToLive"/> is null.
         /// </exception>
         public CouldNotAcquireDistributedLockException(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             Exception innerException = null)
-            : base(CreateExceptionMessage(identifier, timeToLive), innerException)
+            : base(CreateExceptionMessage(resourceId, timeToLive), innerException)
         {
-            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            ResourceId = resourceId ?? throw new ArgumentNullException(nameof(resourceId));
             TimeToLive = timeToLive ?? throw new ArgumentNullException(nameof(timeToLive));
         }
 
         private static string CreateExceptionMessage(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive) =>
-            $"Could not acquire lock with identifier {identifier} and time to live {timeToLive}.";
+            $"Could not acquire lock with resource id {resourceId} and time to live {timeToLive}.";
     }
 }

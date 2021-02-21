@@ -13,7 +13,7 @@ namespace DistributedLocking.UnitTests
     {
         [Theory]
         [AutoMoqData]
-        public void Throw_When_TryingToCreateWithNullIdentifier(
+        public void Throw_When_TryingToCreateWithNullResourceId(
             DistributedLockId id,
             IDistributedLockFacade distributedLockFacade)
         {
@@ -23,29 +23,29 @@ namespace DistributedLocking.UnitTests
         [Theory]
         [AutoMoqData]
         public void Throw_When_TryingToCreateWithNullId(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             IDistributedLockFacade distributedLockFacade)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLock(identifier, null, distributedLockFacade));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLock(resourceId, null, distributedLockFacade));
         }
         
         [Theory]
         [AutoMoqData]
         public void Throw_When_TryingToCreateWithNullFacade(
             DistributedLockId id,
-            DistributedLockIdentifier identifier)
+            DistributedLockResourceId resourceId)
         {
-            Assert.Throws<ArgumentNullException>(() => new DistributedLock(identifier, id, null));
+            Assert.Throws<ArgumentNullException>(() => new DistributedLock(resourceId, id, null));
         }
         
         [Theory]
         [AutoMoqData]
         public void NotThrow_When_TryingToCreateWithoutNullValues(
             DistributedLockId id,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             IDistributedLockFacade distributedLockFacade)
         {
-            _ = new DistributedLock(identifier, id, distributedLockFacade);
+            _ = new DistributedLock(resourceId, id, distributedLockFacade);
         }
 
         [Theory]
@@ -60,7 +60,7 @@ namespace DistributedLocking.UnitTests
         {
             distributedLockFacadeMock
                 .Setup(facade => facade.TryExtendAsync(
-                    distributedLock.Identifier,
+                    distributedLock.ResourceId,
                     distributedLock.Id,
                     timeToLive,
                     cancellationToken))
@@ -82,7 +82,7 @@ namespace DistributedLocking.UnitTests
             distributedLockFacadeMock
                 .Verify(
                     repository => repository.TryReleaseAsync(
-                        distributedLock.Identifier,
+                        distributedLock.ResourceId,
                         distributedLock.Id,
                         CancellationToken.None),
                     Times.Once);

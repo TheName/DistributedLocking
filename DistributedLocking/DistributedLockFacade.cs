@@ -27,46 +27,46 @@ namespace DistributedLocking
 
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">
-        /// Thrown when provided <paramref name="identifier"/> or <paramref name="timeToLive"/> is null.
+        /// Thrown when provided <paramref name="resourceId"/> or <paramref name="timeToLive"/> is null.
         /// </exception>
         public async Task<(bool Success, IDistributedLock distributedLock)> TryAcquireAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
-            EnsureIsNotNull(identifier, nameof(identifier));
+            EnsureIsNotNull(resourceId, nameof(resourceId));
             EnsureIsNotNull(timeToLive, nameof(timeToLive));
 
             var lockId = Guid.NewGuid();
 
             var success = await _repository.TryInsert(
-                    identifier,
+                    resourceId,
                     lockId,
                     timeToLive,
                     cancellationToken)
                 .ConfigureAwait(false);
 
-            var @lock = success ? new DistributedLock(identifier, lockId, this) : null;
+            var @lock = success ? new DistributedLock(resourceId, lockId, this) : null;
 
             return (success, @lock);
         }
 
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">
-        /// Thrown when provided <paramref name="identifier"/>, <paramref name="id"/> or <paramref name="timeToLive"/> is null.
+        /// Thrown when provided <paramref name="resourceId"/>, <paramref name="id"/> or <paramref name="timeToLive"/> is null.
         /// </exception>
         public async Task<bool> TryExtendAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
-            EnsureIsNotNull(identifier, nameof(identifier));
+            EnsureIsNotNull(resourceId, nameof(resourceId));
             EnsureIsNotNull(id, nameof(id));
             EnsureIsNotNull(timeToLive, nameof(timeToLive));
             
             return await _repository.TryUpdateTimeToLiveAsync(
-                    identifier,
+                    resourceId,
                     id,
                     timeToLive,
                     cancellationToken)
@@ -75,18 +75,18 @@ namespace DistributedLocking
 
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">
-        /// Thrown when provided <paramref name="identifier"/> or <paramref name="id"/> is null.
+        /// Thrown when provided <paramref name="resourceId"/> or <paramref name="id"/> is null.
         /// </exception>
         public async Task<bool> TryReleaseAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             CancellationToken cancellationToken)
         {
-            EnsureIsNotNull(identifier, nameof(identifier));
+            EnsureIsNotNull(resourceId, nameof(resourceId));
             EnsureIsNotNull(id, nameof(id));
             
             return await _repository.TryDelete(
-                    identifier,
+                    resourceId,
                     id,
                     cancellationToken)
                 .ConfigureAwait(false);

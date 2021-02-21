@@ -12,13 +12,13 @@ namespace DistributedLocking.Abstractions.Repositories
     public interface IDistributedLocksRepository
     {
         /// <summary>
-        /// Tries to insert identifier and id for provided TTL period.
+        /// Tries to insert resource id and lock id for provided TTL period.
         /// <remarks>
-        /// Insert is successful only if provided identifier does not have any active (TTL not expired) ids assigned to it.
+        /// Insert is successful only if provided resource id does not have any active (TTL not expired) lock id assigned to it.
         /// </remarks>
         /// </summary>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// The <see cref="DistributedLockId"/>.
@@ -33,7 +33,7 @@ namespace DistributedLocking.Abstractions.Repositories
         /// True if insert was successful, false otherwise.
         /// </returns>
         Task<bool> TryInsert(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
@@ -41,11 +41,11 @@ namespace DistributedLocking.Abstractions.Repositories
         /// <summary>
         /// Tries to update distributed lock's TTL with provided value.
         /// <remarks>
-        /// Update is successful only if the lock with provided <paramref name="identifier"/> and <paramref name="id"/> is still active (TTL has not expired).
+        /// Update is successful only if the lock with provided <paramref name="resourceId"/> and <paramref name="id"/> is still active (TTL has not expired).
         /// </remarks>
         /// </summary>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// The <see cref="DistributedLockId"/>.
@@ -60,7 +60,7 @@ namespace DistributedLocking.Abstractions.Repositories
         /// True if update was successful, false otherwise.
         /// </returns>
         Task<bool> TryUpdateTimeToLiveAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken);
@@ -68,11 +68,11 @@ namespace DistributedLocking.Abstractions.Repositories
         /// <summary>
         /// Tries to delete distributed lock.
         /// <remarks>
-        /// Deletion is successful only if the lock with provided <paramref name="identifier"/> and <paramref name="id"/> is still active (TTL has not expired).
+        /// Deletion is successful only if the lock with provided <paramref name="resourceId"/> and <paramref name="id"/> is still active (TTL has not expired).
         /// </remarks>
         /// </summary>
-        /// <param name="identifier">
-        /// The <see cref="DistributedLockIdentifier"/>.
+        /// <param name="resourceId">
+        /// The <see cref="DistributedLockResourceId"/>.
         /// </param>
         /// <param name="id">
         /// The <see cref="DistributedLockId"/>.
@@ -84,7 +84,7 @@ namespace DistributedLocking.Abstractions.Repositories
         /// True if deletion was successful, false otherwise.
         /// </returns>
         Task<bool> TryDelete(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             CancellationToken cancellationToken);
     }

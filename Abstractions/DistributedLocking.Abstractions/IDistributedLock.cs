@@ -10,9 +10,9 @@ namespace DistributedLocking.Abstractions
     public interface IDistributedLock : IAsyncDisposable
     {
         /// <summary>
-        /// The distributed lock's <see cref="DistributedLockIdentifier"/>.
+        /// The distributed lock's <see cref="DistributedLockResourceId"/>.
         /// </summary>
-        DistributedLockIdentifier Identifier { get; }
+        DistributedLockResourceId ResourceId { get; }
         
         /// <summary>
         /// The distributed lock's <see cref="DistributedLockId"/>.

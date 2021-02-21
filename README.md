@@ -11,15 +11,15 @@ Below you can find the basic usage examples.
 ### Acquire the lock
 
 In order to acquire a lock, you need to provide:
-- an *identifier* - something, that identifies your resource,
+- a *resource id* - something, that identifies your resource,
 - desired TTL (time to live) of the lock - in case your process would not gracefully release the lock, it has to automatically turn itself inactive to avoid infinite locks.
 
 To do that, you have a simple interface:
 ```csharp
 IDistributedLockFacade facade = ...
-var identifier = new DistributedLockIdentifier("Resource ID");
+var resourceId = new DistributedLockResourceId("Resource ID");
 var ttl = new DistributedLockTimeToLive(TimeSpan.FromMinutes(5);
-var (success, distributedLock) = await facade.TryAcquireAsync(identifier, ttl, CancellationToken.None);
+var (success, distributedLock) = await facade.TryAcquireAsync(resourceId, ttl, CancellationToken.None);
 ```
 
 If `success` is `False`, the `distributedLock` will be `null` - the lock was not acquired; most likely the resource is already locked.

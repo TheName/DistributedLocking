@@ -33,14 +33,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task ReturnFalse_When_TryingToInsert_And_SqlClientReturnsZeroModifiedRows(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive)
         {
             SqlClientMock.SetupNonQueryResult(0);
             
             var success = await SqlServerDistributedLockRepository.TryInsert(   
-                identifier,
+                resourceId,
                 lockId,
                 timeToLive,
                 CancellationToken.None);
@@ -51,14 +51,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task ReturnTrue_When_TryingToInsert_And_SqlClientReturnsOneModifiedRow(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive)
         {
             SqlClientMock.SetupNonQueryResult(1);
 
             var success = await SqlServerDistributedLockRepository.TryInsert(
-                identifier,
+                resourceId,
                 lockId,
                 timeToLive,
                 CancellationToken.None);
@@ -71,14 +71,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqWithInlineData(2)]
         public async Task Throw_When_TryingToInsert_And_SqlClientReturnsOtherThanOneOrZeroModifiedRows(
             int numberOfModifiedRows,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive)
         {
             SqlClientMock.SetupNonQueryResult(numberOfModifiedRows);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlServerDistributedLockRepository.TryInsert(
-                identifier,
+                resourceId,
                 lockId,
                 timeToLive,
                 CancellationToken.None));
@@ -87,14 +87,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task ReturnFalse_When_TryingToUpdateTimeToLive_And_SqlClientReturnsZeroModifiedRows(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive)
         {
             SqlClientMock.SetupNonQueryResult(0);
             
             var success = await SqlServerDistributedLockRepository.TryUpdateTimeToLiveAsync(   
-                identifier,
+                resourceId,
                 lockId,
                 timeToLive,
                 CancellationToken.None);
@@ -105,14 +105,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task ReturnTrue_When_TryingToUpdateTimeToLive_And_SqlClientReturnsOneModifiedRow(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive)
         {
             SqlClientMock.SetupNonQueryResult(1);
 
             var success = await SqlServerDistributedLockRepository.TryUpdateTimeToLiveAsync(
-                identifier,
+                resourceId,
                 lockId,
                 timeToLive,
                 CancellationToken.None);
@@ -125,14 +125,14 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqWithInlineData(2)]
         public async Task Throw_When_TryingToUpdateTimeToLive_And_SqlClientReturnsOtherThanOneOrZeroModifiedRows(
             int numberOfModifiedRows,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId,
             DistributedLockTimeToLive timeToLive)
         {
             SqlClientMock.SetupNonQueryResult(numberOfModifiedRows);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlServerDistributedLockRepository.TryUpdateTimeToLiveAsync(
-                identifier,
+                resourceId,
                 lockId,
                 timeToLive,
                 CancellationToken.None));
@@ -141,13 +141,13 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task ReturnFalse_When_TryingToDelete_And_SqlClientReturnsZeroModifiedRows(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId)
         {
             SqlClientMock.SetupNonQueryResult(0);
             
             var success = await SqlServerDistributedLockRepository.TryDelete(   
-                identifier,
+                resourceId,
                 lockId,
                 CancellationToken.None);
             
@@ -157,13 +157,13 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [Theory]
         [AutoMoqData]
         public async Task ReturnTrue_When_TryingToDelete_And_SqlClientReturnsOneModifiedRow(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId)
         {
             SqlClientMock.SetupNonQueryResult(1);
 
             var success = await SqlServerDistributedLockRepository.TryDelete(
-                identifier,
+                resourceId,
                 lockId,
                 CancellationToken.None);
             
@@ -175,13 +175,13 @@ namespace DistributedLocking.SqlServer.UnitTests.Repositories
         [AutoMoqWithInlineData(2)]
         public async Task Throw_When_TryingToDelete_And_SqlClientReturnsOtherThanOneOrZeroModifiedRows(
             int numberOfModifiedRows,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId lockId)
         {
             SqlClientMock.SetupNonQueryResult(numberOfModifiedRows);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => SqlServerDistributedLockRepository.TryDelete(
-                identifier,
+                resourceId,
                 lockId,
                 CancellationToken.None));
         }

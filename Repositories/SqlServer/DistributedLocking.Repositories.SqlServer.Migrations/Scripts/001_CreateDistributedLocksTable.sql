@@ -15,11 +15,11 @@ ELSE
         IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'DistributedLocking' AND TABLE_NAME = 'DistributedLocks'))
             BEGIN
                 CREATE TABLE [DistributedLocking].DistributedLocks (
-                   Identifier              VARCHAR(900)         NOT NULL PRIMARY KEY,
-                   Id                      UNIQUEIDENTIFIER     NOT NULL UNIQUE, 
+                   ResourceId              VARCHAR(900)         NOT NULL PRIMARY KEY,
+                   LockId                  UNIQUEIDENTIFIER     NOT NULL UNIQUE, 
                    ExpiryDateTimestamp     DATETIME2            NOT NULL); 
-                CREATE INDEX IDX_Identifier_ExpiryDateTimestamp ON [DistributedLocking].DistributedLocks (Identifier, ExpiryDateTimestamp);
-                CREATE INDEX IDX_Identifier_Id_ExpiryDateTimestamp ON [DistributedLocking].DistributedLocks (Identifier, Id, ExpiryDateTimestamp);
+                CREATE INDEX IDX_ResourceId_ExpiryDateTimestamp ON [DistributedLocking].DistributedLocks (ResourceId, ExpiryDateTimestamp);
+                CREATE INDEX IDX_ResourceId_LockId_ExpiryDateTimestamp ON [DistributedLocking].DistributedLocks (ResourceId, LockId, ExpiryDateTimestamp);
                 COMMIT TRANSACTION;
             END
     END;

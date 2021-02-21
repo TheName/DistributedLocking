@@ -17,34 +17,34 @@ namespace DistributedLocking.Repositories.SqlServer
            @"SET NOCOUNT ON;
                 DELETE
                     FROM [DistributedLocking].[DistributedLocks] 
-                    WHERE   Identifier = @Identifier
+                    WHERE   ResourceId = @ResourceId
                     AND     ExpiryDateTimestamp < SYSUTCDATETIME();
             SET NOCOUNT OFF;
             INSERT INTO [DistributedLocking].[DistributedLocks] 
                 SELECT 
-                    @Identifier,
-                    @Id,
+                    @ResourceId,
+                    @LockId,
                     DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,SYSUTCDATETIME()) 
                 WHERE
                     NOT EXISTS 
                         (SELECT *
                             FROM [DistributedLocking].[DistributedLocks] WITH (UPDLOCK, HOLDLOCK)
-                            WHERE       Identifier = @Identifier
+                            WHERE       ResourceId = @ResourceId
                                 AND     ExpiryDateTimestamp > SYSUTCDATETIME());";
 
         private const string UpdateDistributedLockIfExistsSqlCommand =
             @"UPDATE [DistributedLocking].[DistributedLocks] 
                 SET
                     ExpiryDateTimestamp = DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,SYSUTCDATETIME()) 
-                WHERE   Identifier = @Identifier
-                AND     Id = @Id 
+                WHERE   ResourceId = @ResourceId
+                AND     LockId = @LockId 
                 AND     ExpiryDateTimestamp > SYSUTCDATETIME();";
 
         private const string DeleteDistributedLockIfExistsSqlCommand =
             @"DELETE
                     FROM [DistributedLocking].[DistributedLocks] 
-                    WHERE   Identifier = @Identifier
-                    AND     Id = @Id 
+                    WHERE   ResourceId = @ResourceId
+                    AND     LockId = @LockId 
                     AND     ExpiryDateTimestamp > SYSUTCDATETIME();";
 
         private readonly ISqlClient _sqlClient;
@@ -56,7 +56,7 @@ namespace DistributedLocking.Repositories.SqlServer
 
         /// <inheritdoc />
         public async Task<bool> TryInsert(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
@@ -65,8 +65,8 @@ namespace DistributedLocking.Repositories.SqlServer
                     InsertIfNotExistsSqlCommand,
                     new List<SqlParameter>
                     {
-                        GetIdentifierParameter(identifier),
-                        GetIdParameter(id),
+                        GetResourceIdParameter(resourceId),
+                        GetLockIdParameter(id),
                         GetExpiryDateTimeSpanInMillisecondsParameter(timeToLive)
                     },
                     cancellationToken)
@@ -77,7 +77,7 @@ namespace DistributedLocking.Repositories.SqlServer
 
         /// <inheritdoc />
         public async Task<bool> TryUpdateTimeToLiveAsync(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
@@ -86,8 +86,8 @@ namespace DistributedLocking.Repositories.SqlServer
                     UpdateDistributedLockIfExistsSqlCommand,
                     new[] 
                     {
-                        GetIdentifierParameter(identifier),
-                        GetIdParameter(id),
+                        GetResourceIdParameter(resourceId),
+                        GetLockIdParameter(id),
                         GetExpiryDateTimeSpanInMillisecondsParameter(timeToLive)
                     },
                     cancellationToken)
@@ -98,7 +98,7 @@ namespace DistributedLocking.Repositories.SqlServer
 
         /// <inheritdoc />
         public async Task<bool> TryDelete(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             CancellationToken cancellationToken)
         {
@@ -106,8 +106,8 @@ namespace DistributedLocking.Repositories.SqlServer
                     DeleteDistributedLockIfExistsSqlCommand,
                     new[]
                     {
-                        GetIdentifierParameter(identifier),
-                        GetIdParameter(id)
+                        GetResourceIdParameter(resourceId),
+                        GetLockIdParameter(id)
                     },
                     cancellationToken)
                 .ConfigureAwait(false);
@@ -115,14 +115,14 @@ namespace DistributedLocking.Repositories.SqlServer
             return ParseNumberOfAffectedRowsToResult(numberOfAffectedRows);
         }
 
-        private static SqlParameter GetIdentifierParameter(string identifier) =>
-            new SqlParameter("@Identifier", SqlDbType.VarChar)
+        private static SqlParameter GetResourceIdParameter(string resourceId) =>
+            new SqlParameter("@ResourceId", SqlDbType.VarChar)
             {
-                Value = identifier
+                Value = resourceId
             };
 
-        private static SqlParameter GetIdParameter(Guid id) =>
-            new SqlParameter("@Id", SqlDbType.UniqueIdentifier)
+        private static SqlParameter GetLockIdParameter(Guid id) =>
+            new SqlParameter("@LockId", SqlDbType.UniqueIdentifier)
             {
                 Value = id
             };

@@ -27,7 +27,7 @@ namespace DistributedLocking.UnitTests.Facades
 
         [Theory]
         [AutoMoqData]
-        public async Task Throw_When_TryingToAcquire_And_IdentifierIsNull(
+        public async Task Throw_When_TryingToAcquire_And_ResourceIdIsNull(
             DistributedLockTimeToLive timeToLive,
             DistributedLockFacade facade)
         {
@@ -40,11 +40,11 @@ namespace DistributedLocking.UnitTests.Facades
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_TryingToAcquire_And_TimeToLiveIsNull(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockFacade facade)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => facade.TryAcquireAsync(
-                identifier,
+                resourceId,
                 null,
                 CancellationToken.None));
         }
@@ -52,21 +52,21 @@ namespace DistributedLocking.UnitTests.Facades
         [Theory]
         [AutoMoqData]
         public async Task ReturnNull_When_TryingToAcquire_And_RepositoryFails(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             [Frozen] Mock<IDistributedLocksRepository> repositoryMock,
             DistributedLockFacade facade)
         {
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryInsert(
-                    identifier,
+                    resourceId,
                     It.IsAny<DistributedLockId>(),
                     timeToLive,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var (success, distributedLock) = await facade.TryAcquireAsync(
-                identifier,
+                resourceId,
                 timeToLive,
                 CancellationToken.None);
             
@@ -77,7 +77,7 @@ namespace DistributedLocking.UnitTests.Facades
         [Theory]
         [AutoMoqData]
         public async Task ReturnLock_When_TryingToAcquire_And_RepositorySucceeds(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             [Frozen] Mock<IDistributedLocksRepository> repositoryMock,
             DistributedLockFacade facade)
@@ -85,16 +85,16 @@ namespace DistributedLocking.UnitTests.Facades
             DistributedLockId lockId = null;
             repositoryMock
                 .Setup(lockRepository => lockRepository.TryInsert(
-                    identifier,
+                    resourceId,
                     It.IsAny<DistributedLockId>(),
                     timeToLive,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true)
-                .Callback<DistributedLockIdentifier, DistributedLockId, DistributedLockTimeToLive, CancellationToken>(
+                .Callback<DistributedLockResourceId, DistributedLockId, DistributedLockTimeToLive, CancellationToken>(
                     (_, id, _, _) => lockId = id);
 
             var (success, distributedLock) = await facade.TryAcquireAsync(
-                identifier,
+                resourceId,
                 timeToLive,
                 CancellationToken.None);
             
@@ -102,12 +102,12 @@ namespace DistributedLocking.UnitTests.Facades
             Assert.NotNull(distributedLock);
             Assert.NotNull(lockId);
             Assert.Equal(lockId, distributedLock.Id);
-            Assert.Equal(identifier, distributedLock.Identifier);
+            Assert.Equal(resourceId, distributedLock.ResourceId);
         }
 
         [Theory]
         [AutoMoqData]
-        public async Task Throw_When_TryingToExtend_And_IdentifierIsNull(
+        public async Task Throw_When_TryingToExtend_And_ResourceIdIsNull(
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             DistributedLockFacade facade)
@@ -122,12 +122,12 @@ namespace DistributedLocking.UnitTests.Facades
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_TryingToExtend_And_IdIsNull(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             DistributedLockFacade facade)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => facade.TryExtendAsync(
-                identifier,
+                resourceId,
                 null,
                 timeToLive,
                 CancellationToken.None));
@@ -136,12 +136,12 @@ namespace DistributedLocking.UnitTests.Facades
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_TryingToExtend_And_TimeToLiveIsNull(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockFacade facade)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => facade.TryExtendAsync(
-                identifier,
+                resourceId,
                 id,
                 null,
                 CancellationToken.None));
@@ -152,7 +152,7 @@ namespace DistributedLocking.UnitTests.Facades
         [AutoMoqWithInlineData(false)]
         public async Task ReturnRepositoryResult_When_TryingToExtend(
             bool expectedResult,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             [Frozen] Mock<IDistributedLocksRepository> repositoryMock,
@@ -160,14 +160,14 @@ namespace DistributedLocking.UnitTests.Facades
         {
             repositoryMock
                 .Setup(repository => repository.TryUpdateTimeToLiveAsync(
-                    identifier,
+                    resourceId,
                     id,
                     timeToLive,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(expectedResult);
             
             var result = await facade.TryExtendAsync(
-                identifier,
+                resourceId,
                 id,
                 timeToLive,
                 CancellationToken.None);
@@ -177,7 +177,7 @@ namespace DistributedLocking.UnitTests.Facades
 
         [Theory]
         [AutoMoqData]
-        public async Task Throw_When_TryingToRelease_And_IdentifierIsNull(
+        public async Task Throw_When_TryingToRelease_And_ResourceIdIsNull(
             DistributedLockId id,
             DistributedLockFacade facade)
         {
@@ -190,11 +190,11 @@ namespace DistributedLocking.UnitTests.Facades
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_TryingToRelease_And_IdIsNull(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockFacade facade)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => facade.TryReleaseAsync(
-                identifier,
+                resourceId,
                 null,
                 CancellationToken.None));
         }
@@ -204,20 +204,20 @@ namespace DistributedLocking.UnitTests.Facades
         [AutoMoqWithInlineData(false)]
         public async Task ReturnRepositoryResult_When_TryingToRelease(
             bool expectedResult,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             [Frozen] Mock<IDistributedLocksRepository> repositoryMock,
             DistributedLockFacade facade)
         {
             repositoryMock
                 .Setup(repository => repository.TryDelete(
-                    identifier,
+                    resourceId,
                     id,
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(expectedResult);
             
             var result = await facade.TryReleaseAsync(
-                identifier,
+                resourceId,
                 id,
                 CancellationToken.None);
             

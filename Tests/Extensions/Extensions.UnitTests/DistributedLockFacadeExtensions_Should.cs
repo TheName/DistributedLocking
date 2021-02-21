@@ -15,34 +15,34 @@ namespace Extensions.UnitTests
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Acquiring_And_FacadeIsNull(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
         {
             IDistributedLockFacade facade = null;
 
             await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                facade.AcquireAsync(identifier, timeToLive, cancellationToken));
+                facade.AcquireAsync(resourceId, timeToLive, cancellationToken));
         }
         
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Acquiring_And_FacadeFails(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             Mock<IDistributedLockFacade> facadeMock,
             CancellationToken cancellationToken)
         {
             facadeMock
-                .Setup(x => x.TryAcquireAsync(identifier, timeToLive, cancellationToken))
+                .Setup(x => x.TryAcquireAsync(resourceId, timeToLive, cancellationToken))
                 .ReturnsAsync((false, null));
 
             var facade = facadeMock.Object;
 
             var exception = await Assert.ThrowsAsync<CouldNotAcquireDistributedLockException>(() =>
-                facade.AcquireAsync(identifier, timeToLive, cancellationToken));
+                facade.AcquireAsync(resourceId, timeToLive, cancellationToken));
             
-            Assert.Equal(identifier, exception.Identifier);
+            Assert.Equal(resourceId, exception.ResourceId);
             Assert.Equal(timeToLive, exception.TimeToLive);
         }
 
@@ -50,18 +50,18 @@ namespace Extensions.UnitTests
         [AutoMoqData]
         public async Task ReturnDistributedLock_When_Acquiring_And_FacadeSucceeds(
             IDistributedLock distributedLock,
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockTimeToLive timeToLive,
             Mock<IDistributedLockFacade> facadeMock,
             CancellationToken cancellationToken)
         {
             facadeMock
-                .Setup(x => x.TryAcquireAsync(identifier, timeToLive, cancellationToken))
+                .Setup(x => x.TryAcquireAsync(resourceId, timeToLive, cancellationToken))
                 .ReturnsAsync((true, distributedLock));
 
             var facade = facadeMock.Object;
 
-            var result = await facade.AcquireAsync(identifier, timeToLive, cancellationToken);
+            var result = await facade.AcquireAsync(resourceId, timeToLive, cancellationToken);
             
             Assert.Equal(distributedLock, result);
         }
@@ -69,7 +69,7 @@ namespace Extensions.UnitTests
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Extending_And_FacadeIsNull(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             CancellationToken cancellationToken)
@@ -77,28 +77,28 @@ namespace Extensions.UnitTests
             IDistributedLockFacade facade = null;
 
             await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                facade.ExtendAsync(identifier, id, timeToLive, cancellationToken));
+                facade.ExtendAsync(resourceId, id, timeToLive, cancellationToken));
         }
         
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Extending_And_FacadeFails(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             Mock<IDistributedLockFacade> facadeMock,
             CancellationToken cancellationToken)
         {
             facadeMock
-                .Setup(x => x.TryExtendAsync(identifier, id, timeToLive, cancellationToken))
+                .Setup(x => x.TryExtendAsync(resourceId, id, timeToLive, cancellationToken))
                 .ReturnsAsync(false);
 
             var facade = facadeMock.Object;
 
             var exception = await Assert.ThrowsAsync<CouldNotExtendDistributedLockException>(() =>
-                facade.ExtendAsync(identifier, id, timeToLive, cancellationToken));
+                facade.ExtendAsync(resourceId, id, timeToLive, cancellationToken));
             
-            Assert.Equal(identifier, exception.Identifier);
+            Assert.Equal(resourceId, exception.ResourceId);
             Assert.Equal(id, exception.Id);
             Assert.Equal(timeToLive, exception.TimeToLive);
         }
@@ -106,70 +106,70 @@ namespace Extensions.UnitTests
         [Theory]
         [AutoMoqData]
         public async Task NotThrow_When_Extending_And_FacadeSucceeds(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             DistributedLockTimeToLive timeToLive,
             Mock<IDistributedLockFacade> facadeMock,
             CancellationToken cancellationToken)
         {
             facadeMock
-                .Setup(x => x.TryExtendAsync(identifier, id, timeToLive, cancellationToken))
+                .Setup(x => x.TryExtendAsync(resourceId, id, timeToLive, cancellationToken))
                 .ReturnsAsync(true);
 
             var facade = facadeMock.Object;
 
-            await facade.ExtendAsync(identifier, id, timeToLive, cancellationToken);
+            await facade.ExtendAsync(resourceId, id, timeToLive, cancellationToken);
         }
         
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Releasing_And_FacadeIsNull(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             CancellationToken cancellationToken)
         {
             IDistributedLockFacade facade = null;
 
             await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                facade.ReleaseAsync(identifier, id, cancellationToken));
+                facade.ReleaseAsync(resourceId, id, cancellationToken));
         }
         
         [Theory]
         [AutoMoqData]
         public async Task Throw_When_Releasing_And_FacadeFails(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             Mock<IDistributedLockFacade> facadeMock,
             CancellationToken cancellationToken)
         {
             facadeMock
-                .Setup(x => x.TryReleaseAsync(identifier, id, cancellationToken))
+                .Setup(x => x.TryReleaseAsync(resourceId, id, cancellationToken))
                 .ReturnsAsync(false);
 
             var facade = facadeMock.Object;
 
             var exception = await Assert.ThrowsAsync<CouldNotReleaseDistributedLockException>(() =>
-                facade.ReleaseAsync(identifier, id, cancellationToken));
+                facade.ReleaseAsync(resourceId, id, cancellationToken));
             
-            Assert.Equal(identifier, exception.Identifier);
+            Assert.Equal(resourceId, exception.ResourceId);
             Assert.Equal(id, exception.Id);
         }
         
         [Theory]
         [AutoMoqData]
         public async Task NotThrow_When_Releasing_And_FacadeSucceeds(
-            DistributedLockIdentifier identifier,
+            DistributedLockResourceId resourceId,
             DistributedLockId id,
             Mock<IDistributedLockFacade> facadeMock,
             CancellationToken cancellationToken)
         {
             facadeMock
-                .Setup(x => x.TryReleaseAsync(identifier, id, cancellationToken))
+                .Setup(x => x.TryReleaseAsync(resourceId, id, cancellationToken))
                 .ReturnsAsync(true);
 
             var facade = facadeMock.Object;
 
-            await facade.ReleaseAsync(identifier, id, cancellationToken);
+            await facade.ReleaseAsync(resourceId, id, cancellationToken);
         }
     }
 }
