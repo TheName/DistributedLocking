@@ -14,14 +14,14 @@ namespace DistributedLocking.Abstractions.UnitTests
         [InlineAutoData((string)null)]
         public void Throw_When_TryingToCreateWithNullOrWhitespaceValue(string resourceId)
         {
-            Assert.Throws<ArgumentException>(() => new DistributedLockResourceId(resourceId));
+            Assert.Throws<ArgumentException>(() => (DistributedLockResourceId) resourceId);
         }
 
         [Theory]
         [AutoMoqData]
         public void NotThrow_When_TryingToCreateWithNonNullOrWhitespaceValue(string resourceId)
         {
-            _ = new DistributedLockResourceId(resourceId);
+            DistributedLockResourceId _ = resourceId;
         }
 
         [Theory]

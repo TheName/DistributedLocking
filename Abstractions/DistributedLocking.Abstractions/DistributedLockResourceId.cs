@@ -15,16 +15,7 @@ namespace DistributedLocking.Abstractions
         /// </summary>
         public string Value { get; }
 
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        /// <param name="value">
-        /// The resource id.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// Thrown when provided <paramref name="value"/> is null or whitespace.
-        /// </exception>
-        public DistributedLockResourceId(string value)
+        private DistributedLockResourceId(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
