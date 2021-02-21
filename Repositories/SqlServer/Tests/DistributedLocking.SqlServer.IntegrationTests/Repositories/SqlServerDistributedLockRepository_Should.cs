@@ -49,7 +49,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             DistributedLockTimeToLive timeToLive)
         {
             // make sure the timeout will last at least until we try to acquire again
-            timeToLive = timeToLive.Value + TimeSpan.FromSeconds(5);
+            timeToLive += TimeSpan.FromSeconds(5);
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -73,7 +73,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             DistributedLockTimeToLive timeToLive)
         {
             // make sure the timeout will last at least until all tasks are done
-            timeToLive = timeToLive.Value + TimeSpan.FromSeconds(5);
+            timeToLive += TimeSpan.FromSeconds(5);
             var tryAcquireTasks = Enumerable.Range(0, 1000)
                 .Select(i =>
                     DistributedLockRepository.TryInsert(resourceId, lockId, timeToLive, CancellationToken.None))
@@ -96,7 +96,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             DistributedLockTimeToLive timeToLive)
         {
             // make sure the timeout will last at least until the release is called
-            timeToLive = timeToLive.Value + TimeSpan.FromSeconds(5);
+            timeToLive += TimeSpan.FromSeconds(5);
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -113,12 +113,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_TimeoutHasExpired(
             DistributedLockResourceId resourceId,
-            DistributedLockId lockId,
-            DistributedLockTimeToLive timeToLive)
+            DistributedLockId lockId)
         {
             // make sure the timeout will last no longer than until we try to release it
             const int maxMillisecondsTimeout = 100;
-            timeToLive = TimeSpan.FromMilliseconds(timeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout);
+            DistributedLockTimeToLive timeToLive = TimeSpan.FromMilliseconds(new Random().Next(1, maxMillisecondsTimeout));
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -151,7 +150,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             DistributedLockTimeToLive timeToLive)
         {
             // make sure the timeout will last at least until the release is called
-            timeToLive = timeToLive.Value + TimeSpan.FromSeconds(5);
+            timeToLive += TimeSpan.FromSeconds(5);
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -174,12 +173,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_LockIdIsCorrectButResourceIdIsNot(
             DistributedLockResourceId resourceId,
             DistributedLockId lockId,
-            DistributedLockResourceId anotherResourceId,
-            DistributedLockTimeToLive timeToLive)
+            DistributedLockResourceId anotherResourceId)
         {
             // make sure the timeout will last no longer than until we try to release it
             const int maxMillisecondsTimeout = 100;
-            timeToLive = TimeSpan.FromMilliseconds(timeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout);
+            DistributedLockTimeToLive timeToLive = TimeSpan.FromMilliseconds(new Random().Next(1, maxMillisecondsTimeout));
             
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
@@ -202,12 +200,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         public async Task FailToReleaseAcquiredLock_When_TryingToReleaseLock_And_LockIdIsIncorrectButResourceIdIsCorrect(
             DistributedLockResourceId resourceId,
             DistributedLockId lockId,
-            DistributedLockId anotherId,
-            DistributedLockTimeToLive timeToLive)
+            DistributedLockId anotherId)
         {
             // make sure the timeout will last no longer than until we try to release it
             const int maxMillisecondsTimeout = 100;
-            timeToLive = TimeSpan.FromMilliseconds(timeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout);
+            DistributedLockTimeToLive timeToLive = TimeSpan.FromMilliseconds(new Random().Next(1, maxMillisecondsTimeout));
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -232,7 +229,7 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
             DistributedLockTimeToLive timeToLive)
         {
             // make sure the timeout will last at least until the release is called
-            timeToLive = timeToLive.Value + TimeSpan.FromSeconds(5);
+            timeToLive += TimeSpan.FromSeconds(5);
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -253,12 +250,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         [AutoMoqData]
         public async Task FailToExtendAcquiredLock_When_TryingToExtendLock_And_TimeoutHasExpired(
             DistributedLockResourceId resourceId,
-            DistributedLockId lockId,
-            DistributedLockTimeToLive timeToLive)
+            DistributedLockId lockId)
         {
             // make sure the timeout will last no longer than until we try to release it
             const int maxMillisecondsTimeout = 100;
-            timeToLive = TimeSpan.FromMilliseconds(timeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout);
+            DistributedLockTimeToLive timeToLive = TimeSpan.FromMilliseconds(new Random().Next(1, maxMillisecondsTimeout));
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -281,12 +277,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         public async Task FailToExtendAcquiredLock_When_TryingToExtendLock_And_LockIdIsCorrectButResourceIdIsNot(
             DistributedLockResourceId resourceId,
             DistributedLockId lockId,
-            DistributedLockResourceId anotherResourceId,
-            DistributedLockTimeToLive timeToLive)
+            DistributedLockResourceId anotherResourceId)
         {
             // make sure the timeout will last no longer than until we try to release it
             const int maxMillisecondsTimeout = 100;
-            timeToLive = TimeSpan.FromMilliseconds(timeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout);
+            DistributedLockTimeToLive timeToLive = TimeSpan.FromMilliseconds(new Random().Next(1, maxMillisecondsTimeout));
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,
@@ -309,12 +304,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Repositories
         public async Task FailToExtendAcquiredLock_When_TryingToExtendLock_And_LockIdIsIncorrectButResourceIdIsCorrect(
             DistributedLockResourceId resourceId,
             DistributedLockId lockId,
-            DistributedLockId anotherId,
-            DistributedLockTimeToLive timeToLive)
+            DistributedLockId anotherId)
         {
             // make sure the timeout will last no longer than until we try to release it
             const int maxMillisecondsTimeout = 100;
-            timeToLive = TimeSpan.FromMilliseconds(timeToLive.Value.TotalMilliseconds % maxMillisecondsTimeout);
+            DistributedLockTimeToLive timeToLive = TimeSpan.FromMilliseconds(new Random().Next(1, maxMillisecondsTimeout));
             var success = await DistributedLockRepository.TryInsert(
                 resourceId,
                 lockId,

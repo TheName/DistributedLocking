@@ -65,7 +65,7 @@ namespace DistributedLocking.Abstractions.UnitTests
             var positiveTimespan = TimeSpan.Zero + TimeSpan.FromMilliseconds(milliseconds);
             DistributedLockTimeToLive timeToLive = positiveTimespan;
             
-            Assert.Equal(positiveTimespan, timeToLive.Value);
+            Assert.Equal(positiveTimespan.ToString(), timeToLive.ToString());
         }
 
         [Theory]
@@ -74,14 +74,16 @@ namespace DistributedLocking.Abstractions.UnitTests
         {
             TimeSpan value = timeToLive;
             
-            Assert.Equal(timeToLive.Value, value);
+            Assert.Equal(timeToLive.ToString(), value.ToString());
         }
 
         [Theory]
         [AutoMoqData]
         public void ReturnValueToString_When_CallingToString(DistributedLockTimeToLive timeToLive)
         {
-            Assert.Equal(timeToLive.Value.ToString(), timeToLive.ToString());
+            var timeToLiveAsTimeSpan = (TimeSpan) timeToLive;
+
+            Assert.Equal(timeToLiveAsTimeSpan.ToString(), timeToLive.ToString());
         }
     }
 }

@@ -7,10 +7,7 @@ namespace DistributedLocking.Abstractions
     /// </summary>
     public sealed class DistributedLockTimeToLive
     {
-        /// <summary>
-        /// The TTL value.
-        /// </summary>
-        public TimeSpan Value { get; }
+        private TimeSpan Value { get; }
 
         private DistributedLockTimeToLive(TimeSpan value)
         {
