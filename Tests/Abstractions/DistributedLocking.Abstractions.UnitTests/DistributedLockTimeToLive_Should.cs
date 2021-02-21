@@ -9,7 +9,7 @@ namespace DistributedLocking.Abstractions.UnitTests
         [Fact]
         public void Throw_When_TryingToCreateWithZeroTimespan()
         {
-            Assert.Throws<ArgumentException>(() => new DistributedLockTimeToLive(TimeSpan.Zero));
+            Assert.Throws<ArgumentException>(() => (DistributedLockTimeToLive) TimeSpan.Zero);
         }
         
         [Theory]
@@ -17,14 +17,14 @@ namespace DistributedLocking.Abstractions.UnitTests
         public void Throw_When_TryingToCreateWithNegativeTimespan(uint milliseconds)
         {
             Assert.Throws<ArgumentException>(() =>
-                new DistributedLockTimeToLive(TimeSpan.Zero - TimeSpan.FromMilliseconds(milliseconds)));
+                (DistributedLockTimeToLive) (TimeSpan.Zero - TimeSpan.FromMilliseconds(milliseconds)));
         }
         
         [Theory]
         [AutoMoqData]
         public void NotThrow_When_TryingToCreateWithPositiveTimespan(uint milliseconds)
         {
-            _ = new DistributedLockTimeToLive(TimeSpan.Zero + TimeSpan.FromMilliseconds(milliseconds));
+            DistributedLockTimeToLive _ = TimeSpan.Zero + TimeSpan.FromMilliseconds(milliseconds);
         }
 
         [Theory]

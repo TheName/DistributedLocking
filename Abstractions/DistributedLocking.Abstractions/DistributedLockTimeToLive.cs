@@ -12,16 +12,7 @@ namespace DistributedLocking.Abstractions
         /// </summary>
         public TimeSpan Value { get; }
 
-        /// <summary>
-        /// The constructor.
-        /// </summary>
-        /// <param name="value">
-        /// The TTL.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// Thrown when provided <paramref name="value"/> is lower than or equal to zero.
-        /// </exception>
-        public DistributedLockTimeToLive(TimeSpan value)
+        private DistributedLockTimeToLive(TimeSpan value)
         {
             if (value <= TimeSpan.Zero)
             {
