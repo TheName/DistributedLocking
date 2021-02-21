@@ -10,6 +10,8 @@ namespace DistributedLocking
     public class DistributedLock : IDistributedLock
     {
         private readonly IDistributedLocksRepository _distributedLocksRepository;
+        private bool _wasReleased;
+        private bool _releasingResult;
 
         /// <inheritdoc />
         public DistributedLockResourceId ResourceId { get; }
@@ -90,11 +92,25 @@ namespace DistributedLocking
                 .ConfigureAwait(false);
 
         /// <inheritdoc />
-        public async ValueTask DisposeAsync() =>
-            await _distributedLocksRepository.TryDelete(
+        public async Task<bool> TryReleaseAsync(CancellationToken cancellationToken)
+        {
+            if (_wasReleased)
+            {
+                return _releasingResult;
+            }
+
+            _releasingResult = await _distributedLocksRepository.TryDelete(
                     ResourceId,
                     Id,
-                    CancellationToken.None)
+                    cancellationToken)
                 .ConfigureAwait(false);
+
+            _wasReleased = true;
+            return _releasingResult;
+        }
+
+        /// <inheritdoc />
+        public async ValueTask DisposeAsync() =>
+            await TryReleaseAsync(CancellationToken.None).ConfigureAwait(false);
     }
 }

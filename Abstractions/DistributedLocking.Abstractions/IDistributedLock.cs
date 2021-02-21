@@ -40,5 +40,16 @@ namespace DistributedLocking.Abstractions
         /// - false, if lock was not active (TTL has expired).
         /// </returns>
         Task<bool> TryExtendAsync(DistributedLockTimeToLive timeToLive, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Tries to release the distributed lock.
+        /// </summary>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/>.
+        /// </param>
+        /// <returns>
+        /// True, if release was successful, false otherwise.
+        /// </returns>
+        Task<bool> TryReleaseAsync(CancellationToken cancellationToken);
     }
 }

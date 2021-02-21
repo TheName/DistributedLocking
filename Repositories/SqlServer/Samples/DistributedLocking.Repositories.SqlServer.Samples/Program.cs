@@ -29,15 +29,15 @@ namespace DistributedLocking.Repositories.SqlServer.Samples
             // prepare the database by applying distributed lock SQL Server migrations
             ApplyMigrations(provider);
 
-            var facade = provider.GetRequiredService<IDistributedLockFacade>();
+            var distributedLockProvider = provider.GetRequiredService<IDistributedLockProvider>();
 
             var resourceId = "Resource ID"; 
-            var (success, distributedLock) = await facade.TryAcquireAsync(
+            var distributedLock = await distributedLockProvider.TryAcquireAsync(
                 resourceId,
                 TimeSpan.FromMinutes(5),
                 CancellationToken.None);
 
-            if (!success)
+            if (distributedLock == null)
             {
                 throw new Exception("Trying to acquire distributed lock failed!");
             }
@@ -45,12 +45,12 @@ namespace DistributedLocking.Repositories.SqlServer.Samples
             Console.WriteLine($"Successfully acquired lock with resource id \"{resourceId}\" and lock id \"{distributedLock.Id}\"");
 
             // acquiring a new lock for same resource id will now fail:
-            (success, _) = await facade.TryAcquireAsync(
+            var otherDistributedLock = await distributedLockProvider.TryAcquireAsync(
                 resourceId,
                 TimeSpan.FromMinutes(5),
                 CancellationToken.None);
 
-            if (success)
+            if (otherDistributedLock != null)
             {
                 throw new Exception("Trying to acquire a new lock for same resource id should fail!");
             }
@@ -71,12 +71,12 @@ namespace DistributedLocking.Repositories.SqlServer.Samples
             await Task.Delay(TimeSpan.FromSeconds(3));
             
             // now acquiring a new lock should succeed, because the TTL of the previous one has expired:
-            var (newDistributedLockSuccess, newDistributedLock) = await facade.TryAcquireAsync(
+            var newDistributedLock = await distributedLockProvider.TryAcquireAsync(
                 resourceId,
                 TimeSpan.FromMinutes(5),
                 CancellationToken.None);
 
-            if (!newDistributedLockSuccess)
+            if (newDistributedLock == null)
             {
                 throw new Exception("Trying to acquire the new lock should succeed!");
             }
@@ -84,10 +84,7 @@ namespace DistributedLocking.Repositories.SqlServer.Samples
             Console.WriteLine($"Successfully acquired a new lock with resource id \"{resourceId}\" and lock id \"{newDistributedLock.Id}\" because the old one has expired.");
             
             // notice that releasing the old lock will now fail (since it's already expired):
-            var releasingResult = await facade.TryReleaseAsync(
-                distributedLock.ResourceId,
-                distributedLock.Id,
-                CancellationToken.None);
+            var releasingResult = await distributedLock.TryReleaseAsync(CancellationToken.None);
 
             if (releasingResult)
             {
@@ -97,10 +94,7 @@ namespace DistributedLocking.Repositories.SqlServer.Samples
             Console.WriteLine($"Releasing old lock with resource id \"{resourceId}\" and id \"{distributedLock.Id}\" failed because it has already expired.");
             
             // however releasing the new lock will succeed:
-            releasingResult = await facade.TryReleaseAsync(
-                newDistributedLock.ResourceId,
-                newDistributedLock.Id,
-                CancellationToken.None);
+            releasingResult = await newDistributedLock.TryReleaseAsync(CancellationToken.None);
             
             if (!releasingResult)
             {
@@ -110,7 +104,7 @@ namespace DistributedLocking.Repositories.SqlServer.Samples
             Console.WriteLine($"Releasing new lock with resource id \"{resourceId}\" and id \"{newDistributedLock.Id}\" succeeded.");
             
             // you can also use extensions:
-            var newlyAcquiredLock = await facade.AcquireAsync(
+            var newlyAcquiredLock = await distributedLockProvider.AcquireAsync(
                 resourceId,
                 TimeSpan.FromMinutes(5),
                 CancellationToken.None);
@@ -126,8 +120,8 @@ namespace DistributedLocking.Repositories.SqlServer.Samples
             Console.WriteLine($"Successfully released new lock with resource id \"{resourceId}\" and id \"{newlyAcquiredLock.Id}\" via IAsyncDisposable.");
             
             // as a proof, we can acquire same resource id again: 
-            var (anotherLockSuccess, anotherLock) = await facade.TryAcquireAsync(resourceId, TimeSpan.FromMinutes(5), CancellationToken.None);
-            if (!anotherLockSuccess)
+            var anotherLock = await distributedLockProvider.TryAcquireAsync(resourceId, TimeSpan.FromMinutes(5), CancellationToken.None);
+            if (anotherLock == null)
             {
                 throw new Exception("Trying to acquire should succeed!");
             }

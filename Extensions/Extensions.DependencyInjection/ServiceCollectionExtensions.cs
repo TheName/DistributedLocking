@@ -29,7 +29,7 @@ namespace DistributedLocking.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(services));
             }
             
-            services.TryAddTransient<IDistributedLockFacade, DistributedLockFacade>();
+            services.TryAddTransient<IDistributedLockProvider, DistributedLockProvider>();
 
             return services;
         }
