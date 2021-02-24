@@ -10,8 +10,7 @@ using DistributedLocking.Repositories.SqlServer.Abstractions.Helpers;
 
 namespace DistributedLocking.Repositories.SqlServer
 {
-    /// <inheritdoc />
-    public class SqlServerDistributedLocksRepository : IDistributedLocksRepository
+    internal class SqlServerDistributedLocksRepository : IDistributedLocksRepository
     {
         private const string InsertIfNotExistsSqlCommand = 
            @"SET NOCOUNT ON;
@@ -54,7 +53,6 @@ namespace DistributedLocking.Repositories.SqlServer
             _sqlClient = sqlClient ?? throw new ArgumentNullException(nameof(sqlClient));
         }
 
-        /// <inheritdoc />
         public async Task<bool> TryInsert(
             DistributedLockResourceId resourceId,
             DistributedLockId id,
@@ -75,7 +73,6 @@ namespace DistributedLocking.Repositories.SqlServer
             return ParseNumberOfAffectedRowsToResult(numberOfAffectedRows);
         }
 
-        /// <inheritdoc />
         public async Task<bool> TryUpdateTimeToLiveAsync(
             DistributedLockResourceId resourceId,
             DistributedLockId id,
@@ -96,7 +93,6 @@ namespace DistributedLocking.Repositories.SqlServer
             return ParseNumberOfAffectedRowsToResult(numberOfAffectedRows);
         }
 
-        /// <inheritdoc />
         public async Task<bool> TryDelete(
             DistributedLockResourceId resourceId,
             DistributedLockId id,
