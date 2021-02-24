@@ -8,7 +8,7 @@ using DistributedLocking.Abstractions.Repositories.Migrations;
 namespace DistributedLocking.Repositories.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public class SqlDistributedLocksRepositoryMigrationsProvider : IDistributedLocksRepositoryMigrationsProvider
+    internal class SqlDistributedLocksRepositoryMigrationsProvider : IDistributedLocksRepositoryMigrationsProvider
     {
         private const string ScriptResourceNamePrefix = "DistributedLocking.Repositories.SqlServer.Migrations.Scripts.";
         
