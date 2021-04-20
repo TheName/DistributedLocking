@@ -75,10 +75,19 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Fixtures
                 InitialCatalog = string.Empty
             };
 
-            await using var connection = new SqlConnection(sqlConnectionBuilder.ConnectionString);
-            var command = new SqlCommand(sqlCommand, connection);
-            await connection.OpenAsync();
-            await command.ExecuteNonQueryAsync();
+            try
+            {
+                await using var connection = new SqlConnection(sqlConnectionBuilder.ConnectionString);
+                var command = new SqlCommand(sqlCommand, connection);
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(
+                    $"Could not execute SQL command. Connection string: \"{sqlConnectionBuilder.ConnectionString}\", SQL command: \"{sqlCommand}\"",
+                    e);
+            }
         }
         
         private class SqlServerDistributedLockConfiguration : ISqlServerDistributedLockConfiguration
