@@ -1,4 +1,6 @@
-# Distributed Locking
+# Distributed Locking 
+
+[![Unit tests](https://github.com/TheName/DistributedLocking/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/TheName/DistributedLocking/actions/workflows/unit_tests.yml)
 
 Simple C# implementation of distributed lock that can be used in multi-client (process) environment focused on extensibility.
 
