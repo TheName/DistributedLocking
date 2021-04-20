@@ -1,14 +1,6 @@
 name: Unit tests
 
 on:
-  push:
-    branches: [ main ]
-    paths-ignore:
-      - '.github/workflows/**'
-      - 'DistributedLocking.sln.DotSettings'
-      - 'LICENSE.md'
-      - 'README.md'
-      - '.gitignore'
   pull_request:
     branches: [ main ]
     paths-ignore:
@@ -32,6 +24,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal --filter .UnitTests
