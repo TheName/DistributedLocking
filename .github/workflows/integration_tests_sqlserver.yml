@@ -46,6 +46,6 @@ jobs:
       env:
         SqlServerDistributedLockConfiguration.ConnectionString: "Server=localhost;Database=master;User ID=sa;Password=yourStrong(!)Password"
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal --filter DistributedLocking.SqlServer.IntegrationTests
