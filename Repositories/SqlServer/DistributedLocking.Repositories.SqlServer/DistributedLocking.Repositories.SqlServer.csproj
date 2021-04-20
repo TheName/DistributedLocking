@@ -6,21 +6,21 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Repositories.SqlServer</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Repositories.SqlServer</AssemblyName>
+        <AssemblyName>DistributedLocking.Repositories.SqlServer</AssemblyName>
     </PropertyGroup>
 
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Repositories.SqlServer</Title>
-        <Description>This package contains SQL Server implementation of TheName.DistributedLocking.Abstractions.Repositories package.</Description>
+        <Description>This package contains SQL Server implementation of DistributedLocking.Abstractions.Repositories package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Repositories.SqlServer</PackageId>
+        <PackageId>DistributedLocking.Repositories.SqlServer</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Repositories.SqlServer project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Repositories;DistributedLocking.Repositories.SqlServer;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Repositories;DistributedLocking.Repositories.SqlServer</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

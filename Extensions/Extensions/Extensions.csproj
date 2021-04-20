@@ -5,7 +5,7 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Extensions</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Extensions</AssemblyName>
+        <AssemblyName>DistributedLocking.Extensions</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,15 +15,15 @@
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Extensions</Title>
-        <Description>This package contains extensions for TheName.DistributedLocking.Abstractions package.</Description>
+        <Description>This package contains extensions for DistributedLocking.Abstractions package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Extensions</PackageId>
+        <PackageId>DistributedLocking.Extensions</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Extensions project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Extensions;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Extensions</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

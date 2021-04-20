@@ -5,21 +5,21 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Repositories.SqlServer.Migrations.DbUp</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Repositories.SqlServer.Migrations.DbUp</AssemblyName>
+        <AssemblyName>DistributedLocking.Repositories.SqlServer.Migrations.DbUp</AssemblyName>
     </PropertyGroup>
 
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Repositories.SqlServer.Migrations.DbUp</Title>
-        <Description>This package contains DbUp IScriptProvider for TheName.DistributedLocking.Repositories.SqlServer.Migrations package.</Description>
+        <Description>This package contains DbUp IScriptProvider for DistributedLocking.Repositories.SqlServer.Migrations package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Repositories.SqlServer.Migrations.DbUp</PackageId>
+        <PackageId>DistributedLocking.Repositories.SqlServer.Migrations.DbUp</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Repositories.SqlServer.Migrations.DbUp project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName.DistributedLocking;DistributedLocking.Repositories.SqlServer.Migrations.DbUp;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Repositories.SqlServer.Migrations.DbUp</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

@@ -5,7 +5,7 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Extensions.DependencyInjection</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Extensions.DependencyInjection</AssemblyName>
+        <AssemblyName>DistributedLocking.Extensions.DependencyInjection</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,15 +19,15 @@
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Extensions.DependencyInjection</Title>
-        <Description>This package contains dependency injection extensions for TheName.DistributedLocking package.</Description>
+        <Description>This package contains dependency injection extensions for DistributedLocking package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Extensions.DependencyInjection</PackageId>
+        <PackageId>DistributedLocking.Extensions.DependencyInjection</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Extensions.DependencyInjection project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Extensions;TheName.DistributedLocking.Extensions.DependencyInjection;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Extensions;DistributedLocking.Extensions.DependencyInjection</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

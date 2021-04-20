@@ -5,7 +5,7 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Repositories.SqlServer.Migrations</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Repositories.SqlServer.Migrations</AssemblyName>
+        <AssemblyName>DistributedLocking.Repositories.SqlServer.Migrations</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,15 +24,15 @@
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Repositories.SqlServer.Migrations</Title>
-        <Description>This package contains migration scripts for TheName.DistributedLocking.Repositories.SqlServer package.</Description>
+        <Description>This package contains migration scripts for DistributedLocking.Repositories.SqlServer package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Repositories.SqlServer.Migrations</PackageId>
+        <PackageId>DistributedLocking.Repositories.SqlServer.Migrations</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Repositories.SqlServer.Migrations project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Repositories.SqlServer;TheName.DistributedLocking.Repositories.SqlServer.Migrations;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Repositories.SqlServer;DistributedLocking.Repositories.SqlServer.Migrations</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

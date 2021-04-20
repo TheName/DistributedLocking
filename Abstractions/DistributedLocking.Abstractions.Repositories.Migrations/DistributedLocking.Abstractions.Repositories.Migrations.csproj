@@ -5,21 +5,21 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Abstractions.Repositories.Migrations</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Abstractions.Repositories.Migrations</AssemblyName>
+        <AssemblyName>DistributedLocking.Abstractions.Repositories.Migrations</AssemblyName>
     </PropertyGroup>
 
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Abstractions.Repositories.Migrations</Title>
-        <Description>This package contains abstractions over TheName.DistributedLocking repositories migration scripts.</Description>
+        <Description>This package contains abstractions over DistributedLocking repositories migration scripts.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Abstractions.Repositories.Migrations</PackageId>
+        <PackageId>DistributedLocking.Abstractions.Repositories.Migrations</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Abstractions.Repositories.Migrations project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions;TheName.DistributedLocking.Abstractions.Repositories;TheName.DistributedLocking.Abstractions.Repositories.Migrations;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Abstractions;DistributedLocking.Abstractions.Repositories;DistributedLocking.Abstractions.Repositories.Migrations</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

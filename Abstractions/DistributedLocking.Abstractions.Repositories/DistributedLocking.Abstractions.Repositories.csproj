@@ -5,7 +5,7 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Abstractions.Repositories</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Abstractions.Repositories</AssemblyName>
+        <AssemblyName>DistributedLocking.Abstractions.Repositories</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,15 +15,15 @@
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Abstractions.Repositories</Title>
-        <Description>This package contains abstractions over TheName.DistributedLocking repositories.</Description>
+        <Description>This package contains abstractions over DistributedLocking repositories.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Abstractions.Repositories</PackageId>
+        <PackageId>DistributedLocking.Abstractions.Repositories</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Abstractions.Repositories project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions;TheName.DistributedLocking.Abstractions.Repositories;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Abstractions;DistributedLocking.Abstractions.Repositories</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

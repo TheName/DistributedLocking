@@ -5,7 +5,7 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking</AssemblyName>
+        <AssemblyName>DistributedLocking</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,15 +16,15 @@
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking</Title>
-        <Description>This package contains default implementation of TheName.DistributedLocking.Abstractions package.</Description>
+        <Description>This package contains default implementation of DistributedLocking.Abstractions package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking</PackageId>
+        <PackageId>DistributedLocking</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

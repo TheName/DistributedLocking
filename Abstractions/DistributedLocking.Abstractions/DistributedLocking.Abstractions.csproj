@@ -5,7 +5,7 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Abstractions</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Abstractions</AssemblyName>
+        <AssemblyName>DistributedLocking.Abstractions</AssemblyName>
     </PropertyGroup>
     
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
@@ -15,15 +15,15 @@
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Abstractions</Title>
-        <Description>This package contains abstractions over TheName.DistributedLocking packages.</Description>
+        <Description>This package contains abstractions over DistributedLocking packages.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Abstractions</PackageId>
+        <PackageId>DistributedLocking.Abstractions</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Abstractions project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Abstractions;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Abstractions</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

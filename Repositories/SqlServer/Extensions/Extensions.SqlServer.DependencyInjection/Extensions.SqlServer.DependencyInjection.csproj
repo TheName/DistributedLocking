@@ -5,21 +5,21 @@
         <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</RootNamespace>
-        <AssemblyName>TheName.DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</AssemblyName>
+        <AssemblyName>DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</AssemblyName>
     </PropertyGroup>
 
     <!-- NuGet metadata -->
     <PropertyGroup>
         <Title>DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</Title>
-        <Description>This package contains dependency injection extensions for TheName.DistributedLocking.Repositories.SqlServer package.</Description>
+        <Description>This package contains dependency injection extensions for DistributedLocking.Repositories.SqlServer package.</Description>
         <Authors>Dawid Szmidka</Authors>
-        <PackageId>TheName.DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</PackageId>
+        <PackageId>DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</PackageId>
         <Version>0.1.0-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>TheName;TheName.DistributedLocking;TheName.DistributedLocking.Extensions;TheName.DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection;DistributedLocking</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Extensions;DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>
