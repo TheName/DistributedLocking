@@ -34,7 +34,7 @@ jobs:
         # comma separated list of XML/JSON/YAML files in which tokens are to be substituted. Files names must be specified relative to the folder-path.
         files: 'Repositories/SqlServer/Tests/DistributedLocking.SqlServer.IntegrationTests/appsettings.json'
       env:
-        SqlServerDistributedLockConfiguration.ConnectionString: "Server=localhost:1433;Database=master;User ID=sa;Password=yourStrong(!)Password"
+        SqlServerDistributedLockConfiguration.ConnectionString: "Server=localhost;Database=master;User ID=sa;Password=yourStrong(!)Password"
     - name: Build
       run: dotnet build --no-restore
     - name: Test
