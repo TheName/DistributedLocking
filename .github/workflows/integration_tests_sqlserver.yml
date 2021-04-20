@@ -1,12 +1,6 @@
 name: SQL Server
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'Abstractions/**'
-      - 'DistributedLocking/**'
-      - 'Repositories/SqlServer/**/**'
   pull_request:
     branches: [ main ]
     paths:
