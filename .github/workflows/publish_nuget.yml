@@ -3,6 +3,12 @@ name: Publish packages to NuGet
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'DistributedLocking.sln.DotSettings'
+      - 'LICENSE.md'
+      - 'README.md'
+      - '.gitignore'
   workflow_dispatch:
 
 jobs:
@@ -41,5 +47,5 @@ jobs:
     - name: Pack
       run: dotnet pack --configuration Release --no-build
     - name: Push
-      run: dotnet nuget push "*.nupkg" --skip-duplicate -k ${{ secrets.NUGET_APIKEY }}
+      run: dotnet nuget push "**/*.nupkg" --skip-duplicate -k ${{ secrets.NUGET_APIKEY }}
     
