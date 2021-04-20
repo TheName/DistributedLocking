@@ -1,10 +1,22 @@
-name: Integration tests SQL Server
+name: SQL Server
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'Abstractions/**'
+      - 'DistributedLocking/**'
+      - 'Repositories/SqlServer'
+    paths-ignore:
+      - 'Repositories/SqlServer/README.MD'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'Abstractions/**'
+      - 'DistributedLocking/**'
+      - 'Repositories/SqlServer'
+    paths-ignore:
+      - 'Repositories/SqlServer/README.MD'
 
 jobs:
   integration-tests-sql-server:
