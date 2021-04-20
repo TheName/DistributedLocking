@@ -6,17 +6,13 @@ on:
     paths:
       - 'Abstractions/**'
       - 'DistributedLocking/**'
-      - 'Repositories/SqlServer'
-    paths-ignore:
-      - 'Repositories/SqlServer/README.MD'
+      - 'Repositories/SqlServer/**/**'
   pull_request:
     branches: [ main ]
     paths:
       - 'Abstractions/**'
       - 'DistributedLocking/**'
-      - 'Repositories/SqlServer'
-    paths-ignore:
-      - 'Repositories/SqlServer/README.MD'
+      - 'Repositories/SqlServer/**/**'
 
 jobs:
   integration-tests-sql-server:
