@@ -13,6 +13,8 @@ on:
       - 'Abstractions/**'
       - 'DistributedLocking/**'
       - 'Repositories/SqlServer/**/**'
+  workflow_dispatch:
+    
 
 jobs:
   integration-tests-sql-server:
