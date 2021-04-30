@@ -7,12 +7,10 @@ using DistributedLocking.Abstractions.Repositories.Migrations;
 
 namespace DistributedLocking.Repositories.SqlServer.Migrations
 {
-    /// <inheritdoc />
     internal class SqlDistributedLocksRepositoryMigrationsProvider : IDistributedLocksRepositoryMigrationsProvider
     {
         private const string ScriptResourceNamePrefix = "DistributedLocking.Repositories.SqlServer.Migrations.Scripts.";
         
-        /// <inheritdoc />
         public async Task<IReadOnlyCollection<MigrationScript>> GetMigrationsAsync()
         {
             var currentAssembly = typeof(SqlDistributedLocksRepositoryMigrationsProvider).Assembly;
