@@ -22,7 +22,7 @@
         <Description>This package contains migration scripts for DistributedLocking.Repositories.SqlServer package.</Description>
         <Authors>Dawid Szmidka</Authors>
         <PackageId>DistributedLocking.Repositories.SqlServer.Migrations</PackageId>
-        <Version>0.1.1-alpha</Version>
+        <Version>0.1.2-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Repositories.SqlServer.Migrations project
         </PackageReleaseNotes>

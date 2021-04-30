@@ -35,7 +35,7 @@ namespace DistributedLocking.Repositories.SqlServer.Migrations
                     {
                         var content = await streamReader.ReadToEndAsync().ConfigureAwait(false);
                         var script = new MigrationScript(
-                            resourceName.Replace(ScriptResourceNamePrefix, string.Empty),
+                            resourceName,
                             content);
                         
                         result.Add(script);
