@@ -15,7 +15,7 @@
         <Description>This package contains SQL Server implementation of DistributedLocking.Abstractions.Repositories package.</Description>
         <Authors>Dawid Szmidka</Authors>
         <PackageId>DistributedLocking.Repositories.SqlServer</PackageId>
-        <Version>0.1.0-alpha</Version>
+        <Version>0.1.1-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Repositories.SqlServer project
         </PackageReleaseNotes>

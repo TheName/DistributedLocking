@@ -13,38 +13,41 @@ namespace DistributedLocking.Repositories.SqlServer
     internal class SqlServerDistributedLocksRepository : IDistributedLocksRepository
     {
         private const string InsertIfNotExistsSqlCommand = 
-           @"SET NOCOUNT ON;
+           @"DECLARE @CurrentTimestamp datetime2 = SYSUTCDATETIME();
+            SET NOCOUNT ON;
                 DELETE
                     FROM [DistributedLocking].[DistributedLocks] 
                     WHERE   ResourceId = @ResourceId
-                    AND     ExpiryDateTimestamp < SYSUTCDATETIME();
+                    AND     ExpiryDateTimestamp < @CurrentTimestamp;
             SET NOCOUNT OFF;
             INSERT INTO [DistributedLocking].[DistributedLocks] 
                 SELECT 
                     @ResourceId,
                     @LockId,
-                    DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,SYSUTCDATETIME()) 
+                    DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,@CurrentTimestamp) 
                 WHERE
                     NOT EXISTS 
                         (SELECT *
                             FROM [DistributedLocking].[DistributedLocks] WITH (UPDLOCK, HOLDLOCK)
                             WHERE       ResourceId = @ResourceId
-                                AND     ExpiryDateTimestamp > SYSUTCDATETIME());";
+                                AND     ExpiryDateTimestamp > @CurrentTimestamp);";
 
         private const string UpdateDistributedLockIfExistsSqlCommand =
-            @"UPDATE [DistributedLocking].[DistributedLocks] 
+            @"DECLARE @CurrentTimestamp datetime2 = SYSUTCDATETIME();
+            UPDATE [DistributedLocking].[DistributedLocks] 
                 SET
-                    ExpiryDateTimestamp = DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,SYSUTCDATETIME()) 
+                    ExpiryDateTimestamp = DATEADD(millisecond,@ExpiryDateTimeSpanInMilliseconds,@CurrentTimestamp) 
                 WHERE   ResourceId = @ResourceId
                 AND     LockId = @LockId 
-                AND     ExpiryDateTimestamp > SYSUTCDATETIME();";
+                AND     ExpiryDateTimestamp > @CurrentTimestamp;";
 
         private const string DeleteDistributedLockIfExistsSqlCommand =
-            @"DELETE
+            @"DECLARE @CurrentTimestamp datetime2 = SYSUTCDATETIME();
+            DELETE
                     FROM [DistributedLocking].[DistributedLocks] 
                     WHERE   ResourceId = @ResourceId
                     AND     LockId = @LockId 
-                    AND     ExpiryDateTimestamp > SYSUTCDATETIME();";
+                    AND     ExpiryDateTimestamp > @CurrentTimestamp;";
 
         private readonly ISqlClient _sqlClient;
 

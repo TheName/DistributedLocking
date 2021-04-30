@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using DistributedLocking.Repositories.SqlServer.Abstractions.Configuration;
 using DistributedLocking.Repositories.SqlServer.Migrations;
@@ -24,11 +25,11 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Migrations
         }
 
         [Fact, Order(0)]
-        public async Task CreateTable_When_CreatingTableIfNotExists_And_TableDoesNotExist()
+        public async Task CreateTable_When_CreatingTableIfNotExistsMultipleTimes_And_TableDoesNotExist()
         {
             Assert.False(await TableExists());
 
-            await ExecuteMigrationScripts();
+            await Task.WhenAll(Enumerable.Repeat(0, 10).Select(i => ExecuteMigrationScripts()));
             
             Assert.True(await TableExists());
         }
@@ -46,13 +47,13 @@ namespace DistributedLocking.SqlServer.IntegrationTests.Migrations
         private async Task<bool> TableExists()
         {
             const string commandText =
-                "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'DistributedLocking' AND TABLE_NAME = 'DistributedLocks';";
+                "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'DistributedLocking' AND TABLE_NAME = 'DistributedLocks';";
             
             await using var connection = new SqlConnection(SqlServerDistributedLockConfiguration.ConnectionString);
             var command = new SqlCommand(commandText, connection);
             await connection.OpenAsync();
             var result = await command.ExecuteScalarAsync();
-            return result != null;
+            return (int) result == 1;
         }
 
         private async Task ExecuteMigrationScripts()
