@@ -14,7 +14,7 @@
         <Description>This package contains dependency injection extensions for DistributedLocking.Repositories.SqlServer package.</Description>
         <Authors>Dawid Szmidka</Authors>
         <PackageId>DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</PackageId>
-        <Version>0.1.1-alpha</Version>
+        <Version>0.1.2-alpha</Version>
         <PackageReleaseNotes>
             - Initial version of DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection project
         </PackageReleaseNotes>
