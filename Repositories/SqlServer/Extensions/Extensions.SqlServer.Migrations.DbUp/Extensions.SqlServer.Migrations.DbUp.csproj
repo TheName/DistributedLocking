@@ -19,7 +19,7 @@
             - Initial version of DistributedLocking.Repositories.SqlServer.Migrations.DbUp project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>DistributedLocking;DistributedLocking.Repositories.SqlServer.Migrations.DbUp</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Repositories;DistributedLocking.Repositories.SqlServer;DistributedLocking.Repositories.SqlServer.Migrations.DbUp</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>

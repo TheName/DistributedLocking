@@ -19,7 +19,7 @@
             - Initial version of DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection project
         </PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>DistributedLocking;DistributedLocking.Extensions;DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</PackageTags>
+        <PackageTags>DistributedLocking;DistributedLocking.Extensions;DistributedLocking.Repositories;DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>
