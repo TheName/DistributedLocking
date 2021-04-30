@@ -3,7 +3,7 @@ using DistributedLocking.Extensions.Repositories.SqlServer.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Extensions.DependencyInjection.SqlServer.UnitTests
+namespace Extensions.SqlServer.DependencyInjection.UnitTests
 {
     public class ServiceCollectionExtensions_Should
     {
