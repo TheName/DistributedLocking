@@ -254,6 +254,41 @@ namespace TestHelpers
 
         [Theory]
         [AutoMoqData]
+        public async Task AcquireLock_After_ExtendingAcquiredLockToLowerValue_And_TtlHasExpired(
+            DistributedLockResourceId resourceId,
+            DistributedLockId lockId,
+            DistributedLockTimeToLive timeToLive)
+        {
+            // make sure the timeout will last at least until the release is called
+            timeToLive += TimeSpan.FromSeconds(5);
+            var success = await DistributedLockRepository.TryInsert(
+                resourceId,
+                lockId,
+                timeToLive,
+                CancellationToken.None);
+            Assert.True(success);
+
+            var result = await DistributedLockRepository.TryUpdateTimeToLiveAsync(
+                resourceId,
+                lockId,
+                TimeSpan.FromSeconds(1),
+                CancellationToken.None);
+
+            Assert.True(result);
+
+            await Task.Delay(TimeSpan.FromSeconds(1.5));
+
+            result = await DistributedLockRepository.TryInsert(
+                resourceId,
+                DistributedLockId.NewLockId(),
+                TimeSpan.FromMinutes(1),
+                CancellationToken.None);
+
+            Assert.True(result);
+        }
+
+        [Theory]
+        [AutoMoqData]
         public async Task FailToExtendAcquiredLock_When_TryingToExtendLock_And_TimeoutHasExpired(
             DistributedLockResourceId resourceId,
             DistributedLockId lockId)

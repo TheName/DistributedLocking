@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RootNamespace>DistributedLocking.Repositories.Cassandra.Migrations</RootNamespace>
+        <AssemblyName>DistributedLocking.Repositories.Cassandra.Migrations</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Abstractions\DistributedLocking.Abstractions.Repositories.Migrations\DistributedLocking.Abstractions.Repositories.Migrations.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Scripts\*.cql" />
+    </ItemGroup>
+
+    <!-- NuGet metadata -->
+    <PropertyGroup>
+        <Title>DistributedLocking.Repositories.Cassandra.Migrations</Title>
+        <Description>This package contains migration scripts for DistributedLocking.Repositories.Cassandra package.</Description>
+        <Authors>Dawid Szmidka</Authors>
+        <PackageId>DistributedLocking.Repositories.Cassandra.Migrations</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <PackageReleaseNotes>
+            - Initial version of DistributedLocking.Repositories.Cassandra.Migrations project
+        </PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>DistributedLocking;DistributedLocking.Repositories;DistributedLocking.Repositories.Cassandra;DistributedLocking.Repositories.Cassandra.Migrations</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
+        <RepositoryUrl>https://github.com/TheName/DistributedLocking</RepositoryUrl>
+    </PropertyGroup>
+
+</Project>

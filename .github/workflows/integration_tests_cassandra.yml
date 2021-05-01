@@ -1,0 +1,35 @@
+name: Cassandra
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Abstractions/**'
+      - 'DistributedLocking/**'
+      - 'Repositories/Cassandra/**/**'
+  workflow_dispatch:
+    
+
+jobs:
+  integration-tests-cassandra:
+
+    runs-on: ubuntu-latest
+    
+    services:
+      cassandra:
+        image: cassandra-latest
+        ports:
+          - 7000:7000
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal --filter DistributedLocking.Cassandra.IntegrationTests

@@ -1,7 +1,10 @@
 # Distributed Locking 
 
 [![Unit tests](https://github.com/TheName/DistributedLocking/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/TheName/DistributedLocking/actions/workflows/unit_tests.yml)
+
 [![SQL Server](https://github.com/TheName/DistributedLocking/actions/workflows/integration_tests_sqlserver.yml/badge.svg)](https://github.com/TheName/DistributedLocking/actions/workflows/integration_tests_sqlserver.yml)
+[![Cassandra](https://github.com/TheName/DistributedLocking/actions/workflows/integration_tests_cassandra.yml/badge.svg)](https://github.com/TheName/DistributedLocking/actions/workflows/integration_tests_cassandra.yml)
+
 [![Publish packages to NuGet](https://github.com/TheName/DistributedLocking/actions/workflows/publish_nuget.yml/badge.svg)](https://github.com/TheName/DistributedLocking/actions/workflows/publish_nuget.yml)
 
 Simple C# implementation of distributed lock that can be used in multi-client (process) environment focused on extensibility.
@@ -66,6 +69,7 @@ This library is designed to work with any kind of repository as long as it imple
 Currently supported databases:
 
 - [SqlServer](./Repositories/SqlServer/README.MD)
+- [Cassandra](./Repositories/Cassandra/README.md)
 
 ### Migrations
 

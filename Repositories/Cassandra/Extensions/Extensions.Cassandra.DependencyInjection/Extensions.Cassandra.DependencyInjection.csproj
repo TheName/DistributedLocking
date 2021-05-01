@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RootNamespace>DistributedLocking.Extensions.Repositories.Cassandra.DependencyInjection</RootNamespace>
+        <AssemblyName>DistributedLocking.Extensions.Repositories.Cassandra.DependencyInjection</AssemblyName>
+    </PropertyGroup>
+
+    <!-- NuGet metadata -->
+    <PropertyGroup>
+        <Title>DistributedLocking.Extensions.Repositories.Cassandra.DependencyInjection</Title>
+        <Description>This package contains dependency injection extensions for DistributedLocking.Repositories.Cassandra package.</Description>
+        <Authors>Dawid Szmidka</Authors>
+        <PackageId>DistributedLocking.Extensions.Repositories.Cassandra.DependencyInjection</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <PackageReleaseNotes>
+            - Initial version of DistributedLocking.Extensions.Repositories.Cassandra.DependencyInjection project
+        </PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>DistributedLocking;DistributedLocking.Extensions;DistributedLocking.Repositories;DistributedLocking.Extensions.Repositories.Cassandra.DependencyInjection</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
+        <RepositoryUrl>https://github.com/TheName/DistributedLocking</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\Extensions\Extensions.DependencyInjection\Extensions.DependencyInjection.csproj" />
+        <ProjectReference Include="..\..\DistributedLocking.Repositories.Cassandra\DistributedLocking.Repositories.Cassandra.csproj" />
+    </ItemGroup>
+
+</Project>
