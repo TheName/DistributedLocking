@@ -17,7 +17,7 @@ jobs:
     
     services:
       cassandra:
-        image: cassandra-latest
+        image: cassandra:latest
         ports:
           - 7000:7000
 
